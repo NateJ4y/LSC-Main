@@ -13,10 +13,13 @@ import {
   Scissors,
   Building2,
   Calculator,
-  ArrowRight
+  ArrowRight,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { CartItem } from '../types';
 import { BrandLogo } from './BrandLogo';
+import { useTheme } from '../context/ThemeContext';
 
 interface HeaderProps {
   cartItems: CartItem[];
@@ -34,6 +37,7 @@ export const Header: React.FC<HeaderProps> = ({
   activeSection
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
   const totalCartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   const navItems = [
@@ -139,6 +143,20 @@ export const Header: React.FC<HeaderProps> = ({
               <span>GET A QUOTE</span>
             </button>
 
+            {/* Dark / Light Mode Switch Button */}
+            <button
+              onClick={toggleTheme}
+              className="p-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-white/10 hover:border-orange-500/40 transition-all duration-200 cursor-pointer flex items-center justify-center group relative shadow-sm"
+              aria-label={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            >
+              {theme === 'dark' ? (
+                <Sun className="w-5 h-5 text-amber-400 group-hover:rotate-45 transition-transform duration-300" />
+              ) : (
+                <Moon className="w-5 h-5 text-indigo-500 group-hover:-rotate-12 transition-transform duration-300" />
+              )}
+            </button>
+
             {/* Shopping Cart Button */}
             <button
               onClick={onOpenCart}
@@ -168,6 +186,39 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
         <div className="lg:hidden bg-[#121212] border-b border-white/10 px-4 pt-2 pb-6 space-y-3 animate-in slide-in-from-top-2">
+          {/* Mobile Theme Switch Row */}
+          <div className="flex items-center justify-between p-3 bg-zinc-900/80 border border-white/10 rounded-2xl">
+            <div className="flex items-center space-x-2 text-xs font-bold uppercase tracking-wider text-zinc-300">
+              {theme === 'dark' ? (
+                <>
+                  <Moon className="w-4 h-4 text-indigo-400" />
+                  <span>Theme: Dark Mode</span>
+                </>
+              ) : (
+                <>
+                  <Sun className="w-4 h-4 text-amber-500" />
+                  <span>Theme: Light Mode</span>
+                </>
+              )}
+            </div>
+            <button
+              onClick={toggleTheme}
+              className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-orange-500 hover:text-white text-white text-xs font-bold uppercase tracking-wider transition border border-white/10 flex items-center space-x-1.5 cursor-pointer"
+            >
+              {theme === 'dark' ? (
+                <>
+                  <Sun className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Switch to Light</span>
+                </>
+              ) : (
+                <>
+                  <Moon className="w-3.5 h-3.5 text-indigo-400" />
+                  <span>Switch to Dark</span>
+                </>
+              )}
+            </button>
+          </div>
+
           <div className="grid grid-cols-2 gap-2 pb-2">
             {navItems.map((item) => (
               <button

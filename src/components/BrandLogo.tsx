@@ -58,7 +58,8 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
         {/* Top-Left Outer White Swoosh Arc */}
         <path
           d="M 16 102 C 14 62 46 22 96 16 C 104 15 110 15 110 15"
-          stroke="#FFFFFF"
+          className="stroke-white transition-colors duration-200 [html.light_&]:stroke-[#0f172a]"
+          stroke="currentColor"
           strokeWidth="13"
           strokeLinecap="round"
         />
@@ -66,7 +67,8 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
         {/* Bottom-Right Outer White Arc */}
         <path
           d="M 98 184 C 146 182 184 148 184 100 C 184 88 180 72 174 62"
-          stroke="#FFFFFF"
+          className="stroke-white transition-colors duration-200 [html.light_&]:stroke-[#0f172a]"
+          stroke="currentColor"
           strokeWidth="13"
           strokeLinecap="round"
         />
@@ -74,7 +76,8 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
         {/* The 'L' Monogram (Solid Crisp White, Left Half) */}
         <path
           d="M 48 38 L 84 38 L 84 136 L 98 136 L 98 162 L 48 162 Z"
-          fill="#FFFFFF"
+          className="fill-white transition-colors duration-200 [html.light_&]:fill-[#0f172a]"
+          fill="currentColor"
         />
 
         {/* The 'S' Monogram (Automotive Slate Grey, Right Half) */}
