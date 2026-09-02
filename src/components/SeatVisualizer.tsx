@@ -40,19 +40,18 @@ export const SeatVisualizer: React.FC<SeatVisualizerProps> = ({
       : 'font-sans font-black uppercase tracking-wider';
 
   return (
-    <div className="relative w-full bg-zinc-900 border border-white/10 rounded-3xl p-4 sm:p-6 overflow-hidden flex flex-col items-center justify-center min-h-[440px] shadow-2xl">
+    <div className="relative w-full bg-zinc-900 border border-white/10 rounded-3xl p-4 sm:p-5 overflow-hidden flex flex-col items-center justify-between min-h-[440px] shadow-2xl">
       {/* Background Lighting / Studio Shadow */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-orange-600/10 via-transparent to-transparent pointer-events-none" />
-      <div className="absolute top-3 left-4 flex items-center space-x-2 text-[11px] font-bold text-zinc-300 bg-black/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 z-10 font-mono">
-        <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
-        <span className="text-white">{vehicleTitle || 'Vehicle Tailored Fit'}</span>
-        <span className="text-zinc-500">•</span>
-        <span className="text-orange-400 font-mono">3D CAD Tailored</span>
-      </div>
-
-      <div className="absolute top-3 right-4 flex items-center space-x-1.5 z-10 font-mono">
-        <span className="bg-black/80 text-zinc-300 text-[10px] font-bold px-2.5 py-1 rounded-md border border-white/10">
-          Airbag Seam Certified 🛡️
+      
+      {/* Clean Top Status Bar with No Overlap */}
+      <div className="w-full flex items-center justify-between gap-2 z-10 pb-2 border-b border-white/10">
+        <div className="flex items-center space-x-2 text-[11px] font-bold text-zinc-300 bg-black/60 px-3 py-1 rounded-full border border-white/10 truncate">
+          <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse shrink-0"></span>
+          <span className="text-white truncate">{vehicleTitle || 'Vehicle Tailored Fit'}</span>
+        </div>
+        <span className="bg-black/60 text-zinc-300 text-[10px] font-semibold px-2.5 py-1 rounded-full border border-white/10 shrink-0 font-mono">
+          Airbag Safe 🛡️
         </span>
       </div>
 

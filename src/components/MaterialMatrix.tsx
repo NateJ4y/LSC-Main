@@ -1,19 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { 
   ShieldCheck, 
   Droplets, 
   Sun, 
-  Sparkles, 
   Dog, 
-  Wind, 
-  Award, 
   Check, 
-  HelpCircle, 
   ArrowRight,
-  Layers
+  Layers,
+  Sparkles
 } from 'lucide-react';
 import { MATERIALS_DATA } from '../data/materialsData';
-import { MaterialSpec } from '../types';
 
 interface MaterialMatrixProps {
   onSelectMaterial: (materialId: string) => void;
@@ -24,291 +20,203 @@ export const MaterialMatrix: React.FC<MaterialMatrixProps> = ({
   onSelectMaterial,
   onOpenSwatches
 }) => {
-  // Fabric Quiz State
-  const [quizUse, setQuizUse] = useState<string>('overland');
-  const [quizPets, setQuizPets] = useState<string>('yes');
-  const [quizFeel, setQuizFeel] = useState<string>('canvas');
-  const [recommendedId, setRecommendedId] = useState<string>('heavy-duty-ripstop-canvas');
-
-  const handleCalculateRecommendation = (use: string, pets: string, feel: string) => {
-    setQuizUse(use);
-    setQuizPets(pets);
-    setQuizFeel(feel);
-
-    if (feel === 'leather') {
-      setRecommendedId('rhino-hide-leatherette');
-    } else if (feel === 'neoprene' || use === 'surfing') {
-      setRecommendedId('genuine-neoprene-waterproof');
-    } else if (feel === 'mesh' || use === 'commute') {
-      setRecommendedId('cool-breathe-3d-spacer');
-    } else if (use === 'overland' && feel === 'tactical') {
-      setRecommendedId('tactical-molle-expedition');
-    } else if (use === 'fleet') {
-      setRecommendedId('heavy-poly-cotton-twill');
-    } else {
-      setRecommendedId('heavy-duty-ripstop-canvas');
-    }
-  };
-
-  const recMaterial = MATERIALS_DATA.find((m) => m.id === recommendedId) || MATERIALS_DATA[0];
-
   return (
-    <section id="fabric-matrix" className="w-full bg-[#0c0c0e] py-16 px-4 sm:px-6 lg:px-8 border-b border-white/10 scroll-mt-20">
-      <div className="max-w-7xl mx-auto space-y-12">
+    <section id="fabric-matrix" className="w-full bg-[#0c0c0e] py-14 px-4 sm:px-6 lg:px-8 border-b border-white/10 scroll-mt-20">
+      <div className="max-w-7xl mx-auto space-y-10">
+        
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-3">
-          <div className="inline-flex items-center space-x-2 text-[10px] font-bold text-[#8C9BA8] uppercase tracking-widest bg-[#141418] border border-white/10 px-3 py-1 rounded-md font-mono">
+        <div className="text-center max-w-2xl mx-auto space-y-2">
+          <div className="inline-flex items-center space-x-2 text-[10px] font-bold text-orange-400 uppercase tracking-widest bg-[#141418] border border-orange-500/20 px-3 py-1 rounded-md font-mono">
             <Layers className="w-3.5 h-3.5 text-orange-500" />
-            <span>FABRIC ENGINEERING LAB</span>
+            <span>SIMPLE MATERIAL GUIDE</span>
           </div>
-          <h2 className="font-heading text-3xl sm:text-5xl font-black uppercase text-white tracking-tight">
-            COMPARE OUR <span className="text-white border-b-2 border-orange-500 pb-0.5">SOUTH AFRICAN</span> FABRICS
+          <h2 className="font-heading text-3xl sm:text-4xl font-black uppercase text-white tracking-tight">
+            CHOOSE YOUR FABRIC
           </h2>
-          <p className="text-[#8C9BA8] text-sm sm:text-base">
-            Every material is laser cut to 1:1 original factory CAD seat specs and rigorously tested against South Africa's intense UV index, thornveld abrasions, and mud.
+          <p className="text-sm text-[#8C9BA8]">
+            Built specifically for South African conditions, active lifestyles, pets, workouts, and everyday vehicle use. Handcrafted in our Vereeniging workshop.
           </p>
         </div>
 
-        {/* Interactive Material Finder Quiz Bento Card */}
-        <div className="bg-[#141418] border border-white/10 rounded-3xl p-6 sm:p-8 shadow-xl">
-          <div className="flex flex-col lg:flex-row items-stretch justify-between gap-8">
-            <div className="space-y-4 w-full lg:w-7/12 flex flex-col justify-between">
+        {/* 3 Core Material Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          {/* 1. Heavy Duty Ripstop Canvas */}
+          <div className="bg-[#141418] border-2 border-orange-500/50 rounded-3xl p-6 sm:p-7 flex flex-col justify-between relative shadow-xl hover:border-orange-500 transition">
+            <div className="absolute top-4 right-4 bg-orange-500 text-black text-[10px] font-black uppercase px-2.5 py-1 rounded-full">
+              #1 FOR BAKKIES & 4X4
+            </div>
+
+            <div className="space-y-4">
               <div>
-                <div className="flex items-center space-x-2 text-xs font-bold text-[#8C9BA8] uppercase tracking-wider font-mono">
-                  <Sparkles className="w-4 h-4 text-orange-500" />
-                  <span>3-STEP FABRIC ADVISOR QUIZ</span>
-                </div>
-                <h3 className="font-heading text-2xl font-black uppercase text-white mt-1">
-                  NOT SURE WHICH FABRIC SUITS YOUR LIFESTYLE?
+                <div className="text-xs font-mono font-bold text-orange-400 uppercase">510g Heavy-Duty</div>
+                <h3 className="font-heading text-2xl font-bold uppercase text-white mt-0.5">
+                  Ripstop Canvas
                 </h3>
-              </div>
-
-              <div className="space-y-3 pt-2">
-                {/* Q1: Primary Use */}
-                <div>
-                  <label className="text-xs font-bold text-[#8C9BA8] uppercase block mb-1.5 font-mono">
-                    1. Primary Vehicle Usage:
-                  </label>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-                    {[
-                      { id: 'overland', label: '🏕️ 4x4 / Overland' },
-                      { id: 'farm', label: '🚜 Farm / Mining' },
-                      { id: 'family', label: '👨‍👩‍👧 Family & Kids' },
-                      { id: 'surfing', label: '🏄 Coastal Surfing' }
-                    ].map((opt) => (
-                      <button
-                        key={opt.id}
-                        onClick={() => handleCalculateRecommendation(opt.id, quizPets, quizFeel)}
-                        className={`p-2 rounded-xl font-semibold border text-center transition cursor-pointer ${
-                          quizUse === opt.id
-                            ? 'bg-white text-black border-white shadow-md'
-                            : 'bg-[#0c0c0e] text-zinc-300 border-white/10 hover:border-white/30'
-                        }`}
-                      >
-                        {opt.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Q2: Pets */}
-                <div>
-                  <label className="text-xs font-bold text-[#8C9BA8] uppercase block mb-1.5 font-mono">
-                    2. Dogs or Boerboels in vehicle?
-                  </label>
-                  <div className="grid grid-cols-3 gap-2 text-xs">
-                    {[
-                      { id: 'yes', label: '🐕 Yes, Heavy Dogs' },
-                      { id: 'occasional', label: '🐾 Small / Rare' },
-                      { id: 'no', label: '🚫 No Pets' }
-                    ].map((opt) => (
-                      <button
-                        key={opt.id}
-                        onClick={() => handleCalculateRecommendation(quizUse, opt.id, quizFeel)}
-                        className={`p-2 rounded-xl font-semibold border text-center transition cursor-pointer ${
-                          quizPets === opt.id
-                            ? 'bg-white text-black border-white shadow-md'
-                            : 'bg-[#0c0c0e] text-zinc-300 border-white/10 hover:border-white/30'
-                        }`}
-                      >
-                        {opt.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Q3: Feel & Texture */}
-                <div>
-                  <label className="text-xs font-bold text-[#8C9BA8] uppercase block mb-1.5 font-mono">
-                    3. Preferred Look & Feel:
-                  </label>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-                    {[
-                      { id: 'canvas', label: '🛡️ Tough Canvas' },
-                      { id: 'leather', label: '✨ Luxury Leather' },
-                      { id: 'neoprene', label: '🤿 Wetsuit Foam' },
-                      { id: 'mesh', label: '💨 High Airflow' }
-                    ].map((opt) => (
-                      <button
-                        key={opt.id}
-                        onClick={() => handleCalculateRecommendation(quizUse, quizPets, opt.id)}
-                        className={`p-2 rounded-xl font-semibold border text-center transition cursor-pointer ${
-                          quizFeel === opt.id
-                            ? 'bg-white text-black border-white shadow-md'
-                            : 'bg-[#0c0c0e] text-zinc-300 border-white/10 hover:border-white/30'
-                        }`}
-                      >
-                        {opt.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Quiz Recommendation Result Box */}
-            <div className="w-full lg:w-5/12 bg-[#0c0c0e] border border-white/15 rounded-2xl p-5 sm:p-6 shadow-2xl flex flex-col justify-between">
-              <div>
-                <div className="text-[10px] font-bold text-[#8C9BA8] uppercase tracking-widest font-mono">
-                  MATCH RESULT FOR YOUR PROFILE:
-                </div>
-                <h4 className="font-heading text-2xl font-black uppercase text-white mt-1">
-                  {recMaterial.name}
-                </h4>
-                <p className="text-xs text-white font-medium mt-0.5">{recMaterial.tagline}</p>
-                <p className="text-xs text-[#8C9BA8] mt-2 leading-relaxed">
-                  {recMaterial.description}
+                <p className="text-xs text-zinc-300 mt-2 leading-relaxed">
+                  Toughest fabric on the market. Waterproof, tear-resistant, Kalahari thorn-proof, and impervious to red mud.
                 </p>
+              </div>
 
-                {/* Mini Ratings */}
-                <div className="grid grid-cols-2 gap-2 mt-4 text-xs font-semibold text-zinc-300 font-mono">
-                  <div className="flex items-center gap-1.5">
-                    <Droplets className="w-3.5 h-3.5 text-blue-400" />
-                    <span>Waterproof: {recMaterial.waterproofRating}/10</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <Sun className="w-3.5 h-3.5 text-amber-400" />
-                    <span>UV Guard: {recMaterial.uvResistanceRating}/10</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <Dog className="w-3.5 h-3.5 text-orange-400" />
-                    <span>Pet Proof: {recMaterial.petProofRating}/10</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <Award className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>Warranty: {recMaterial.warrantyYears} Years</span>
-                  </div>
+              {/* Quick Feature Bullets */}
+              <div className="space-y-2 text-xs text-zinc-300 py-2 border-y border-white/10">
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>100% Waterproof & Mud Resistant</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Dog claw & heavy equipment proof</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>UV stabilized (won't fade or rot in SA sun)</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Available in Charcoal, Khaki Sand, Black & Olive</span>
                 </div>
               </div>
 
-              <div className="mt-5 pt-4 border-t border-white/10 flex items-center justify-between gap-3">
-                <div>
-                  <div className="text-[10px] text-[#8C9BA8] font-mono">FROM</div>
-                  <div className="font-mono font-bold text-white text-lg">
-                    R{recMaterial.basePriceZAR.toLocaleString()}
-                  </div>
-                </div>
-                <button
-                  onClick={() => onSelectMaterial(recMaterial.id)}
-                  className="py-2.5 px-4 rounded-xl bg-white hover:bg-zinc-200 text-black font-black uppercase text-xs tracking-wider flex items-center space-x-1.5 shadow transition cursor-pointer"
-                >
-                  <span>CONFIGURE THIS FABRIC</span>
-                  <ArrowRight className="w-4 h-4 text-orange-600" />
-                </button>
+              <div>
+                <span className="text-[10px] uppercase font-mono text-zinc-400 block">Starting from</span>
+                <span className="text-2xl font-black font-mono text-white">R2,650</span>
+                <span className="text-xs text-zinc-400 block">Front Set / R3,950 Full Set</span>
               </div>
             </div>
+
+            <div className="pt-6 mt-4 border-t border-white/10">
+              <button
+                onClick={() => onSelectMaterial('heavy-duty-ripstop-canvas')}
+                className="w-full py-3 rounded-xl bg-white hover:bg-zinc-200 text-black font-bold uppercase text-xs tracking-wider transition cursor-pointer flex items-center justify-center space-x-2"
+              >
+                <span>Customize in Canvas</span>
+                <ArrowRight className="w-3.5 h-3.5 text-orange-600" />
+              </button>
+            </div>
           </div>
+
+          {/* 2. Rhino Leatherette */}
+          <div className="bg-[#141418] border border-white/15 rounded-3xl p-6 sm:p-7 flex flex-col justify-between relative shadow-xl hover:border-white/40 transition">
+            <div className="space-y-4">
+              <div>
+                <div className="text-xs font-mono font-bold text-zinc-400 uppercase">Automotive Grade</div>
+                <h3 className="font-heading text-2xl font-bold uppercase text-white mt-0.5">
+                  Rhino Leatherette
+                </h3>
+                <p className="text-xs text-zinc-300 mt-2 leading-relaxed">
+                  Executive luxury look with padded foam comfort. Easy to wipe clean with a damp cloth — perfect for family SUVs.
+                </p>
+              </div>
+
+              {/* Quick Feature Bullets */}
+              <div className="space-y-2 text-xs text-zinc-300 py-2 border-y border-white/10">
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Wipe-clean in seconds (coffee, juice, mud)</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Laminated with high-density comfort foam</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Pet hair doesn't stick to surface</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Available in Onyx Black, Cognac Brown & Grey</span>
+                </div>
+              </div>
+
+              <div>
+                <span className="text-[10px] uppercase font-mono text-zinc-400 block">Starting from</span>
+                <span className="text-2xl font-black font-mono text-white">R2,950</span>
+                <span className="text-xs text-zinc-400 block">Front Set / R4,450 Full Set</span>
+              </div>
+            </div>
+
+            <div className="pt-6 mt-4 border-t border-white/10">
+              <button
+                onClick={() => onSelectMaterial('rhino-hide-leatherette')}
+                className="w-full py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold uppercase text-xs tracking-wider transition border border-white/20 cursor-pointer flex items-center justify-center space-x-2"
+              >
+                <span>Customize in Leatherette</span>
+                <ArrowRight className="w-3.5 h-3.5 text-orange-400" />
+              </button>
+            </div>
+          </div>
+
+          {/* 3. 600D Heavy Duty Polyester */}
+          <div className="bg-[#141418] border border-white/15 rounded-3xl p-6 sm:p-7 flex flex-col justify-between relative shadow-xl hover:border-white/40 transition">
+            <div className="space-y-4">
+              <div>
+                <div className="text-xs font-mono font-bold text-zinc-400 uppercase">Workhorse & Commuter</div>
+                <h3 className="font-heading text-2xl font-bold uppercase text-white mt-0.5">
+                  600D Polyester
+                </h3>
+                <p className="text-xs text-zinc-300 mt-2 leading-relaxed">
+                  Hard-wearing and breathable everyday protection. Ideal for daily drivers, work teams, delivery bakkies and fleets.
+                </p>
+              </div>
+
+              {/* Quick Feature Bullets */}
+              <div className="space-y-2 text-xs text-zinc-300 py-2 border-y border-white/10">
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Durable 600D synthetic weave</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Breathable & cool in summer heat</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Stain resistant & machine washable</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Great budget-friendly complete protection</span>
+                </div>
+              </div>
+
+              <div>
+                <span className="text-[10px] uppercase font-mono text-zinc-400 block">Starting from</span>
+                <span className="text-2xl font-black font-mono text-white">R2,450</span>
+                <span className="text-xs text-zinc-400 block">Front Set / R3,650 Full Set</span>
+              </div>
+            </div>
+
+            <div className="pt-6 mt-4 border-t border-white/10">
+              <button
+                onClick={() => onSelectMaterial('600d-synthetic-polyester')}
+                className="w-full py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold uppercase text-xs tracking-wider transition border border-white/20 cursor-pointer flex items-center justify-center space-x-2"
+              >
+                <span>Customize in Polyester</span>
+                <ArrowRight className="w-3.5 h-3.5 text-orange-400" />
+              </button>
+            </div>
+          </div>
+
         </div>
 
-        {/* Detailed Side-by-Side Comparison Table */}
-        <div className="bg-[#141418] border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
-          <div className="p-6 border-b border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        {/* Free Swatch Pack Banner */}
+        <div className="p-4 sm:p-5 bg-black/50 border border-white/10 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center space-x-3 text-center sm:text-left">
+            <Sparkles className="w-6 h-6 text-orange-400 shrink-0" />
             <div>
-              <h3 className="font-heading text-2xl font-black uppercase text-white">
-                TECHNICAL SPECIFICATIONS MATRIX
-              </h3>
-              <p className="text-xs text-[#8C9BA8]">
-                Independent laboratory metrics for heavy African climate exposure.
-              </p>
+              <h4 className="text-sm font-bold text-white uppercase">Want to touch and feel the fabrics first?</h4>
+              <p className="text-xs text-[#8C9BA8]">We couriered free physical sample swatches across South Africa.</p>
             </div>
-            <button
-              onClick={onOpenSwatches}
-              className="text-xs font-bold text-white bg-white/5 border border-white/10 px-3.5 py-2 rounded-xl hover:bg-white/10 transition flex items-center space-x-1.5 cursor-pointer font-mono"
-            >
-              <Layers className="w-3.5 h-3.5 text-orange-500" />
-              <span>Get Free Physical Swatches</span>
-            </button>
           </div>
-
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs sm:text-sm">
-              <thead className="bg-[#0c0c0e] text-[#8C9BA8] text-xs uppercase font-bold border-b border-white/10 font-mono">
-                <tr>
-                  <th className="py-4 px-4 sm:px-6">Material</th>
-                  <th className="py-4 px-3 text-center">Waterproof</th>
-                  <th className="py-4 px-3 text-center">UV Guard</th>
-                  <th className="py-4 px-3 text-center">Tear Abrasion</th>
-                  <th className="py-4 px-3 text-center">Pet Claw Proof</th>
-                  <th className="py-4 px-3 text-center">Cleaning</th>
-                  <th className="py-4 px-3 text-center">Warranty</th>
-                  <th className="py-4 px-4 text-right">Price (Full Set)</th>
-                  <th className="py-4 px-4 text-center">Action</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y border-white/5 text-zinc-200">
-                {MATERIALS_DATA.map((mat) => (
-                  <tr key={mat.id} className="hover:bg-white/5 transition">
-                    <td className="py-4 px-4 sm:px-6">
-                      <div className="font-bold text-white text-sm sm:text-base font-heading uppercase">
-                        {mat.name}
-                      </div>
-                      <div className="text-[11px] text-[#8C9BA8] font-medium line-clamp-1">
-                        {mat.tagline}
-                      </div>
-                    </td>
-
-                    <td className="py-4 px-3 text-center">
-                      <span className="font-mono font-bold text-blue-400">{mat.waterproofRating}/10</span>
-                    </td>
-
-                    <td className="py-4 px-3 text-center">
-                      <span className="font-mono font-bold text-amber-400">{mat.uvResistanceRating}/10</span>
-                    </td>
-
-                    <td className="py-4 px-3 text-center">
-                      <span className="font-mono font-bold text-zinc-200">{mat.abrasionRating}/10</span>
-                    </td>
-
-                    <td className="py-4 px-3 text-center">
-                      <span className="font-mono font-bold text-orange-400">{mat.petProofRating}/10</span>
-                    </td>
-
-                    <td className="py-4 px-3 text-center text-xs font-semibold text-zinc-300">
-                      {mat.cleaningEase}
-                    </td>
-
-                    <td className="py-4 px-3 text-center font-bold text-emerald-400 font-mono">
-                      {mat.warrantyYears} Years
-                    </td>
-
-                    <td className="py-4 px-4 text-right font-mono font-bold text-white text-sm sm:text-base">
-                      R{mat.basePriceZAR.toLocaleString()}
-                    </td>
-
-                    <td className="py-4 px-4 text-center">
-                      <button
-                        onClick={() => onSelectMaterial(mat.id)}
-                        className="py-1.5 px-3 rounded-lg bg-white/10 hover:bg-white hover:text-black text-white font-bold text-xs transition uppercase cursor-pointer border border-white/10 font-mono"
-                      >
-                        Select
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <button
+            onClick={onOpenSwatches}
+            className="py-2 px-5 rounded-xl bg-white text-black hover:bg-zinc-200 text-xs font-bold uppercase tracking-wider transition shrink-0 cursor-pointer"
+          >
+            Request Free Fabric Swatches
+          </button>
         </div>
+
       </div>
     </section>
   );

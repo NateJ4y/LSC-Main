@@ -63,7 +63,7 @@ export const ManufacturingProcessAndDirector: React.FC<ManufacturingProcessProps
       step: '04',
       title: 'Multi-Point Quality Audit & Nationwide Courier',
       lead: 'Backed by our 24-Month Comprehensive Warranty',
-      description: 'Before packaging, every finished cover undergoes a strict multi-point inspection for seam tension, anchor buckle strength, and alignment. Dispatched via The Courier Guy with direct tracking straight to your door or fitted on-site at our Polokwane showroom.',
+      description: 'Before packaging, every finished cover undergoes a strict multi-point inspection for seam tension, anchor buckle strength, and alignment. Dispatched via The Courier Guy with direct tracking straight to your door or fitted on-site at our Vereeniging workshop.',
       icon: Truck,
       badge: 'Step 4: Dispatch & Warranty'
     }
@@ -77,26 +77,26 @@ export const ManufacturingProcessAndDirector: React.FC<ManufacturingProcessProps
       tag: 'Bakkie & 4x4'
     },
     {
-      title: 'Mining & Heavy Construction',
-      description: 'Earthmovers, yellow plant, front loaders, dump trucks, and site bakkies facing severe dust and abrasive PPE wear.',
-      icon: HardHat,
-      tag: 'Heavy Industrial'
-    },
-    {
-      title: 'Safari & Game Viewers',
-      description: 'Open-sided safari cruisers, 9-seater Land Cruisers, hunting vehicles, and game reserve guest transport.',
+      title: 'Active Lifestyles, Gym & Outdoor Sports',
+      description: 'Athletes, trail runners, cyclists, beachgoers, and gym enthusiasts needing sweat and water barrier protection.',
       icon: Flame,
-      tag: 'Bush & Wildlife'
+      tag: 'Active Lifestyle'
     },
     {
-      title: 'Agricultural & Farm Tractors',
-      description: 'Tractors, sprayers, farm workhorses exposed to red soil, fertilizer, chemicals, dogs, and sun.',
+      title: 'Pets, Family & Daily Commutes',
+      description: 'Dog owners, parents with toddlers, and daily drivers wanting machine washable, non-slip, scratch-proof seat protection.',
+      icon: HardHat,
+      tag: 'Family & Pets'
+    },
+    {
+      title: 'Agricultural & Farm Workhorses',
+      description: 'Bakkies, bakkie fleets, and farm vehicles exposed to red Kalahari dust, mud, sun, and tools.',
       icon: Tractor,
       tag: 'Agriculture'
     },
     {
       title: 'Commercial Courier & Security Fleets',
-      description: 'Delivery vans, security response bakkies, and commuter taxis requiring indestructible, easy-wipe protection.',
+      description: 'Delivery vans, security response bakkies, and corporate fleets requiring indestructible, easy-wipe protection.',
       icon: Building2,
       tag: 'Fleet & Courier'
     }
@@ -116,8 +116,8 @@ export const ManufacturingProcessAndDirector: React.FC<ManufacturingProcessProps
       answer: 'Our comprehensive 24-Month Warranty covers all defects in materials and workmanship under normal South African operating conditions—including seam failures, zipper/buckle defects, stitching unravelling, and material integrity. If you experience an issue, simply send us your order details and clear photos, and our factory will rectify it promptly.'
     },
     {
-      question: 'Can I visit the showroom or have my covers fitted on-site?',
-      answer: 'Absolutely. If you are in or traveling through Limpopo, you are welcome to visit our showroom and manufacturing facility at 16 Industria Street, Polokwane (0700), where our technicians can measure or fit your seat covers. For customers across the rest of South Africa, we provide free door-to-door courier delivery via The Courier Guy with a foolproof 30-minute DIY fitment guide.'
+      question: 'Can I visit the workshop or have my covers fitted on-site?',
+      answer: 'Absolutely. If you are in the Vaal or Gauteng region, you are welcome to visit our workshop at Unit 6 Assegai St, South, Vereeniging (1939), where our technicians can assist with measuring or fitting your seat covers. For customers across the rest of South Africa, we provide door-to-door courier delivery via The Courier Guy with a fast, foolproof DIY fitment guide.'
     },
     {
       question: 'Can I add custom embroidery with my name or company logo?',
@@ -137,17 +137,17 @@ export const ManufacturingProcessAndDirector: React.FC<ManufacturingProcessProps
             <div className="lg:col-span-8 space-y-4">
               <div className="inline-flex items-center space-x-2 text-[10px] font-bold text-[#8C9BA8] uppercase tracking-widest bg-black/50 border border-white/10 px-3 py-1 rounded-md font-mono">
                 <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
-                <span>FROM THE CO-DIRECTOR'S WORKSHOP • POLOKWANE, LIMPOPO</span>
+                <span>DIRECT FROM THE WORKSHOP • VEREENIGING, SOUTH AFRICA</span>
               </div>
               
               <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-black uppercase text-white tracking-tight leading-tight">
-                WHY WE REFUSE TO KEEP <span className="text-white border-b-2 border-orange-500 pb-1">OFF-THE-SHELF</span> STOCK
+                PRACTICAL INTERIOR PROTECTION FOR <span className="text-white border-b-2 border-orange-500 pb-1">ACTIVE LIFESTYLES</span>
               </h2>
               
               <p className="text-sm sm:text-base text-zinc-300 leading-relaxed max-w-2xl">
-                "In South Africa, vehicle owners don’t compromise on their bakkies, 4x4s, or work fleets. A Hilux Legend is not identical to a Raider; a Next-Gen Ranger Wildtrak has different seat bolsters and lumbar dials than an XLT. 
+                "Modern seat covers have evolved beyond simple aesthetics. They serve as a critical barrier against moisture, sweat, grime, and heavy use. Located in Vereeniging, Lifestyle Seat Covers caters to athletes, pet owners, and outdoor enthusiasts who value a clean, durable cabin.
                 <br /><br />
-                That’s why every set is <strong>100% custom-crafted from scratch</strong> at our Polokwane facility (16 Industria St). We survey the exact 1:1 OEM seat geometry, laser-cut genuine Riptech® 510g canvas or 600D synthetic polyester, integrate certified airbag tear-away seams, and test every stitch to withstand our harsh African sun, dust, and thorns."
+                Every set is <strong>handcrafted from scratch</strong> at our Vereeniging facility (Unit 6 Assegai St). We build with 100% waterproof heavy-duty materials, non-slip silicone bead or elastic backing, certified airbag-safe seams, and machine-washable designs so you can tackle workouts, trails, and road trips with complete peace of mind."
               </p>
 
               {/* Director Pillars */}
@@ -165,9 +165,9 @@ export const ManufacturingProcessAndDirector: React.FC<ManufacturingProcessProps
                 </div>
 
                 <div className="bg-black/50 border border-white/10 p-3 rounded-xl">
-                  <div className="text-[10px] text-[#8C9BA8] uppercase font-mono font-bold">Direct Factory Pricing</div>
+                  <div className="text-[10px] text-[#8C9BA8] uppercase font-mono font-bold">Direct Workshop Pricing</div>
                   <div className="text-sm font-bold text-white mt-0.5 font-mono">Zero Middleman Markup</div>
-                  <div className="text-[11px] text-zinc-400 mt-0.5">Direct from Polokwane workshop</div>
+                  <div className="text-[11px] text-zinc-400 mt-0.5">Direct from Vereeniging workshop</div>
                 </div>
               </div>
             </div>
@@ -179,33 +179,33 @@ export const ManufacturingProcessAndDirector: React.FC<ManufacturingProcessProps
                   <Building2 className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-heading text-sm font-bold text-white uppercase">Polokwane Showroom</h4>
-                  <p className="text-[11px] text-[#8C9BA8]">Showroom, Factory & Fitment Hub</p>
+                  <h4 className="font-heading text-sm font-bold text-white uppercase">Vereeniging Workshop</h4>
+                  <p className="text-[11px] text-[#8C9BA8]">Lifestyle & Stealth Seat Covers</p>
                 </div>
               </div>
 
               <div className="space-y-3 text-xs text-zinc-300">
                 <div className="flex items-start space-x-2.5">
                   <MapPin className="w-4 h-4 text-orange-500 shrink-0 mt-0.5" />
-                  <span>16 Industria Street, Polokwane, 0700, Limpopo, South Africa</span>
+                  <span>Unit 6 Assegai St, South, Vereeniging, 1939, South Africa</span>
                 </div>
 
                 <div className="flex items-center space-x-2.5 font-mono">
                   <Phone className="w-4 h-4 text-orange-500 shrink-0" />
-                  <a href="tel:+27624679741" className="hover:text-white transition">
-                    +27 62 467 9741
+                  <a href="tel:+27834455370" className="hover:text-white transition">
+                    +27 83 445 5370
                   </a>
                 </div>
 
                 <div className="flex items-center space-x-2.5 font-mono">
                   <MessageCircle className="w-4 h-4 text-emerald-400 shrink-0" />
                   <a 
-                    href="https://wa.me/27624679741?text=Hi%20Stealth%20Seat%20Covers,%20I%20would%20like%20to%20inquire%20about%20custom%20seat%20covers" 
+                    href="https://wa.me/27834455370?text=Hi%20Stealth%20Seat%20Covers,%20I%20would%20like%20to%20inquire%20about%20custom%20seat%20covers" 
                     target="_blank" 
                     rel="noreferrer"
                     className="text-emerald-400 font-bold hover:underline"
                   >
-                    WhatsApp Direct Co-Director Line
+                    WhatsApp Direct Line
                   </a>
                 </div>
               </div>

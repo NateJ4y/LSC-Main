@@ -71,16 +71,16 @@ export const Footer: React.FC<FooterProps> = ({ onOpenSwatches, onSelectNav }) =
           <BrandLogo size="lg" />
 
           <p className="text-[#8C9BA8] text-xs leading-relaxed max-w-sm">
-            South Africa’s premier custom seat cover manufacturer. Engineering heavy-duty Riptech® 510g canvas, 600D synthetic polyester, and automotive leatherette covers built to endure the African bush, mining fleets, farms, and city commutes.
+            LIFESTYLE SEAT COVERS offers practical solutions for drivers seeking to protect vehicle interiors from the rigors of daily use, sweat, mud, pets, and active lifestyles. Handcrafted in Vereeniging, South Africa.
           </p>
 
           {/* Workshop Details Badge */}
           <div className="flex flex-col space-y-1 text-xs font-semibold text-zinc-300 bg-[#16161b] p-3 rounded-xl border border-white/10 w-fit font-mono">
             <div className="flex items-center gap-1.5 text-white">
               <span className="text-base">🇿🇦</span>
-              <span>Direct-from-Factory Workshop & Showroom</span>
+              <span>Direct-from-Workshop</span>
             </div>
-            <span className="text-[11px] text-[#8C9BA8]">16 Industria Street, Polokwane, Limpopo</span>
+            <span className="text-[11px] text-[#8C9BA8]">Unit 6 Assegai St, South, Vereeniging, 1939</span>
           </div>
         </div>
 
@@ -166,35 +166,35 @@ export const Footer: React.FC<FooterProps> = ({ onOpenSwatches, onSelectNav }) =
         {/* Contact & Workshop */}
         <div className="space-y-3">
           <h4 className="font-heading text-sm font-bold text-white uppercase tracking-wider">
-            Showroom & Inquiries
+            Workshop & Inquiries
           </h4>
           <div className="space-y-2.5 text-xs text-[#8C9BA8]">
             <div className="flex items-start space-x-2">
               <MapPin className="w-4 h-4 text-orange-500 shrink-0 mt-0.5" />
               <span>
-                <strong className="text-white">Polokwane Facility:</strong><br />
-                16 Industria Street, Polokwane, 0700, Limpopo
+                <strong className="text-white">Vereeniging Workshop:</strong><br />
+                Unit 6 Assegai St, South, Vereeniging, 1939
               </span>
             </div>
             <div className="flex items-center space-x-2 font-mono text-zinc-300">
               <Clock className="w-4 h-4 text-orange-500 shrink-0" />
-              <span>Lead Time: 10–20 Working Days</span>
+              <span>Hours: Mon–Fri 8:00 AM – 5:00 PM</span>
             </div>
             <div className="flex items-center space-x-2 font-mono text-zinc-300">
               <Phone className="w-4 h-4 text-orange-500 shrink-0" />
-              <a href="tel:+27624679741" className="hover:text-white transition">
-                +27 62 467 9741
+              <a href="tel:+27834455370" className="hover:text-white transition">
+                +27 83 445 5370
               </a>
             </div>
             <div className="flex items-center space-x-2">
               <MessageCircle className="w-4 h-4 text-emerald-400 shrink-0" />
               <a
-                href="https://wa.me/27624679741?text=Hi%20Stealth%20Seat%20Covers,%20I%20need%20a%20quote"
+                href="https://wa.me/27834455370?text=Hi%20Stealth%20Seat%20Covers,%20I%20need%20a%20quote"
                 target="_blank"
                 rel="noreferrer"
                 className="text-emerald-400 font-semibold hover:underline"
               >
-                WhatsApp Workshop Line
+                WhatsApp Line (+27 83 445 5370)
               </a>
             </div>
           </div>
@@ -205,7 +205,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenSwatches, onSelectNav }) =
       <div className="border-t border-white/10 py-6 px-4 sm:px-6 lg:px-8 bg-black">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="text-zinc-500 text-[11px] text-center md:text-left">
-            © {new Date().getFullYear()} Lifestyle Seat Covers (Pty) Ltd. In association with Stealth Seat Covers South Africa. Handcrafted in Polokwane.
+            © {new Date().getFullYear()} Lifestyle Seat Covers. Powered by Stealth Seat Covers (stealthseatcovers.co.za). Handcrafted in Vereeniging, South Africa.
           </div>
 
           {/* Payment Badges */}

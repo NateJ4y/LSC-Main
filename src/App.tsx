@@ -3,16 +3,25 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Header } from './components/Header';
 import { HeroVehicleSelector } from './components/HeroVehicleSelector';
+import { TrustProofBar } from './components/TrustProofBar';
+import { WhySeatCovers } from './components/WhySeatCovers';
 import { CustomizerStudio } from './components/CustomizerStudio';
+import { RealFitmentGallery } from './components/RealFitmentGallery';
 import { MaterialMatrix } from './components/MaterialMatrix';
-import { CategoryShowcase } from './components/CategoryShowcase';
-import { PopularVehicles } from './components/PopularVehicles';
-import { InstallationGuides } from './components/InstallationGuides';
-import { CustomerReviews } from './components/CustomerReviews';
+import { VehicleApplications } from './components/VehicleApplications';
+import { CustomisationShowcase } from './components/CustomisationShowcase';
+import { FitmentProcess } from './components/FitmentProcess';
+import { CommercialFleetSection } from './components/CommercialFleetSection';
+import { BeforeAfterSlider } from './components/BeforeAfterSlider';
 import { ManufacturingProcessAndDirector } from './components/ManufacturingProcessAndDirector';
+import { CompanyHeritageAbout } from './components/CompanyHeritageAbout';
+import { CustomerReviews } from './components/CustomerReviews';
+import { ComprehensiveQuoteSystem } from './components/ComprehensiveQuoteSystem';
+import { ContactSection } from './components/ContactSection';
+import { FloatingWhatsAppCTA } from './components/FloatingWhatsAppCTA';
 import { FreeSwatchModal } from './components/FreeSwatchModal';
 import { CartDrawer } from './components/CartDrawer';
 import { CheckoutModal } from './components/CheckoutModal';
@@ -112,27 +121,6 @@ export default function App() {
     }));
   };
 
-  const handleSelectPopular = (pop: typeof POPULAR_SA_VEHICLES[0]) => {
-    setCustomizerState((prev) => ({
-      ...prev,
-      vehicle: {
-        year: pop.year,
-        make: pop.make,
-        model: pop.model,
-        cabOrBody: pop.cab,
-        submodel: pop.submodel,
-        seatRows: 'front_and_rear'
-      },
-      embroideryOption: {
-        ...prev.embroideryOption,
-        text: `${pop.model.split(' ')[0].toUpperCase()}`
-      }
-    }));
-
-    scrollToSection('customizer-studio');
-    setActiveNav('customizer');
-  };
-
   const handleSelectMaterial = (materialId: string) => {
     const mat = MATERIALS_DATA.find((m) => m.id === materialId) || MATERIALS_DATA[0];
     setCustomizerState((prev) => ({
@@ -142,7 +130,38 @@ export default function App() {
     }));
 
     scrollToSection('customizer-studio');
-    setActiveNav('customizer');
+    setActiveNav('customise');
+  };
+
+  const handleSelectApplication = (appId: string) => {
+    if (appId === '4x4-overland') {
+      setCustomizerState((prev) => ({
+        ...prev,
+        materialId: 'heavy-duty-ripstop-canvas',
+        primaryColorId: 'canvas-sand'
+      }));
+    } else if (appId === 'daily-suv') {
+      setCustomizerState((prev) => ({
+        ...prev,
+        materialId: 'rhino-hide-leatherette',
+        primaryColorId: 'rhino-onyx'
+      }));
+    } else if (appId === 'commercial-fleet') {
+      setCustomizerState((prev) => ({
+        ...prev,
+        materialId: '600d-synthetic-polyester',
+        primaryColorId: 'poly-charcoal'
+      }));
+    } else if (appId === 'luxury-executive') {
+      setCustomizerState((prev) => ({
+        ...prev,
+        materialId: 'rhino-hide-leatherette',
+        primaryColorId: 'rhino-cognac'
+      }));
+    }
+
+    scrollToSection('customizer-studio');
+    setActiveNav('customise');
   };
 
   const handleAddToCart = (newItem: CartItem) => {
@@ -186,20 +205,20 @@ export default function App() {
     setActiveNav(nav);
     if (nav === 'home') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else if (nav === 'customizer') {
-      scrollToSection('customizer-studio');
-    } else if (nav === 'materials') {
+    } else if (nav === 'gallery') {
+      scrollToSection('gallery');
+    } else if (nav === 'fabrics' || nav === 'seat-covers') {
       scrollToSection('fabric-matrix');
-    } else if (nav === 'process') {
-      scrollToSection('manufacturing-process');
-    } else if (nav === 'categories') {
-      scrollToSection('vehicle-accessories');
-    } else if (nav === 'popular-vehicles') {
-      scrollToSection('popular-bakkies');
-    } else if (nav === 'installation') {
-      scrollToSection('installation-guide');
+    } else if (nav === 'vehicles') {
+      scrollToSection('vehicle-applications');
+    } else if (nav === 'customise') {
+      scrollToSection('customizer-studio');
     } else if (nav === 'reviews') {
       scrollToSection('reviews');
+    } else if (nav === 'quote') {
+      scrollToSection('quote-builder');
+    } else if (nav === 'contact') {
+      scrollToSection('contact-us');
     }
   };
 
@@ -223,17 +242,30 @@ export default function App() {
       />
 
       <main className="flex-1">
-        {/* Coverking-Style Hero Vehicle Selector */}
+        {/* 1. Hero & Fast Quote Calculator with Gallery Slide Preview */}
         <HeroVehicleSelector
           vehicle={customizerState.vehicle}
           onVehicleChange={handleVehicleChange}
           onStartConfiguring={() => {
             scrollToSection('customizer-studio');
-            setActiveNav('customizer');
+            setActiveNav('customise');
+          }}
+          onViewGallery={() => {
+            scrollToSection('gallery');
+            setActiveNav('gallery');
           }}
         />
 
-        {/* The Flagship Interactive Customizer Studio */}
+        {/* 2. Trust & Proof Bar */}
+        <TrustProofBar />
+
+        {/* 3. Simple Material Guide (Canvas, Leatherette, Polyester) */}
+        <MaterialMatrix
+          onSelectMaterial={handleSelectMaterial}
+          onOpenSwatches={() => setIsSwatchesOpen(true)}
+        />
+
+        {/* 4. Interactive Seat Customizer & Live Preview */}
         <CustomizerStudio
           customizerState={customizerState}
           onUpdateCustomizer={setCustomizerState}
@@ -241,40 +273,46 @@ export default function App() {
           onOpenSwatches={() => setIsSwatchesOpen(true)}
         />
 
-        {/* Technical Material Matrix & Fabric Advisor Quiz */}
-        <MaterialMatrix
-          onSelectMaterial={handleSelectMaterial}
-          onOpenSwatches={() => setIsSwatchesOpen(true)}
-        />
-
-        {/* Dash Covers, 3D All-Weather Floor Mats & Storm Covers */}
-        <CategoryShowcase
-          vehicle={customizerState.vehicle}
-          onAddToCart={handleAddToCart}
-          onGoToCustomizer={() => {
-            scrollToSection('customizer-studio');
-            setActiveNav('customizer');
+        {/* 5. Real Vehicle Fitment & Customer Gallery */}
+        <RealFitmentGallery
+          onStartQuote={(vehSummary) => {
+            if (vehSummary) {
+              // Try to adapt customizer state or scroll to quote
+              const el = document.getElementById('quote-builder');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+              setActiveNav('quote');
+            }
           }}
         />
 
-        {/* South Africa's Top Bakkie Fits (Hilux, Ranger, Cruiser, D-Max, Jimny, Fortuner) */}
-        <PopularVehicles onSelectPopular={handleSelectPopular} />
-
-        {/* The Stealth Manufacturing Process & Director's Guarantee */}
-        <ManufacturingProcessAndDirector
-          onOpenSwatches={() => setIsSwatchesOpen(true)}
-          onGoToCustomizer={() => {
-            scrollToSection('customizer-studio');
-            setActiveNav('customizer');
+        {/* 6. Vehicle Fitments Showcase (Hilux, Ranger, D-Max, Cruiser, etc.) */}
+        <VehicleApplications
+          onSelectApplication={handleSelectApplication}
+          onStartQuote={() => {
+            scrollToSection('quote-builder');
+            setActiveNav('quote');
           }}
         />
 
-        {/* 30-Minute DIY Installation Helper */}
-        <InstallationGuides />
-
-        {/* Customer Reviews by SA Region */}
+        {/* 7. Real South African Customer Reviews */}
         <CustomerReviews />
+
+        {/* 8. Fast 1-Step Quote System */}
+        <ComprehensiveQuoteSystem
+          currentVehicle={customizerState.vehicle}
+        />
+
+        {/* 9. Vereeniging Workshop, Showroom & Contact */}
+        <ContactSection
+          onStartQuote={() => {
+            scrollToSection('quote-builder');
+            setActiveNav('quote');
+          }}
+        />
       </main>
+
+      {/* Floating Persistent WhatsApp Trigger */}
+      <FloatingWhatsAppCTA />
 
       {/* Shopping Cart Slide-over Drawer */}
       <CartDrawer

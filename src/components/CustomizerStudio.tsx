@@ -15,10 +15,12 @@ import {
   Award,
   Sun,
   Flame,
-  Droplets
+  Droplets,
+  PenLine,
+  Car
 } from 'lucide-react';
 import { MATERIALS_DATA } from '../data/materialsData';
-import { CustomizerState, CartItem } from '../types';
+import { CustomizerState, CartItem, VehicleSelection } from '../types';
 import { SeatVisualizer } from './SeatVisualizer';
 
 interface CustomizerStudioProps {
@@ -37,6 +39,28 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
   const [activeTab, setActiveTab] = useState<'material' | 'color' | 'rows' | 'embroidery'>('material');
   const [viewMode, setViewMode] = useState<'front' | 'rear' | 'detail'>('front');
   const [addedToast, setAddedToast] = useState(false);
+  const [showVehicleEditor, setShowVehicleEditor] = useState(false);
+
+  // Editable vehicle state
+  const [editYear, setEditYear] = useState(String(customizerState.vehicle.year || 2024));
+  const [editMake, setEditMake] = useState(customizerState.vehicle.make || 'Toyota');
+  const [editModel, setEditModel] = useState(customizerState.vehicle.model || 'Hilux');
+  const [editCab, setEditCab] = useState(customizerState.vehicle.cabOrBody || 'Double Cab');
+
+  const handleSaveVehicle = (e: React.FormEvent) => {
+    e.preventDefault();
+    onUpdateCustomizer((prev) => ({
+      ...prev,
+      vehicle: {
+        ...prev.vehicle,
+        year: editYear ? Number(editYear) || (editYear as any) : 2024,
+        make: editMake,
+        model: editModel,
+        cabOrBody: editCab
+      }
+    }));
+    setShowVehicleEditor(false);
+  };
 
   const currentMaterial =
     MATERIALS_DATA.find((m) => m.id === customizerState.materialId) || MATERIALS_DATA[0];
@@ -118,7 +142,15 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
             </p>
           </div>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              onClick={() => setShowVehicleEditor(!showVehicleEditor)}
+              className="text-xs font-bold uppercase tracking-wider px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 transition flex items-center space-x-2 cursor-pointer"
+            >
+              <PenLine className="w-3.5 h-3.5 text-orange-500" />
+              <span>{showVehicleEditor ? 'Close Editor' : 'Type / Change Vehicle'}</span>
+            </button>
+
             <button
               onClick={onOpenSwatches}
               className="text-xs font-bold uppercase tracking-wider px-3.5 py-2 rounded-xl bg-[#141418] hover:bg-zinc-800 text-white border border-white/10 hover:border-orange-500/40 transition flex items-center space-x-2 cursor-pointer"
@@ -128,6 +160,81 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
             </button>
           </div>
         </div>
+
+        {/* Inline Vehicle Type-In Editor Drawer */}
+        {showVehicleEditor && (
+          <form onSubmit={handleSaveVehicle} className="mb-6 p-4 sm:p-5 bg-[#141418] border border-orange-500/40 rounded-2xl shadow-xl space-y-3">
+            <div className="flex items-center justify-between border-b border-white/10 pb-2">
+              <span className="text-xs font-bold uppercase text-white flex items-center gap-1.5 font-mono">
+                <Car className="w-4 h-4 text-orange-500" />
+                Type or Edit Your Exact Vehicle Spec
+              </span>
+              <span className="text-[10px] text-zinc-400">Over 1,500+ CAD laser cut patterns available</span>
+            </div>
+            
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+              <div>
+                <label className="block text-[10px] font-bold text-zinc-300 uppercase mb-1">Model Year</label>
+                <input
+                  type="text"
+                  value={editYear}
+                  onChange={(e) => setEditYear(e.target.value)}
+                  placeholder="e.g. 2024"
+                  className="w-full bg-[#0c0c0e] border border-zinc-700 focus:border-orange-500 rounded-xl px-2.5 py-2 text-xs font-semibold text-white focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-bold text-zinc-300 uppercase mb-1">Make / Brand</label>
+                <input
+                  type="text"
+                  value={editMake}
+                  onChange={(e) => setEditMake(e.target.value)}
+                  placeholder="e.g. Toyota, Ford, Isuzu"
+                  className="w-full bg-[#0c0c0e] border border-zinc-700 focus:border-orange-500 rounded-xl px-2.5 py-2 text-xs font-semibold text-white focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-bold text-zinc-300 uppercase mb-1">Model & Trim</label>
+                <input
+                  type="text"
+                  value={editModel}
+                  onChange={(e) => setEditModel(e.target.value)}
+                  placeholder="e.g. Hilux Legend 50 / Wildtrak"
+                  className="w-full bg-[#0c0c0e] border border-zinc-700 focus:border-orange-500 rounded-xl px-2.5 py-2 text-xs font-semibold text-white focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-bold text-zinc-300 uppercase mb-1">Cab / Body</label>
+                <input
+                  type="text"
+                  value={editCab}
+                  onChange={(e) => setEditCab(e.target.value)}
+                  placeholder="e.g. Double Cab / SUV"
+                  className="w-full bg-[#0c0c0e] border border-zinc-700 focus:border-orange-500 rounded-xl px-2.5 py-2 text-xs font-semibold text-white focus:outline-none"
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end space-x-2 pt-1">
+              <button
+                type="button"
+                onClick={() => setShowVehicleEditor(false)}
+                className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-300 text-xs font-bold uppercase tracking-wider cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-1.5 rounded-lg bg-white text-black hover:bg-zinc-200 text-xs font-bold uppercase tracking-wider cursor-pointer shadow"
+              >
+                Apply Vehicle
+              </button>
+            </div>
+          </form>
+        )}
 
         {/* Studio Workspace Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
@@ -276,7 +383,7 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                   <span className="text-white font-semibold">100% Laser-Fit Tailored</span>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                   {MATERIALS_DATA.map((mat) => {
                     const isSelected = customizerState.materialId === mat.id;
                     return (
@@ -289,33 +396,39 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                             primaryColorId: mat.colors[0].id
                           }));
                         }}
-                        className={`relative p-4 rounded-2xl border-2 transition cursor-pointer flex flex-col justify-between ${
+                        className={`p-4 sm:p-5 rounded-2xl border-2 transition cursor-pointer flex flex-col justify-between space-y-3 ${
                           isSelected
-                            ? 'bg-[#18181f] border-white shadow-xl shadow-white/5'
+                            ? 'bg-[#18181f] border-orange-500 shadow-xl shadow-orange-500/10'
                             : 'bg-[#141418] border-white/10 hover:border-white/30'
                         }`}
                       >
-                        {mat.badgeText && (
-                          <div className="absolute top-3 right-3 text-[10px] font-bold px-2 py-0.5 rounded-md bg-white/10 text-white border border-white/20">
-                            {mat.badgeText}
-                          </div>
-                        )}
+                        {/* Top Info Bar */}
+                        <div className="flex items-center justify-between gap-2 border-b border-white/5 pb-2">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-orange-400 font-mono">
+                            {mat.warrantyYears} YEAR WARRANTY
+                          </span>
+                          {mat.badgeText && (
+                            <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-white/10 text-zinc-300 border border-white/10 shrink-0">
+                              {mat.badgeText}
+                            </span>
+                          )}
+                        </div>
 
                         <div>
-                          <h4 className="font-heading text-xl font-bold text-white uppercase flex items-center gap-2">
+                          <h4 className="font-heading text-lg font-bold text-white uppercase flex items-center justify-between gap-2">
                             <span>{mat.name}</span>
-                            {isSelected && <Check className="w-4 h-4 text-orange-500 font-bold" />}
+                            {isSelected && <Check className="w-4 h-4 text-orange-500 shrink-0" />}
                           </h4>
-                          <p className="text-xs text-[#8C9BA8] font-medium mt-0.5">{mat.tagline}</p>
+                          <p className="text-xs text-[#8C9BA8] font-medium mt-1">{mat.tagline}</p>
                           <p className="text-xs text-zinc-300 mt-2 line-clamp-2 leading-relaxed">
                             {mat.description}
                           </p>
                         </div>
 
                         {/* Specs Mini-Badges */}
-                        <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs">
-                          <div className="text-[#8C9BA8]">
-                            Wash: <span className="text-white font-semibold">{mat.cleaningEase}</span>
+                        <div className="pt-3 border-t border-white/10 flex items-center justify-between text-xs">
+                          <div className="text-zinc-400 text-[11px]">
+                            Care: <span className="text-white font-semibold">{mat.cleaningEase}</span>
                           </div>
                           <div className="font-mono font-bold text-white text-sm">
                             From R{mat.basePriceZAR.toLocaleString()}
