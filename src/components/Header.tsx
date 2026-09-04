@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { 
   ShieldCheck, 
+  Truck, 
+  Phone, 
   ShoppingCart, 
   Menu, 
   X, 
@@ -15,6 +17,7 @@ import {
   Sun,
   Moon,
   ChevronRight,
+  Mail,
   MapPin
 } from 'lucide-react';
 import { CartItem } from '../types';
@@ -69,6 +72,44 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header className="sticky top-0 z-50 w-full bg-[#0c0c0e]/95 backdrop-blur-md border-b border-white/10 transition-all font-sans">
+      {/* Top Banner - South African Workshop Context & Fast Helpline */}
+      <div className="bg-[#141417] text-zinc-300 text-xs font-semibold py-1.5 px-3 sm:px-4 border-b border-white/5">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 text-[11px] sm:text-xs">
+          {/* Left: Origin & Trust Proof */}
+          <div className="flex items-center space-x-2 overflow-hidden truncate">
+            <span className="inline-flex items-center gap-1.5 font-bold text-white uppercase tracking-wider text-[10px] sm:text-[11px] shrink-0">
+              <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-orange-500 inline-block animate-pulse" />
+              <span>🇿🇦 VEREENIGING WORKSHOP</span>
+            </span>
+            <span className="text-zinc-600 hidden xs:inline">•</span>
+            <span className="hidden xs:inline-flex items-center gap-1 text-zinc-300 text-[10px] sm:text-[11px] truncate">
+              <Truck className="w-3 h-3 text-orange-400 shrink-0" /> Free Courier SA
+            </span>
+          </div>
+
+          {/* Right: Quick Direct Contact */}
+          <div className="flex items-center space-x-3 text-[11px] font-medium shrink-0">
+            <a
+              href="https://wa.me/27834455370?text=Hi%20Lifestyle%20Seat%20Covers,%20I%20would%20like%20to%20enquire%20about%20custom%20seat%20covers%20for%20my%20vehicle."
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center space-x-1 text-emerald-400 hover:text-emerald-300 transition py-0.5"
+            >
+              <MessageCircle className="w-3.5 h-3.5 fill-current shrink-0" />
+              <span className="font-semibold">WhatsApp</span>
+            </a>
+            <span className="text-zinc-700 hidden sm:inline">|</span>
+            <a
+              href="tel:+27834455370"
+              className="hidden sm:flex items-center space-x-1 text-zinc-300 hover:text-white transition font-mono text-[11px]"
+            >
+              <Phone className="w-3 h-3 text-[#8C9BA8]" />
+              <span>083 445 5370</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
       {/* Main Nav Bar */}
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20 gap-2">

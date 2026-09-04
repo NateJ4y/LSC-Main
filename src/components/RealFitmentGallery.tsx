@@ -9,11 +9,11 @@ import {
   Filter, 
   Search, 
   ShieldCheck,
-  ChevronDown,
-  ChevronUp
+  FolderUp
 } from 'lucide-react';
 import { WORKSHOP_PHOTOS, WorkshopPhoto } from '../data/workshopImages';
 import { AssetImage } from './AssetImage';
+import { AssetUploaderModal } from './AssetUploaderModal';
 
 interface RealFitmentGalleryProps {
   onStartQuote?: (vehicleName?: string) => void;
@@ -23,8 +23,7 @@ export const RealFitmentGallery: React.FC<RealFitmentGalleryProps> = ({ onStartQ
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activeModalItem, setActiveModalItem] = useState<WorkshopPhoto | null>(null);
-  const [isExpanded, setIsExpanded] = useState<boolean>(false);
-  const PREVIEW_COUNT = 3;
+  const [isUploaderOpen, setIsUploaderOpen] = useState<boolean>(false);
 
   const categories = [
     { key: 'all', label: `All Workshop Photos (${WORKSHOP_PHOTOS.length})` },
@@ -44,9 +43,6 @@ export const RealFitmentGallery: React.FC<RealFitmentGalleryProps> = ({ onStartQ
       item.embroidery.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
-
-  const visibleItems = isExpanded ? filteredItems : filteredItems.slice(0, PREVIEW_COUNT);
-  const hasMore = filteredItems.length > PREVIEW_COUNT;
 
   return (
     <section id="gallery" className="py-20 bg-[#0c0c0e] border-b border-white/10 relative overflow-hidden">
@@ -75,6 +71,14 @@ export const RealFitmentGallery: React.FC<RealFitmentGalleryProps> = ({ onStartQ
           </div>
 
           <div className="flex items-center gap-3">
+            <button
+              onClick={() => setIsUploaderOpen(true)}
+              className="py-3 px-4 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700/80 text-xs font-mono font-bold transition flex items-center gap-2"
+              title="Manage and drop authentic image assets"
+            >
+              <FolderUp className="w-4 h-4 text-orange-400" />
+              <span>Original Asset Manager</span>
+            </button>
             <div className="bg-[#141418] border border-white/10 rounded-2xl p-4 sm:p-5 flex items-center space-x-4">
               <div className="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/30 flex items-center justify-center text-orange-500">
                 <ShieldCheck className="w-6 h-6" />
@@ -131,7 +135,7 @@ export const RealFitmentGallery: React.FC<RealFitmentGalleryProps> = ({ onStartQ
 
         {/* Gallery Grid: 21 Authentic Photos */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {visibleItems.map((item) => (
+          {filteredItems.map((item) => (
             <div
               key={item.id}
               className="group bg-[#141418] border border-white/10 hover:border-orange-500/40 rounded-3xl overflow-hidden shadow-xl transition-all duration-300 flex flex-col justify-between hover:-translate-y-1"
@@ -242,40 +246,6 @@ export const RealFitmentGallery: React.FC<RealFitmentGalleryProps> = ({ onStartQ
             </div>
           ))}
         </div>
-
-        {/* Show More / Show Less Button */}
-        {hasMore && (
-          <div className="flex flex-col items-center justify-center pt-2">
-            <button
-              onClick={() => {
-                if (isExpanded) {
-                  setIsExpanded(false);
-                  const galleryEl = document.getElementById('gallery');
-                  if (galleryEl) {
-                    galleryEl.scrollIntoView({ behavior: 'smooth' });
-                  }
-                } else {
-                  setIsExpanded(true);
-                }
-              }}
-              className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-2xl bg-white hover:bg-orange-500 text-black font-heading font-black text-xs uppercase tracking-wider shadow-2xl hover:shadow-orange-500/20 transition-all duration-300 cursor-pointer group"
-            >
-              <span>
-                {isExpanded ? 'Show Less' : `Show More (${filteredItems.length - PREVIEW_COUNT} More Vehicles)`}
-              </span>
-              {isExpanded ? (
-                <ChevronUp className="w-4 h-4 transition-transform duration-200 group-hover:-translate-y-0.5" />
-              ) : (
-                <ChevronDown className="w-4 h-4 transition-transform duration-200 group-hover:translate-y-0.5" />
-              )}
-            </button>
-            <span className="text-[11px] text-zinc-500 font-mono mt-3">
-              {isExpanded
-                ? `Showing all ${filteredItems.length} authentic workshop photos`
-                : `Previewing 3 of ${filteredItems.length} authentic workshop photos`}
-            </span>
-          </div>
-        )}
 
         {/* Empty State */}
         {filteredItems.length === 0 && (
@@ -406,6 +376,12 @@ export const RealFitmentGallery: React.FC<RealFitmentGalleryProps> = ({ onStartQ
           </div>
         </div>
       )}
+
+      {/* Asset Uploader Modal */}
+      <AssetUploaderModal
+        isOpen={isUploaderOpen}
+        onClose={() => setIsUploaderOpen(false)}
+      />
     </section>
   );
 };
