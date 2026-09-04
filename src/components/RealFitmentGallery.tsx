@@ -1,179 +1,19 @@
 import React, { useState } from 'react';
 import { 
   Camera, 
-  CheckCircle2, 
   Sparkles, 
-  ShieldCheck, 
   Maximize2, 
   X, 
   MessageCircle, 
   Calculator, 
-  MapPin, 
   Filter, 
   Search, 
-  SlidersHorizontal,
-  Layers,
-  ArrowRight,
-  Award
+  ShieldCheck,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
-import hiluxGd6Img from '../assets/images/hilux_gd6_covers_1788330516757.jpg';
-import cruiser79Img from '../assets/images/cruiser_79_covers_1788330530981.jpg';
-import rangerRedImg from '../assets/images/ranger_red_covers_1788330546716.jpg';
-import amarokDiamondImg from '../assets/images/amarok_diamond_covers_1788330560423.jpg';
-import showroomImg from '../assets/images/showroom_display_seats_1788330578843.jpg';
-import jeepImg from '../assets/images/jeep_wrangler_covers_1788330596374.jpg';
-import fleetImg from '../assets/images/gwm_fleet_covers_1788330612996.jpg';
-
-export interface GalleryItem {
-  id: string;
-  title: string;
-  vehicle: string;
-  category: 'bakkies' | 'suv' | 'fleet' | 'diamond' | 'showroom';
-  material: string;
-  stitchStyle: string;
-  embroidery: string;
-  location: string;
-  image: string;
-  highlights: string[];
-  description: string;
-  featured?: boolean;
-}
-
-const GALLERY_DATA: GalleryItem[] = [
-  {
-    id: 'hilux-gd6-custom',
-    title: 'Toyota Hilux GD-6 Raider & Legend',
-    vehicle: 'Toyota Hilux (2016–2025+ GD-6 Double Cab)',
-    category: 'bakkies',
-    material: '510g Tough Ripstop Canvas + Micro-Silicone Non-Slip Backing',
-    stitchStyle: 'Upper Fluted Ribs + Lower Diamond Quilt Center',
-    embroidery: 'Bespoke Dual-Tone "GD-6" Chrome/Red Badge',
-    location: 'Fitted at Vereeniging Workshop',
-    image: hiluxGd6Img,
-    highlights: [
-      'Certified Side Airbag Breakaway Seam Tagged',
-      'Dual Flute + Diamond Quilted Padding',
-      'Full Lumbar & Side Lever Clearance',
-      'Waterproof & Mud Resistant'
-    ],
-    description: 'Precision handcrafted for South Africa’s bestselling bakkie. Features a custom embroidered GD-6 badge, breathable high-density padded diamond quilt, and zero interference with seat-adjust levers.',
-    featured: true
-  },
-  {
-    id: 'cruiser-79-overland',
-    title: 'Toyota Land Cruiser 79 Series Single & Double Cab',
-    vehicle: 'Toyota Land Cruiser 79 (4.5L V8 / 2.8L GD-6)',
-    category: 'bakkies',
-    material: '510g Heavy-Duty Riptech Canvas (Tactical Charcoal & Sand)',
-    stitchStyle: 'Heavy-Gauge Double-Needle Nylon Stitching',
-    embroidery: 'Official "LAND CRUISER" Contrast Header Bar',
-    location: 'Direct Workshop Installation',
-    image: cruiser79Img,
-    highlights: [
-      'Indestructible 510g Canvas against Thorns & Red Dust',
-      'Twin-Tone Sand Beige Accent Bar',
-      'Reinforced Bottom Anchor Straps',
-      'Designed for Kalahari & Bush Expeditions'
-    ],
-    description: 'Built for extreme African conditions. Designed to wrap tightly around the rugged Cruiser seats, shielding factory upholstery from abrasive red soil, hunting gear, and blazing sun.',
-    featured: true
-  },
-  {
-    id: 'ranger-wildtrak-red',
-    title: 'Ford Ranger Wildtrak & XLT Next-Gen',
-    vehicle: 'Ford Ranger / Everest (2019–2025+ Double Cab)',
-    category: 'bakkies',
-    material: 'Waterproof 600D Poly Canvas with Sport Padding',
-    stitchStyle: 'High-Contrast Red Sport Perimeter & Fluted Inset',
-    embroidery: 'Custom Red "RANGER" Upper Backrest Branding',
-    location: 'Dispatched Nationwide via The Courier Guy',
-    image: rangerRedImg,
-    highlights: [
-      'Matching Padded Center Armrest Console Cover',
-      'Vibrant Red UV-Bonded Thread (Zero Fade)',
-      '100% Retained Electric Seat Adjustments',
-      'Airbag-Safe Breakaway Seams'
-    ],
-    description: 'Sporty, aggressive styling tailored for the Ford Ranger cabin. Includes a snug matching center console lid cover and bold red accent stitching that complements factory interior trims.',
-    featured: true
-  },
-  {
-    id: 'amarok-diamond-luxury',
-    title: 'Volkswagen Amarok V6 & BiTDI Double Cab',
-    vehicle: 'Volkswagen Amarok (2010–2025+ Double Cab)',
-    category: 'diamond',
-    material: 'Heavy-Duty Canvas with High-Density Quilted Foam Core',
-    stitchStyle: 'Full Geometric Diamond Quilt in Silver Needle',
-    embroidery: 'Embroidered "AMAROK" Silver Upper Script',
-    location: 'Vereeniging Workshop Fitment',
-    image: amarokDiamondImg,
-    highlights: [
-      'Deep Diamond Quilt for Enhanced Lumbar Comfort',
-      'Tightly Sculpted Deep-Seat Side Bolsters',
-      'Resistant to Gym Sweat, Spills & Dogs',
-      'Machine Washable & Quick Dry'
-    ],
-    description: 'Combines executive styling with heavy-duty defense. The full diamond-stitched center cushions provide extra padding for long highway hauls while preventing sweat and water seepage.',
-    featured: true
-  },
-  {
-    id: 'jeep-wrangler-tactical',
-    title: 'Jeep Wrangler Rubicon & Gladiator',
-    vehicle: 'Jeep Wrangler JK / JL & Gladiator JT',
-    category: 'bakkies',
-    material: 'Tactical 510g Ripstop Canvas (Charcoal Black)',
-    stitchStyle: 'White Precision Contour Lines & Double Edging',
-    embroidery: 'Official "Jeep" White Script on Backrest',
-    location: 'Custom Order from Vereeniging Workshop',
-    image: jeepImg,
-    highlights: [
-      'Open-Top UV & Rain Protection',
-      'Included Armrest & Headrest Sets',
-      'Zero Bunched Fabric on Entry/Exit',
-      'Easy Sponge-Down or Machine Wash'
-    ],
-    description: 'Engineered for open-air trail exploration. Repels sudden rain downpours, river crossings, mud, and dust without soaking through to the factory foam.',
-    featured: true
-  },
-  {
-    id: 'corporate-fleet-gwm',
-    title: 'Corporate Fleet & Commercial Branding',
-    vehicle: 'GWM P-Series / Steed / Isuzu D-Max Fleets',
-    category: 'fleet',
-    material: 'Industrial Grade 600D Oxford Polyester',
-    stitchStyle: 'Reinforced Twin-Needle Seams',
-    embroidery: 'Custom Company Logo & Headrest Department Badges',
-    location: 'Vereeniging Direct Fleet Production',
-    image: fleetImg,
-    highlights: [
-      'Custom Corporate Logo Embroidery (e.g. Mining / Logistics)',
-      'Resistant to Dirty Workwear, Tools & Grease',
-      'Fast 10-Min Wipe-Down Maintenance',
-      'Massive Resale Value Protection'
-    ],
-    description: 'We outfit company bakkie fleets with custom embroidered corporate logos. Protects fleet equity from rough workboots, grease, chemicals, and daily crew turnover.',
-    featured: true
-  },
-  {
-    id: 'showroom-display-bench',
-    title: 'Lifestyle Seat Covers Workshop Showroom',
-    vehicle: 'Live Demonstration Seats (Unit 6 Assegai St, Vereeniging)',
-    category: 'showroom',
-    material: 'All Fabric Options: 510g Canvas, Leatherette, 600D Poly',
-    stitchStyle: 'Diamond Quilt, Horizontal Flutes, Red Sport & Plain',
-    embroidery: 'Lifestyle Seat Covers Official Brand Demo',
-    location: 'Unit 6 Assegai St, South, Vereeniging, 1939',
-    image: showroomImg,
-    highlights: [
-      'Inspect Stitches, Padding & Materials in Person',
-      'Compare Diamond Quilt vs Fluted vs Plain Styles',
-      'On-Site Measurements & Professional Fitment Service',
-      'Open Mon–Fri 08:00–17:00'
-    ],
-    description: 'Visit our Vereeniging showroom to physically feel our 510g Riptech canvas, luxury diamond stitch padding, and test the tight non-slip fitment on our demo seating bench.',
-    featured: true
-  }
-];
+import { WORKSHOP_PHOTOS, WorkshopPhoto } from '../data/workshopImages';
+import { AssetImage } from './AssetImage';
 
 interface RealFitmentGalleryProps {
   onStartQuote?: (vehicleName?: string) => void;
@@ -182,17 +22,20 @@ interface RealFitmentGalleryProps {
 export const RealFitmentGallery: React.FC<RealFitmentGalleryProps> = ({ onStartQuote }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [activeModalItem, setActiveModalItem] = useState<GalleryItem | null>(null);
+  const [activeModalItem, setActiveModalItem] = useState<WorkshopPhoto | null>(null);
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const PREVIEW_COUNT = 3;
 
   const categories = [
-    { key: 'all', label: 'All Real Fitments' },
+    { key: 'all', label: `All Workshop Photos (${WORKSHOP_PHOTOS.length})` },
     { key: 'bakkies', label: '4x4 Bakkies & Cruisers' },
-    { key: 'diamond', label: 'Luxury Diamond Stitch' },
-    { key: 'fleet', label: 'Corporate & Custom Logos' },
-    { key: 'showroom', label: 'Workshop Showroom' }
+    { key: 'suv', label: 'SUVs & Wranglers' },
+    { key: 'fleet', label: 'Commercial & Corporate Logos' },
+    { key: 'diamond', label: 'Diamond Quilted' },
+    { key: 'interior', label: 'Cabin & Interior Views' }
   ];
 
-  const filteredItems = GALLERY_DATA.filter((item) => {
+  const filteredItems = WORKSHOP_PHOTOS.filter((item) => {
     const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
     const matchesSearch = 
       item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -201,6 +44,9 @@ export const RealFitmentGallery: React.FC<RealFitmentGalleryProps> = ({ onStartQ
       item.embroidery.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
+
+  const visibleItems = isExpanded ? filteredItems : filteredItems.slice(0, PREVIEW_COUNT);
+  const hasMore = filteredItems.length > PREVIEW_COUNT;
 
   return (
     <section id="gallery" className="py-20 bg-[#0c0c0e] border-b border-white/10 relative overflow-hidden">
@@ -214,43 +60,47 @@ export const RealFitmentGallery: React.FC<RealFitmentGalleryProps> = ({ onStartQ
           <div className="space-y-3 max-w-3xl">
             <div className="inline-flex items-center space-x-2 text-[10px] font-bold text-orange-500 uppercase tracking-widest bg-[#141418] border border-orange-500/20 px-3 py-1 rounded-md font-mono">
               <Camera className="w-3.5 h-3.5 text-orange-500" />
-              <span>REAL WORKSHOP & CUSTOMER FITMENTS</span>
+              <span>AUTHENTIC WORKSHOP PHOTOGRAPHY • {WORKSHOP_PHOTOS.length} VEHICLE FITMENTS</span>
             </div>
             
             <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-black uppercase text-white tracking-tight leading-tight">
-              PROVEN ON SOUTH AFRICAN ROADS. <br />
-              <span className="text-white border-b-2 border-orange-500 pb-1">INSPECT OUR ACTUAL FITMENTS</span>
+              GENUINE SOUTH AFRICAN FITMENTS. <br />
+              <span className="text-white border-b-2 border-orange-500 pb-1">UNEDITED ORIGINAL CRAFTSMANSHIP</span>
             </h2>
 
-            <p className="text-sm sm:text-base text-[#8C9BA8] leading-relaxed">
-              No generic CGI mockups. Browse actual photographs of our handcrafted seat covers fitted to Toyota Hilux GD-6, Land Cruiser 79 Series, Ford Ranger, VW Amarok, Jeep Wrangler, and corporate fleets — straight from our Vereeniging workshop.
+            <p className="text-sm text-[#8C9BA8] max-w-2xl leading-relaxed">
+              Every photograph shown here is an unmodified capture from our Vereeniging workshop floor. 
+              Review real embroidery badges, high-tensile stitching, and tight custom anchoring across South Africa’s favorite 4x4s, SUVs, and commercial fleets.
             </p>
           </div>
 
-          {/* Workshop Trust Badge */}
-          <div className="bg-[#141418] border border-white/10 p-4 rounded-2xl flex items-center space-x-3.5 shrink-0 shadow-lg">
-            <div className="w-10 h-10 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-500 shrink-0">
-              <Award className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="text-xs font-bold text-white uppercase font-mono">100% Handcrafted</div>
-              <div className="text-[11px] text-[#8C9BA8]">Unit 6 Assegai St, Vereeniging</div>
+          <div className="flex items-center gap-3">
+            <div className="bg-[#141418] border border-white/10 rounded-2xl p-4 sm:p-5 flex items-center space-x-4">
+              <div className="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/30 flex items-center justify-center text-orange-500">
+                <ShieldCheck className="w-6 h-6" />
+              </div>
+              <div className="text-left font-mono">
+                <div className="text-xs text-zinc-400">Airbag Certification</div>
+                <div className="text-sm font-bold text-white">SABS Compliant Seams</div>
+                <div className="text-[10px] text-emerald-400">ISO 9001 Threading</div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Filter Controls & Search */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#141418] border border-white/10 p-3 rounded-2xl">
+        {/* Filter and Search Bar */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#141418] border border-white/10 p-3 sm:p-4 rounded-2xl">
           {/* Category Tabs */}
-          <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 scrollbar-none">
+          <div className="flex items-center space-x-1 sm:space-x-2 overflow-x-auto pb-2 md:pb-0 scrollbar-none">
+            <Filter className="w-4 h-4 text-zinc-500 ml-1 mr-1 shrink-0 hidden sm:block" />
             {categories.map((cat) => (
               <button
                 key={cat.key}
                 onClick={() => setSelectedCategory(cat.key)}
-                className={`px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider whitespace-nowrap transition cursor-pointer ${
+                className={`px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider whitespace-nowrap transition cursor-pointer shrink-0 ${
                   selectedCategory === cat.key
-                    ? 'bg-orange-500 text-white shadow-md'
-                    : 'bg-black/40 text-[#8C9BA8] hover:text-white hover:bg-black/80 border border-white/5'
+                    ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/20'
+                    : 'bg-white/5 text-[#8C9BA8] hover:text-white hover:bg-white/10'
                 }`}
               >
                 {cat.label}
@@ -258,74 +108,79 @@ export const RealFitmentGallery: React.FC<RealFitmentGalleryProps> = ({ onStartQ
             ))}
           </div>
 
-          {/* Quick Search */}
-          <div className="relative w-full sm:w-64">
-            <Search className="w-4 h-4 text-[#8C9BA8] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+          {/* Search Input */}
+          <div className="relative w-full md:w-72">
+            <Search className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search make or model (e.g. Hilux, Cruiser)..."
+              placeholder="Search vehicle or embroidery..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#0c0c0e] border border-white/10 focus:border-orange-500 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder:text-zinc-500 focus:outline-none transition"
+              className="w-full pl-10 pr-4 py-2 bg-black/50 border border-white/10 rounded-xl text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-orange-500 transition"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white text-xs"
               >
-                <X className="w-3.5 h-3.5" />
+                ✕
               </button>
             )}
           </div>
         </div>
 
-        {/* Gallery Grid */}
+        {/* Gallery Grid: 21 Authentic Photos */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {filteredItems.map((item) => (
+          {visibleItems.map((item) => (
             <div
               key={item.id}
-              className="group bg-[#141418] border border-white/10 hover:border-orange-500/50 rounded-3xl overflow-hidden shadow-xl transition-all duration-300 flex flex-col hover:-translate-y-1"
+              className="group bg-[#141418] border border-white/10 hover:border-orange-500/40 rounded-3xl overflow-hidden shadow-xl transition-all duration-300 flex flex-col justify-between hover:-translate-y-1"
             >
-              {/* Image Container with Zoom Overlay */}
+              {/* Image Container - Strictly fits/contains to element box, click to enlarge */}
               <div 
                 onClick={() => setActiveModalItem(item)}
-                className="relative aspect-[4/3] sm:aspect-[3/4] overflow-hidden bg-black cursor-pointer"
+                className="relative aspect-[4/3] bg-[#0c0c0e] overflow-hidden flex items-center justify-center p-2 sm:p-3 cursor-pointer"
               >
-                <img
-                  src={item.image}
+                <AssetImage
+                  filename={item.rawFilename}
                   alt={item.title}
-                  referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition duration-500 ease-out"
+                  fit="contain"
+                  className="w-full h-full group-hover:scale-105 transition-transform duration-300"
                 />
 
-                {/* Badges Overlay */}
-                <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider bg-black/80 backdrop-blur-md border border-white/15 px-2.5 py-1 rounded-md text-orange-400">
-                    Real Fitment
-                  </span>
-                  
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider bg-black/80 backdrop-blur-md border border-white/15 px-2 py-1 rounded-md text-zinc-300 flex items-center gap-1">
-                    <ShieldCheck className="w-3 h-3 text-emerald-400" />
-                    Airbag Safe
-                  </span>
+                {/* Overlays */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 opacity-60 group-hover:opacity-40 transition-opacity pointer-events-none" />
+
+                {/* Vehicle Badge */}
+                <div className="absolute top-3 left-3 bg-black/80 backdrop-blur-md border border-white/15 text-orange-400 font-mono text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wider z-10">
+                  {item.vehicle.split('(')[0]}
                 </div>
 
-                {/* Hover CTA Button Overlay */}
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
-                  <span className="py-2.5 px-4 rounded-xl bg-orange-500 text-white font-bold uppercase text-xs tracking-wider flex items-center space-x-1.5 shadow-lg transform translate-y-2 group-hover:translate-y-0 transition duration-300">
-                    <Maximize2 className="w-3.5 h-3.5" />
-                    <span>Inspect Details</span>
-                  </span>
+                {/* Zoom Button */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setActiveModalItem(item);
+                  }}
+                  className="absolute top-3 right-3 w-8 h-8 rounded-lg bg-black/70 border border-white/20 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-orange-500 hover:text-black cursor-pointer shadow-lg z-10"
+                  title="Inspect High Resolution Photo"
+                >
+                  <Maximize2 className="w-4 h-4" />
+                </button>
+
+                {/* Embroidery Tag on Image */}
+                <div className="absolute bottom-3 left-3 right-3 z-10">
+                  <div className="inline-flex items-center space-x-1.5 bg-black/90 backdrop-blur-md border border-orange-500/30 text-white px-2.5 py-1 rounded-lg text-[11px] font-mono">
+                    <Sparkles className="w-3 h-3 text-orange-400 shrink-0" />
+                    <span className="truncate">{item.embroidery}</span>
+                  </div>
                 </div>
               </div>
 
               {/* Card Body */}
-              <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
+              <div className="p-6 space-y-4 flex-1 flex flex-col justify-between">
                 <div className="space-y-2">
-                  <div className="text-[11px] font-mono text-orange-400 font-semibold uppercase">
-                    {item.vehicle}
-                  </div>
-                  <h3 className="font-heading text-lg sm:text-xl font-bold uppercase text-white group-hover:text-orange-400 transition leading-snug">
+                  <h3 className="font-heading text-lg font-bold text-white uppercase tracking-tight group-hover:text-orange-400 transition-colors">
                     {item.title}
                   </h3>
                   <p className="text-xs text-[#8C9BA8] line-clamp-2 leading-relaxed">
@@ -333,41 +188,52 @@ export const RealFitmentGallery: React.FC<RealFitmentGalleryProps> = ({ onStartQ
                   </p>
                 </div>
 
-                {/* Specs Pill Summary */}
-                <div className="space-y-2 pt-2 border-t border-white/5">
-                  <div className="flex items-center justify-between text-[11px]">
-                    <span className="text-zinc-500 font-mono">Stitch Pattern:</span>
-                    <span className="text-white font-medium truncate max-w-[60%] text-right">{item.stitchStyle}</span>
+                {/* Technical Specifications Matrix */}
+                <div className="bg-black/40 border border-white/5 rounded-2xl p-3.5 space-y-2 text-[11px] font-mono">
+                  <div className="flex justify-between items-center border-b border-white/5 pb-1.5">
+                    <span className="text-zinc-500">Material Spec:</span>
+                    <span className="text-zinc-300 font-bold truncate max-w-[170px]">{item.material.split('+')[0]}</span>
                   </div>
-                  <div className="flex items-center justify-between text-[11px]">
-                    <span className="text-zinc-500 font-mono">Embroidery:</span>
-                    <span className="text-orange-400 font-medium truncate max-w-[60%] text-right">{item.embroidery}</span>
+                  <div className="flex justify-between items-center border-b border-white/5 pb-1.5">
+                    <span className="text-zinc-500">Stitch Style:</span>
+                    <span className="text-zinc-300 font-bold truncate max-w-[170px]">{item.stitchStyle}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-zinc-500">Source Photo:</span>
+                    <span className="text-orange-400 font-bold truncate max-w-[170px]">{item.rawFilename}</span>
                   </div>
                 </div>
 
-                {/* Actions */}
+                {/* Key Highlight Badges */}
+                <div className="flex flex-wrap gap-1">
+                  {item.highlights.slice(0, 2).map((hl, idx) => (
+                    <span
+                      key={idx}
+                      className="text-[10px] bg-white/5 border border-white/10 text-zinc-300 px-2 py-0.5 rounded-md"
+                    >
+                      • {hl}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Card Action Row */}
                 <div className="pt-2 flex items-center gap-2">
                   <button
-                    onClick={() => {
-                      if (onStartQuote) {
-                        onStartQuote(item.vehicle);
-                      } else {
-                        const el = document.getElementById('quote-builder');
-                        if (el) el.scrollIntoView({ behavior: 'smooth' });
-                      }
-                    }}
-                    className="flex-1 py-2.5 px-3 rounded-xl bg-white/5 hover:bg-orange-500 text-white font-bold uppercase text-[11px] tracking-wider transition border border-white/10 hover:border-orange-500 flex items-center justify-center space-x-1 cursor-pointer"
+                    onClick={() => onStartQuote?.(item.vehicle)}
+                    className="flex-1 py-2.5 px-4 rounded-xl bg-white text-black hover:bg-zinc-200 font-heading font-black uppercase text-[11px] tracking-wider transition cursor-pointer flex items-center justify-center space-x-1.5"
                   >
-                    <span>Quote This</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <Calculator className="w-3.5 h-3.5 text-orange-600" />
+                    <span>Quote This Fitment</span>
                   </button>
 
                   <a
-                    href={`https://wa.me/27834455370?text=Hi%20Lifestyle%20Seat%20Covers,%20I%20saw%20the%20gallery%20photo%20of%20the%20${encodeURIComponent(item.title)}%20and%20would%20like%20a%20quote%20for%20my%20vehicle.`}
+                    href={`https://wa.me/27725916960?text=${encodeURIComponent(
+                      `Hello, I would like more information and a quote for the ${item.title} fitment (Photo: ${item.rawFilename}).`
+                    )}`}
                     target="_blank"
-                    rel="noreferrer"
-                    className="p-2.5 rounded-xl bg-emerald-700/80 hover:bg-emerald-600 text-white transition border border-emerald-500/30 flex items-center justify-center cursor-pointer shrink-0"
-                    title="WhatsApp about this vehicle"
+                    rel="noopener noreferrer"
+                    className="p-2.5 rounded-xl bg-[#25D366]/15 hover:bg-[#25D366]/30 text-[#25D366] border border-[#25D366]/30 transition"
+                    title="Inquire via WhatsApp"
                   >
                     <MessageCircle className="w-4 h-4" />
                   </a>
@@ -377,160 +243,164 @@ export const RealFitmentGallery: React.FC<RealFitmentGalleryProps> = ({ onStartQ
           ))}
         </div>
 
-        {/* Showroom Direct Invitation Card */}
-        <div className="bg-[#141418] border border-white/10 rounded-3xl p-6 sm:p-8 flex flex-col lg:flex-row items-center justify-between gap-6 shadow-2xl">
-          <div className="space-y-2 text-center lg:text-left">
-            <div className="inline-flex items-center space-x-2 text-[10px] font-mono font-bold text-orange-400 uppercase">
-              <MapPin className="w-3.5 h-3.5" />
-              <span>VISIT OUR WORKSHOP SHOWROOM IN VEREENIGING</span>
-            </div>
-            <h3 className="font-heading text-xl sm:text-2xl font-black uppercase text-white">
-              WANT TO SEE THE STITCHING & CANVAS IN PERSON?
-            </h3>
-            <p className="text-xs sm:text-sm text-[#8C9BA8] max-w-2xl">
-              Drop by Unit 6 Assegai St, South, Vereeniging (1939). Sit on our demonstration seating bench, test our genuine 510g Ripstop canvas swatches, and have our technicians fit your covers on-site.
-            </p>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-3 shrink-0 w-full sm:w-auto">
-            <a
-              href="https://wa.me/27834455370?text=Hi%20Lifestyle%20Seat%20Covers,%20I%20would%20like%20to%20book%20a%20visit%20or%20fitment%20at%20your%20Vereeniging%20workshop."
-              target="_blank"
-              rel="noreferrer"
-              className="py-3 px-6 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold uppercase text-xs tracking-wider transition flex items-center justify-center space-x-2 shadow cursor-pointer"
-            >
-              <MessageCircle className="w-4 h-4" />
-              <span>Book Workshop Fitment</span>
-            </a>
-
+        {/* Show More / Show Less Button */}
+        {hasMore && (
+          <div className="flex flex-col items-center justify-center pt-2">
             <button
               onClick={() => {
-                const el = document.getElementById('quote-builder');
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
+                if (isExpanded) {
+                  setIsExpanded(false);
+                  const galleryEl = document.getElementById('gallery');
+                  if (galleryEl) {
+                    galleryEl.scrollIntoView({ behavior: 'smooth' });
+                  }
+                } else {
+                  setIsExpanded(true);
+                }
               }}
-              className="py-3 px-6 rounded-xl bg-white text-black hover:bg-zinc-200 font-bold uppercase text-xs tracking-wider transition flex items-center justify-center space-x-2 shadow cursor-pointer"
+              className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-2xl bg-white hover:bg-orange-500 text-black font-heading font-black text-xs uppercase tracking-wider shadow-2xl hover:shadow-orange-500/20 transition-all duration-300 cursor-pointer group"
             >
-              <Calculator className="w-4 h-4 text-orange-600" />
-              <span>Get Vehicle Quote</span>
+              <span>
+                {isExpanded ? 'Show Less' : `Show More (${filteredItems.length - PREVIEW_COUNT} More Vehicles)`}
+              </span>
+              {isExpanded ? (
+                <ChevronUp className="w-4 h-4 transition-transform duration-200 group-hover:-translate-y-0.5" />
+              ) : (
+                <ChevronDown className="w-4 h-4 transition-transform duration-200 group-hover:translate-y-0.5" />
+              )}
+            </button>
+            <span className="text-[11px] text-zinc-500 font-mono mt-3">
+              {isExpanded
+                ? `Showing all ${filteredItems.length} authentic workshop photos`
+                : `Previewing 3 of ${filteredItems.length} authentic workshop photos`}
+            </span>
+          </div>
+        )}
+
+        {/* Empty State */}
+        {filteredItems.length === 0 && (
+          <div className="text-center py-16 bg-[#141418] border border-white/10 rounded-3xl space-y-4">
+            <Camera className="w-10 h-10 text-zinc-600 mx-auto" />
+            <div className="space-y-1">
+              <h3 className="text-base font-bold text-white uppercase font-heading">No Matching Workshop Photos Found</h3>
+              <p className="text-xs text-zinc-400">Try adjusting your category filter or search keywords.</p>
+            </div>
+            <button
+              onClick={() => {
+                setSelectedCategory('all');
+                setSearchQuery('');
+              }}
+              className="py-2 px-4 rounded-xl bg-orange-500 text-white text-xs font-bold uppercase transition hover:bg-orange-600"
+            >
+              Reset Filters
             </button>
           </div>
-        </div>
+        )}
       </div>
 
-      {/* Detail Modal / Lightbox */}
+      {/* Modal: Full Resolution View */}
       {activeModalItem && (
-        <div 
-          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200"
-          onClick={() => setActiveModalItem(null)}
-        >
-          <div 
-            className="bg-[#141418] border border-white/20 rounded-3xl max-w-4xl w-full overflow-hidden shadow-2xl relative flex flex-col md:flex-row max-h-[90vh]"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Close Button */}
-            <button
-              onClick={() => setActiveModalItem(null)}
-              className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-black/70 border border-white/20 text-white hover:bg-orange-500 hover:border-orange-500 transition flex items-center justify-center cursor-pointer"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            {/* Left Image View */}
-            <div className="md:w-1/2 bg-black relative flex items-center justify-center min-h-[300px] md:min-h-full">
-              <img
-                src={activeModalItem.image}
-                alt={activeModalItem.title}
-                referrerPolicy="no-referrer"
-                className="w-full h-full object-cover max-h-[500px]"
-              />
-              <div className="absolute bottom-3 left-3 bg-black/70 backdrop-blur-md border border-white/10 px-3 py-1 rounded-lg text-[10px] font-mono text-zinc-300">
-                Authentic Workshop Fitment
+        <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-4">
+          <div className="relative max-w-6xl w-full bg-[#121216] border border-white/20 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[92vh]">
+            {/* Modal Header */}
+            <div className="p-4 sm:p-5 bg-[#18181e] border-b border-white/10 flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-mono text-orange-400 font-bold uppercase tracking-wider">
+                  AUTHENTIC CLIENT WORKSHOP ASSET • {activeModalItem.rawFilename}
+                </span>
+                <h4 className="text-lg sm:text-xl font-black uppercase text-white font-heading">
+                  {activeModalItem.title}
+                </h4>
               </div>
+
+              <button
+                onClick={() => setActiveModalItem(null)}
+                className="w-9 h-9 rounded-full bg-white/10 hover:bg-orange-500 text-white transition flex items-center justify-center cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
 
-            {/* Right Details Panel */}
-            <div className="md:w-1/2 p-6 sm:p-8 flex flex-col justify-between space-y-6 overflow-y-auto">
-              <div className="space-y-4">
-                <div className="space-y-1">
-                  <div className="text-[10px] font-mono text-orange-500 font-bold uppercase tracking-wider">
-                    {activeModalItem.vehicle}
-                  </div>
-                  <h3 className="font-heading text-2xl font-black uppercase text-white leading-tight">
-                    {activeModalItem.title}
-                  </h3>
-                </div>
-
-                <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed">
-                  {activeModalItem.description}
-                </p>
-
-                {/* Key Technical Specifications */}
-                <div className="bg-black/50 border border-white/10 rounded-2xl p-4 space-y-2.5 text-xs">
-                  <div className="text-[10px] font-mono font-bold text-zinc-400 uppercase tracking-wider">
-                    SPECIFICATIONS
-                  </div>
-                  <div className="flex justify-between border-b border-white/5 pb-1.5">
-                    <span className="text-zinc-500">Fabric:</span>
-                    <span className="text-white font-medium text-right max-w-[65%]">{activeModalItem.material}</span>
-                  </div>
-                  <div className="flex justify-between border-b border-white/5 pb-1.5">
-                    <span className="text-zinc-500">Stitch Work:</span>
-                    <span className="text-white font-medium text-right max-w-[65%]">{activeModalItem.stitchStyle}</span>
-                  </div>
-                  <div className="flex justify-between border-b border-white/5 pb-1.5">
-                    <span className="text-zinc-500">Embroidery:</span>
-                    <span className="text-orange-400 font-medium text-right max-w-[65%]">{activeModalItem.embroidery}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-zinc-500">Location:</span>
-                    <span className="text-white font-medium text-right">{activeModalItem.location}</span>
-                  </div>
-                </div>
-
-                {/* Engineering Highlights */}
-                <div className="space-y-2">
-                  <div className="text-[10px] font-mono font-bold text-zinc-400 uppercase tracking-wider">
-                    KEY HIGHLIGHTS
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {activeModalItem.highlights.map((h, i) => (
-                      <div key={i} className="flex items-start space-x-2 text-[11px] text-zinc-300">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-orange-500 shrink-0 mt-0.5" />
-                        <span>{h}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+            {/* Modal Body: Image & Spec Details */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
+              {/* Photo Display - Strictly fits/contains to preview box */}
+              <div className="lg:col-span-8 bg-black p-3 sm:p-6 flex items-center justify-center min-h-[320px] sm:min-h-[480px] max-h-[75vh] overflow-hidden">
+                <AssetImage
+                  filename={activeModalItem.rawFilename}
+                  alt={activeModalItem.title}
+                  fit="contain"
+                  className="max-h-[70vh] max-w-full w-auto h-auto rounded-xl shadow-2xl"
+                />
               </div>
 
-              {/* Direct CTAs */}
-              <div className="pt-4 border-t border-white/10 flex flex-col sm:flex-row gap-3">
-                <button
-                  onClick={() => {
-                    const veh = activeModalItem.vehicle;
-                    setActiveModalItem(null);
-                    if (onStartQuote) {
-                      onStartQuote(veh);
-                    } else {
-                      const el = document.getElementById('quote-builder');
-                      if (el) el.scrollIntoView({ behavior: 'smooth' });
-                    }
-                  }}
-                  className="flex-1 py-3 px-4 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold uppercase text-xs tracking-wider transition flex items-center justify-center space-x-2 shadow cursor-pointer"
-                >
-                  <Calculator className="w-4 h-4" />
-                  <span>Quote This Vehicle</span>
-                </button>
+              {/* Specifications Sidebar */}
+              <div className="lg:col-span-4 p-6 sm:p-8 bg-[#16161c] border-t lg:border-t-0 lg:border-l border-white/10 flex flex-col justify-between space-y-6">
+                <div className="space-y-4">
+                  <div>
+                    <div className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest">Vehicle Target</div>
+                    <div className="text-sm font-bold text-white font-mono mt-0.5">{activeModalItem.vehicle}</div>
+                  </div>
 
-                <a
-                  href={`https://wa.me/27834455370?text=Hi%20Lifestyle%20Seat%20Covers,%20I%20am%20interested%20in%20the%20${encodeURIComponent(activeModalItem.title)}%20shown%20in%20your%20gallery.%20Can%20I%20get%20a%20direct%20quote?`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="py-3 px-4 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold uppercase text-xs tracking-wider transition flex items-center justify-center space-x-2 cursor-pointer shrink-0"
-                >
-                  <MessageCircle className="w-4 h-4" />
-                  <span>WhatsApp Quote</span>
-                </a>
+                  <div>
+                    <div className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest">Embroidery & Customization</div>
+                    <div className="text-xs text-orange-400 font-bold mt-0.5 flex items-center space-x-1.5">
+                      <Sparkles className="w-3.5 h-3.5 shrink-0" />
+                      <span>{activeModalItem.embroidery}</span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest">Material & Threading</div>
+                    <div className="text-xs text-zinc-200 mt-0.5">{activeModalItem.material}</div>
+                  </div>
+
+                  <div>
+                    <div className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest">Stitch Technique</div>
+                    <div className="text-xs text-zinc-200 mt-0.5">{activeModalItem.stitchStyle}</div>
+                  </div>
+
+                  <div>
+                    <div className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest">Workshop Highlights</div>
+                    <div className="space-y-1 mt-1">
+                      {activeModalItem.highlights.map((h, i) => (
+                        <div key={i} className="text-xs text-zinc-300 flex items-start space-x-1.5">
+                          <span className="text-orange-500 font-bold">✓</span>
+                          <span>{h}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <p className="text-xs text-zinc-400 leading-relaxed border-t border-white/10 pt-3">
+                    {activeModalItem.description}
+                  </p>
+                </div>
+
+                {/* Modal Action Buttons */}
+                <div className="space-y-2 pt-4 border-t border-white/10">
+                  <button
+                    onClick={() => {
+                      const veh = activeModalItem.vehicle;
+                      setActiveModalItem(null);
+                      onStartQuote?.(veh);
+                    }}
+                    className="w-full py-3 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-heading font-black uppercase text-xs tracking-wider transition shadow-lg cursor-pointer"
+                  >
+                    Configure My {activeModalItem.vehicle.split('(')[0]}
+                  </button>
+
+                  <a
+                    href={`https://wa.me/27725916960?text=${encodeURIComponent(
+                      `Hi Lifestyle Seat Covers, I am looking at the genuine workshop photo of ${activeModalItem.title} (${activeModalItem.rawFilename}). Can you give me pricing and lead time?`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-2.5 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-black font-bold uppercase text-xs tracking-wider transition flex items-center justify-center space-x-2"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    <span>WhatsApp Direct Workshop</span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>

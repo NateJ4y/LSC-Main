@@ -254,13 +254,22 @@ html.light a.bg-emerald-700 {
   color: #ffffff !important;
 }
 
-html.light button.bg-orange-500 span,
-html.light button.bg-orange-600 span,
-html.light a.bg-orange-500 span,
-html.light a.bg-orange-600 span,
-html.light button.bg-emerald-600 span,
-html.light button.bg-emerald-700 span,
-html.light a.bg-emerald-600 span,
-html.light a.bg-emerald-700 span {
-  color: #ffffff !important;
+html.light nav[aria-label="Mobile Quick Actions"] {
+  background-color: rgba(255, 255, 255, 0.96) !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
 }
+
+html.light nav[aria-label="Mobile Quick Actions"] button span,
+html.light nav[aria-label="Mobile Quick Actions"] a span {
+  color: #334155 !important;
+}
+
+html.light nav[aria-label="Mobile Quick Actions"] .text-white {
+  color: #0f172a !important;
+}
+
+.safe-area-pb {
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+}
+

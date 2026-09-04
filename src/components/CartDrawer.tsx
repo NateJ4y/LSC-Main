@@ -76,20 +76,20 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
         className="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity"
       />
 
-      <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
-        <div className="w-screen max-w-md bg-[#0c0c0e] border-l border-white/10 p-6 flex flex-col justify-between shadow-2xl overflow-y-auto">
+      <div className="fixed inset-y-0 right-0 max-w-full flex pl-0 sm:pl-10">
+        <div className="w-screen max-w-full sm:max-w-md bg-[#0c0c0e] border-l border-white/10 p-4 sm:p-6 flex flex-col justify-between shadow-2xl overflow-y-auto">
           {/* Drawer Header */}
           <div>
             <div className="flex items-center justify-between border-b border-white/10 pb-4">
               <div className="flex items-center space-x-2">
                 <ShoppingBag className="w-5 h-5 text-orange-500" />
-                <h3 className="font-heading text-xl font-bold uppercase text-white tracking-tight">
+                <h3 className="font-heading text-lg sm:text-xl font-bold uppercase text-white tracking-tight">
                   YOUR SHOPPING CART ({cartItems.reduce((sum, i) => sum + i.quantity, 0)})
                 </h3>
               </div>
               <button
                 onClick={onClose}
-                className="p-2 rounded-xl bg-[#141418] border border-white/10 text-[#8C9BA8] hover:text-white transition cursor-pointer"
+                className="p-2.5 rounded-xl bg-[#141418] border border-white/10 text-[#8C9BA8] hover:text-white transition cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -275,10 +275,10 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 </button>
 
                 <a
-                  href={`https://wa.me/27118874000?text=Hi%20Lifestyle%20Seat%20Covers!%20I%20would%20like%20to%20place%20an%20order%20for:%0A${whatsappSummary}%0ATotal:%20R${grandTotal}`}
+                  href={`https://wa.me/27834455370?text=Hi%20Lifestyle%20Seat%20Covers!%20I%20would%20like%20to%20place%20an%20order%20for:%0A${whatsappSummary}%0ATotal:%20R${grandTotal}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold uppercase text-xs tracking-wider flex items-center justify-center space-x-2 transition"
+                  className="w-full min-h-[44px] py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold uppercase text-xs tracking-wider flex items-center justify-center space-x-2 transition cursor-pointer"
                 >
                   <MessageCircle className="w-4 h-4" />
                   <span>ORDER DIRECTLY ON WHATSAPP</span>

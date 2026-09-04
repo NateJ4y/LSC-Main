@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { ACCESSORY_PRODUCTS, AccessoryProduct } from '../data/productsData';
 import { CartItem, VehicleSelection } from '../types';
+import { AssetImage } from './AssetImage';
 
 interface CategoryShowcaseProps {
   vehicle: VehicleSelection;
@@ -83,17 +84,18 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
               key={prod.id}
               className="bg-[#141418] border border-white/10 hover:border-white/30 rounded-3xl overflow-hidden shadow-xl flex flex-col justify-between transition duration-300 group"
             >
-              {/* Product Visual Top Image with Badge */}
-              <div className="relative w-full h-48 overflow-hidden bg-black/60">
-                <img
-                  src={prod.image}
+              {/* Product Visual Top Image with Badge - Contained to element box, click to enlarge */}
+              <div className="relative w-full h-52 overflow-hidden bg-[#0c0c0e] flex items-center justify-center p-2 sm:p-3 cursor-pointer">
+                <AssetImage
+                  filename={prod.image}
                   alt={prod.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-80"
+                  fit="contain"
+                  className="w-full h-full group-hover:scale-105 transition duration-300"
+                  allowEnlarge={true}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#141418] via-transparent to-black/40" />
 
                 {prod.badge && (
-                  <div className="absolute top-3 left-3 text-xs font-bold px-3 py-1 rounded-full bg-white text-black shadow-md font-mono">
+                  <div className="absolute top-3 left-3 text-xs font-bold px-3 py-1 rounded-full bg-black/80 backdrop-blur-md text-white border border-white/20 shadow-md font-mono">
                     {prod.badge}
                   </div>
                 )}

@@ -370,7 +370,7 @@ export const POPULAR_SA_VEHICLES = [
     submodel: 'Legend RS / Raider GD-6',
     year: 2024,
     badge: 'SA #1 Bestselling Bakkie',
-    image: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=600&q=80',
+    image: '/images/WhatsApp Image 2026-08-31 at 8.09.01 AM.jpeg',
     popularMaterial: '510g Tough Ripstop Canvas'
   },
   {
@@ -379,9 +379,9 @@ export const POPULAR_SA_VEHICLES = [
     cab: 'Double Cab',
     submodel: 'Wildtrak 3.0L V6 / 2.0 Bi-Turbo',
     year: 2024,
-    badge: 'Top Overland Spec',
-    image: 'https://images.unsplash.com/photo-1559416523-140ddc3d238c?auto=format&fit=crop&w=600&q=80',
-    popularMaterial: 'Tactical MOLLE Expedition Canvas'
+    badge: 'Top Overland Sport Spec',
+    image: '/images/WhatsApp Image 2026-08-31 at 8.09.00 AM (1).jpeg',
+    popularMaterial: 'Sport Quilted Canvas with Red Trim'
   },
   {
     make: 'Toyota',
@@ -390,37 +390,37 @@ export const POPULAR_SA_VEHICLES = [
     submodel: '4.5L V8 D-4D / 2.8 GD-6',
     year: 2024,
     badge: 'Bushveld Legend 4x4',
-    image: 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&w=600&q=80',
-    popularMaterial: 'Heavy Duty Safari Canvas'
+    image: '/images/WhatsApp Image 2026-08-31 at 8.08.57 AM (2).jpeg',
+    popularMaterial: 'Heavy Duty 510g Safari Canvas'
   },
   {
-    make: 'Isuzu',
-    model: 'D-Max (Current & KB Series)',
+    make: 'Volkswagen',
+    model: 'Amarok',
     cab: 'Double Cab',
-    submodel: 'V-Cross 3.0 Ddi 4x4',
+    submodel: '3.0 TDI V6 / BiTDI Style',
     year: 2024,
-    badge: 'Highveld Farm & Fleet Tough',
-    image: 'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=600&q=80',
-    popularMaterial: 'Rhino-Hide™ Heavy Duty Leatherette'
+    badge: 'Executive Diamond Stitch',
+    image: '/images/WhatsApp Image 2026-08-31 at 8.08.55 AM.jpeg',
+    popularMaterial: 'High-Density Diamond Quilted Canvas'
   },
   {
-    make: 'Suzuki',
-    model: 'Jimny (3-Door & 5-Door)',
-    cab: '5-Door Long Wheelbase (JC74)',
-    submodel: 'GLX 4x4 Manual/Auto',
+    make: 'Jeep',
+    model: 'Wrangler & Gladiator',
+    cab: '4-Door Unlimited / JT',
+    submodel: 'Rubicon 4x4 Trail-Rated',
     year: 2024,
     badge: 'Adventure 4x4 Favorite',
-    image: 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=600&q=80',
-    popularMaterial: 'Neoprene Waterproof Dual-Tone'
+    image: '/images/WhatsApp Image 2026-08-31 at 8.08.53 AM.jpeg',
+    popularMaterial: 'Tactical Waterproof Ripstop Canvas'
   },
   {
-    make: 'Toyota',
-    model: 'Fortuner',
-    cab: '7-Seater SUV',
-    submodel: '2.8 GD-6 VX / 4x4',
+    make: 'Commercial Fleet',
+    model: 'GWM / Isuzu Workhorse',
+    cab: 'Double & Single Cab',
+    submodel: 'Fleet Mining & Ag Heavy Duty',
     year: 2024,
-    badge: 'Ultimate Family Tourer',
-    image: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=600&q=80',
-    popularMaterial: 'Cool-Breathe Spacer Mesh'
+    badge: 'Custom Corporate Logo Branding',
+    image: '/images/WhatsApp Image 2026-08-31 at 8.08.56 AM (1).jpeg',
+    popularMaterial: 'Industrial 600D Tear-Proof Oxford'
   }
 ];

@@ -1,7 +1,7 @@
 import React from 'react';
 import { POPULAR_SA_VEHICLES } from '../data/vehicleDatabase';
-import { VehicleSelection } from '../types';
-import { Sparkles, ArrowRight, ShieldCheck } from 'lucide-react';
+import { Sparkles, ArrowRight } from 'lucide-react';
+import { AssetImage } from './AssetImage';
 
 interface PopularVehiclesProps {
   onSelectPopular: (veh: typeof POPULAR_SA_VEHICLES[0]) => void;
@@ -33,23 +33,23 @@ export const PopularVehicles: React.FC<PopularVehiclesProps> = ({ onSelectPopula
               onClick={() => onSelectPopular(v)}
               className="bg-[#141418] border border-white/10 hover:border-white/40 rounded-3xl overflow-hidden shadow-xl cursor-pointer group transition duration-300 flex flex-col justify-between"
             >
-              <div className="relative h-44 overflow-hidden bg-black/60">
-                <img
-                  src={v.image}
+              <div className="relative h-48 overflow-hidden bg-[#0c0c0e] flex items-center justify-center p-2">
+                <AssetImage
+                  filename={v.image}
                   alt={`${v.make} ${v.model}`}
-                  className="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-75"
+                  fit="contain"
+                  className="w-full h-full group-hover:scale-105 transition duration-300"
+                  allowEnlarge={true}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#141418] via-[#141418]/30 to-transparent" />
-
-                <div className="absolute top-3 left-3 text-xs font-bold px-3 py-1 rounded-full bg-white text-black shadow font-mono">
+                <div className="absolute top-3 left-3 text-xs font-bold px-3 py-1 rounded-full bg-black/80 backdrop-blur-md text-white border border-white/20 shadow font-mono z-10">
                   {v.badge}
                 </div>
 
-                <div className="absolute bottom-3 left-3">
-                  <div className="text-[10px] text-[#8C9BA8] font-mono font-bold uppercase">
+                <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-3 pt-6 z-10">
+                  <div className="text-[10px] text-orange-400 font-mono font-bold uppercase tracking-wider">
                     {v.cab}
                   </div>
-                  <h3 className="font-heading text-2xl font-black uppercase text-white">
+                  <h3 className="font-heading text-xl font-black uppercase text-white leading-tight">
                     {v.make} {v.model.split(' ')[0]}
                   </h3>
                 </div>

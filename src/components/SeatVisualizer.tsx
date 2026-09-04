@@ -1,5 +1,7 @@
 import React from 'react';
 import { MaterialSpec } from '../types';
+import { getMatchingWorkshopPhoto } from '../utils/imageRegistry';
+import { AssetImage } from './AssetImage';
 
 interface SeatVisualizerProps {
   material: MaterialSpec;
@@ -11,7 +13,7 @@ interface SeatVisualizerProps {
   embroideryColor?: string;
   includeConsoleCover?: boolean;
   mollePocketsAddon?: boolean;
-  viewMode: 'front' | 'rear' | 'detail';
+  viewMode: 'front' | 'rear' | 'detail' | 'real_photo';
   vehicleTitle: string;
 }
 
@@ -32,6 +34,11 @@ export const SeatVisualizer: React.FC<SeatVisualizerProps> = ({
   const isQuilted = patternType === 'quilted';
   const isCamo = patternType === 'camo';
 
+  // Determine matched unedited original photo based on vehicle or material
+  const matchedData = getMatchingWorkshopPhoto(vehicleTitle);
+  const matchedFilename = matchedData.rawFilename;
+  const photoLabel = `${matchedData.title} – ${matchedData.embroidery}`;
+
   const fontClass =
     embroideryFont === 'rugged'
       ? 'font-serif tracking-widest uppercase font-extrabold'
@@ -40,23 +47,23 @@ export const SeatVisualizer: React.FC<SeatVisualizerProps> = ({
       : 'font-sans font-black uppercase tracking-wider';
 
   return (
-    <div className="relative w-full bg-zinc-900 border border-white/10 rounded-3xl p-4 sm:p-5 overflow-hidden flex flex-col items-center justify-between min-h-[440px] shadow-2xl">
+    <div className="relative w-full bg-zinc-900 border border-white/10 rounded-3xl p-3 sm:p-5 overflow-hidden flex flex-col items-center justify-between min-h-[340px] sm:min-h-[440px] shadow-2xl">
       {/* Background Lighting / Studio Shadow */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-orange-600/10 via-transparent to-transparent pointer-events-none" />
       
       {/* Clean Top Status Bar with No Overlap */}
       <div className="w-full flex items-center justify-between gap-2 z-10 pb-2 border-b border-white/10">
-        <div className="flex items-center space-x-2 text-[11px] font-bold text-zinc-300 bg-black/60 px-3 py-1 rounded-full border border-white/10 truncate">
+        <div className="flex items-center space-x-1.5 sm:space-x-2 text-[10px] sm:text-[11px] font-bold text-zinc-300 bg-black/60 px-2.5 sm:px-3 py-1 rounded-full border border-white/10 truncate max-w-[70%]">
           <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse shrink-0"></span>
           <span className="text-white truncate">{vehicleTitle || 'Vehicle Tailored Fit'}</span>
         </div>
-        <span className="bg-black/60 text-zinc-300 text-[10px] font-semibold px-2.5 py-1 rounded-full border border-white/10 shrink-0 font-mono">
+        <span className="bg-black/60 text-zinc-300 text-[9px] sm:text-[10px] font-semibold px-2 sm:px-2.5 py-1 rounded-full border border-white/10 shrink-0 font-mono">
           Airbag Safe 🛡️
         </span>
       </div>
 
       {/* SVG Canvas for Seat Simulation */}
-      <div className="relative w-full max-w-[420px] aspect-[4/5] flex items-center justify-center py-4">
+      <div className="relative w-full max-w-[380px] sm:max-w-[420px] aspect-[4/5] flex items-center justify-center py-2 sm:py-4">
         {viewMode === 'front' ? (
           <svg
             viewBox="0 0 400 480"
@@ -376,6 +383,29 @@ export const SeatVisualizer: React.FC<SeatVisualizerProps> = ({
               60/40 Split Tailored Bench
             </text>
           </svg>
+        ) : viewMode === 'real_photo' ? (
+          /* UNEDITED ORIGINAL WORKSHOP PHOTO VIEW - Contained in box, click to enlarge */
+          <div className="w-full h-full flex flex-col items-center justify-center p-1 sm:p-2 relative group">
+            <div className="w-full h-full max-h-[380px] bg-black rounded-2xl overflow-hidden border border-white/20 relative flex items-center justify-center shadow-2xl p-2 cursor-pointer">
+              <AssetImage
+                filename={matchedFilename}
+                alt={photoLabel}
+                fit="contain"
+                className="w-full h-full"
+                allowEnlarge={true}
+              />
+              <div className="absolute top-2.5 left-2.5 bg-black/85 backdrop-blur-md border border-white/20 text-orange-400 font-mono text-[10px] font-bold px-2.5 py-1 rounded-md">
+                Original Unedited Photo
+              </div>
+              <div className="absolute top-2.5 right-2.5 bg-black/85 backdrop-blur-md border border-white/20 text-white font-mono text-[10px] font-bold px-2 py-1 rounded-md flex items-center gap-1 pointer-events-none">
+                <span>Click to Enlarge</span>
+              </div>
+              <div className="absolute bottom-2.5 inset-x-2.5 bg-black/85 backdrop-blur-md border border-white/15 px-3 py-1.5 rounded-xl text-center pointer-events-none">
+                <div className="text-white text-xs font-bold font-mono truncate">{photoLabel}</div>
+                <div className="text-[10px] text-zinc-400">Authentic double-needle stitching & tailored contours</div>
+              </div>
+            </div>
+          </div>
         ) : (
           /* FABRIC DETAIL / TEXTURE CLOSEUP VIEW */
           <div className="w-full h-full flex flex-col items-center justify-center space-y-4 p-4">

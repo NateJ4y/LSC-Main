@@ -2,13 +2,12 @@ import React, { useState } from 'react';
 import { 
   ShieldCheck, 
   Wrench, 
-  Play, 
   CheckCircle2, 
-  FileText, 
   AlertTriangle, 
-  Sparkles, 
-  Clock 
+  Clock,
+  Maximize2
 } from 'lucide-react';
+import { AssetImage } from './AssetImage';
 
 export const InstallationGuides: React.FC = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -20,7 +19,9 @@ export const InstallationGuides: React.FC = () => {
       time: '5 mins',
       description: 'Press the release pin on the factory headrest post and slide the headrest completely out. Pull the Lifestyle custom backrest cover down over the seat back like a glove, smoothing downwards to eliminate air pockets.',
       tip: 'Ensure the red side AIRBAG tag is positioned facing towards the vehicle doors, not the center console.',
-      badge: 'Step 1'
+      badge: 'Step 1: Slip-Over Fit',
+      image: 'WhatsApp Image 2026-08-31 at 8.08.57 AM (1).jpeg',
+      caption: 'Workshop demonstration: Slip-over upper backrest contour with reinforced headrest grommets'
     },
     {
       step: 2,
@@ -28,7 +29,9 @@ export const InstallationGuides: React.FC = () => {
       time: '8 mins',
       description: 'Push the reinforced neoprene/canvas center flap through the seat bight (crevice between backrest and bottom cushion) until it emerges behind the seat. Fasten with the heavy-duty industrial hook-and-loop anchors.',
       tip: 'Pull firmly for a wrinkle-free contour that mirrors factory upholstery.',
-      badge: 'Step 2'
+      badge: 'Step 2: Center Flap Tuck',
+      image: 'WhatsApp Image 2026-08-31 at 8.08.54 AM.jpeg',
+      caption: 'Workshop demonstration: Center bight flap secured tightly around the lumbar junction'
     },
     {
       step: 3,
@@ -36,7 +39,9 @@ export const InstallationGuides: React.FC = () => {
       time: '10 mins',
       description: 'Slide the bottom cover over the seat base. Route the two underside nylon straps beneath the seat frame and click them into the quick-cinch tension buckles. Pull snug.',
       tip: 'Do not trap any electric seat wiring or seat rail motors under the straps.',
-      badge: 'Step 3'
+      badge: 'Step 3: Base Cinch',
+      image: 'WhatsApp Image 2026-08-31 at 8.08.58 AM (1).jpeg',
+      caption: 'Workshop demonstration: Tailored bottom cushion bolsters anchored securely'
     },
     {
       step: 4,
@@ -44,7 +49,9 @@ export const InstallationGuides: React.FC = () => {
       time: '5 mins',
       description: 'Slip the tailored headrest covers onto the detached headrests and cinch the velcro bottom. Reinsert the metal posts through the laser-cut reinforced grommet holes. Fit your free matching center console lid cover.',
       tip: 'Your seat covers are now fully installed, 100% airbag deployment safe, and ready for the bush!',
-      badge: 'Complete'
+      badge: 'Step 4: Final Inspection',
+      image: 'WhatsApp Image 2026-08-31 at 8.09.00 AM (1).jpeg',
+      caption: 'Workshop demonstration: Finished cabin installation with matching console lid cover'
     }
   ];
 
@@ -61,12 +68,12 @@ export const InstallationGuides: React.FC = () => {
             NO TOOLS REQUIRED: <span className="text-white border-b-2 border-orange-500 pb-0.5">30-MINUTE DIY FITMENT</span>
           </h2>
           <p className="text-[#8C9BA8] text-sm sm:text-base">
-            Every set includes custom quick-cinch buckles, laser-aligned headrest grommets, and SABS-certified side airbag breakaway stitching.
+            Every set includes custom quick-cinch buckles, laser-aligned headrest grommets, and SABS-certified side airbag breakaway stitching. Click any photo to enlarge.
           </p>
         </div>
 
         {/* Interactive Step-by-Step Bento Card */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-[#141418] border border-white/10 rounded-3xl p-6 sm:p-10 shadow-2xl">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start bg-[#141418] border border-white/10 rounded-3xl p-6 sm:p-10 shadow-2xl">
           {/* Left: Step Selector Buttons */}
           <div className="lg:col-span-5 space-y-3">
             {steps.map((st, idx) => (
@@ -79,9 +86,9 @@ export const InstallationGuides: React.FC = () => {
                     : 'bg-[#101014] border-white/10 hover:border-white/30'
                 }`}
               >
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-3 overflow-hidden">
                   <div
-                    className={`w-8 h-8 rounded-xl font-bold flex items-center justify-center text-xs font-mono ${
+                    className={`w-8 h-8 rounded-xl font-bold flex items-center justify-center text-xs font-mono shrink-0 ${
                       activeStep === idx
                         ? 'bg-white text-black'
                         : 'bg-white/5 text-[#8C9BA8] border border-white/10'
@@ -89,15 +96,15 @@ export const InstallationGuides: React.FC = () => {
                   >
                     0{st.step}
                   </div>
-                  <div>
-                    <h4 className="font-bold text-sm text-white">{st.title}</h4>
+                  <div className="truncate">
+                    <h4 className="font-bold text-sm text-white truncate">{st.title}</h4>
                     <span className="text-[11px] text-[#8C9BA8] flex items-center gap-1 font-mono">
                       <Clock className="w-3 h-3 text-orange-500" /> Approx {st.time}
                     </span>
                   </div>
                 </div>
                 {activeStep === idx && (
-                  <CheckCircle2 className="w-5 h-5 text-orange-500 font-bold" />
+                  <CheckCircle2 className="w-5 h-5 text-orange-500 font-bold shrink-0 ml-2" />
                 )}
               </div>
             ))}
@@ -105,7 +112,7 @@ export const InstallationGuides: React.FC = () => {
             {/* Video Guide & Support Box */}
             <div className="pt-2">
               <a
-                href="https://wa.me/27118874000?text=Hi%20Lifestyle%20Seat%20Covers,%20I%20need%20assistance%20fitting%20my%20covers"
+                href="https://wa.me/27725916960?text=Hi%20Lifestyle%20Seat%20Covers,%20I%20need%20assistance%20fitting%20my%20covers"
                 target="_blank"
                 rel="noreferrer"
                 className="w-full py-3 px-4 rounded-xl bg-black/40 hover:bg-zinc-800 border border-white/10 text-xs font-bold text-white hover:text-orange-400 flex items-center justify-center space-x-2 transition font-mono"
@@ -115,13 +122,34 @@ export const InstallationGuides: React.FC = () => {
             </div>
           </div>
 
-          {/* Right: Active Step Visual Breakdown */}
+          {/* Right: Active Step Visual Breakdown with Contained Image */}
           <div className="lg:col-span-7 bg-[#0c0c0e] border border-white/10 rounded-2xl p-6 sm:p-8 space-y-6 shadow-inner">
             <div className="flex items-center justify-between border-b border-white/10 pb-4 font-mono">
               <span className="text-xs font-bold text-white bg-white/10 px-3 py-1 rounded-md border border-white/20">
                 {steps[activeStep].badge}
               </span>
               <span className="text-xs text-[#8C9BA8]">Step {activeStep + 1} of 4</span>
+            </div>
+
+            {/* Visual Element Box - Image strictly fits/contains, clickable to enlarge */}
+            <div className="relative w-full aspect-[16/9] sm:aspect-[21/9] bg-black rounded-2xl overflow-hidden border border-white/15 flex items-center justify-center p-2 sm:p-3 group">
+              <AssetImage
+                key={steps[activeStep].image}
+                filename={steps[activeStep].image}
+                alt={steps[activeStep].caption}
+                fit="contain"
+                className="w-full h-full"
+                allowEnlarge={true}
+              />
+              
+              <div className="absolute bottom-2.5 left-2.5 z-10 bg-black/80 backdrop-blur-md border border-white/20 px-2.5 py-1 rounded-lg text-[10px] font-mono text-zinc-300 pointer-events-none">
+                {steps[activeStep].caption}
+              </div>
+
+              <div className="absolute top-2.5 right-2.5 z-10 bg-black/80 backdrop-blur-md border border-white/20 text-orange-400 font-mono text-[10px] font-bold px-2 py-0.5 rounded pointer-events-none flex items-center gap-1">
+                <Maximize2 className="w-3 h-3" />
+                <span>Click Photo to Enlarge</span>
+              </div>
             </div>
 
             <div className="space-y-3">

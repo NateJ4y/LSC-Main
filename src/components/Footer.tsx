@@ -202,7 +202,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenSwatches, onSelectNav }) =
       </div>
 
       {/* Bottom Legal & Payment Options */}
-      <div className="border-t border-white/10 py-6 px-4 sm:px-6 lg:px-8 bg-black">
+      <div className="border-t border-white/10 py-6 pb-24 lg:pb-6 px-4 sm:px-6 lg:px-8 bg-black">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="text-zinc-500 text-[11px] text-center md:text-left">
             © {new Date().getFullYear()} Lifestyle Seat Covers. Powered by Stealth Seat Covers (stealthseatcovers.co.za). Handcrafted in Vereeniging, South Africa.

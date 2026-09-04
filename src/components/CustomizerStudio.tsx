@@ -17,7 +17,9 @@ import {
   Flame,
   Droplets,
   PenLine,
-  Car
+  Car,
+  Maximize2,
+  X
 } from 'lucide-react';
 import { MATERIALS_DATA } from '../data/materialsData';
 import { CustomizerState, CartItem, VehicleSelection } from '../types';
@@ -37,9 +39,10 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
   onOpenSwatches
 }) => {
   const [activeTab, setActiveTab] = useState<'material' | 'color' | 'rows' | 'embroidery'>('material');
-  const [viewMode, setViewMode] = useState<'front' | 'rear' | 'detail'>('front');
+  const [viewMode, setViewMode] = useState<'front' | 'rear' | 'detail' | 'real_photo'>('front');
   const [addedToast, setAddedToast] = useState(false);
   const [showVehicleEditor, setShowVehicleEditor] = useState(false);
+  const [mobilePreviewModal, setMobilePreviewModal] = useState(false);
 
   // Editable vehicle state
   const [editYear, setEditYear] = useState(String(customizerState.vehicle.year || 2024));
@@ -125,16 +128,16 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
   const vehicleDisplay = `${customizerState.vehicle.year || 2024} ${customizerState.vehicle.make || 'Toyota'} ${customizerState.vehicle.model || 'Hilux'} ${customizerState.vehicle.cabOrBody ? `(${customizerState.vehicle.cabOrBody})` : ''}`;
 
   return (
-    <section id="customizer-studio" className="w-full bg-[#0c0c0e] py-12 px-4 sm:px-6 lg:px-8 border-b border-white/10 scroll-mt-20">
+    <section id="customizer-studio" className="w-full bg-[#0c0c0e] py-8 sm:py-12 px-3 sm:px-6 lg:px-8 border-b border-white/10 scroll-mt-20">
       <div className="max-w-7xl mx-auto">
-        {/* Section Title */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+        {/* Section Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 sm:mb-8 gap-4">
           <div>
-            <div className="inline-flex items-center space-x-2 text-[10px] font-bold text-[#8C9BA8] uppercase tracking-widest bg-[#141418] border border-white/10 px-3 py-1 rounded-md mb-2 font-mono">
+            <div className="inline-flex items-center space-x-2 text-[10px] font-bold text-[#8C9BA8] uppercase tracking-widest bg-[#141418] border border-white/10 px-2.5 py-1 rounded-md mb-2 font-mono">
               <Sliders className="w-3.5 h-3.5 text-orange-500" />
               <span>CUSTOM SEAT COVER STUDIO</span>
             </div>
-            <h2 className="font-heading text-3xl sm:text-4xl font-black uppercase text-white tracking-tight">
+            <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl font-black uppercase text-white tracking-tight">
               CONFIGURE FOR <span className="text-white border-b-2 border-orange-500 pb-0.5">{vehicleDisplay}</span>
             </h2>
             <p className="text-xs sm:text-sm text-[#8C9BA8] mt-1">
@@ -145,34 +148,34 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
           <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={() => setShowVehicleEditor(!showVehicleEditor)}
-              className="text-xs font-bold uppercase tracking-wider px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 transition flex items-center space-x-2 cursor-pointer"
+              className="text-xs font-bold uppercase tracking-wider px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 transition flex items-center space-x-1.5 cursor-pointer min-h-[40px]"
             >
               <PenLine className="w-3.5 h-3.5 text-orange-500" />
-              <span>{showVehicleEditor ? 'Close Editor' : 'Type / Change Vehicle'}</span>
+              <span>{showVehicleEditor ? 'Close' : 'Change Vehicle'}</span>
             </button>
 
             <button
               onClick={onOpenSwatches}
-              className="text-xs font-bold uppercase tracking-wider px-3.5 py-2 rounded-xl bg-[#141418] hover:bg-zinc-800 text-white border border-white/10 hover:border-orange-500/40 transition flex items-center space-x-2 cursor-pointer"
+              className="text-xs font-bold uppercase tracking-wider px-3.5 py-2.5 rounded-xl bg-[#141418] hover:bg-zinc-800 text-white border border-white/10 hover:border-orange-500/40 transition flex items-center space-x-1.5 cursor-pointer min-h-[40px]"
             >
-              <Layers className="w-4 h-4 text-orange-500" />
-              <span>Request Free Swatch Pack</span>
+              <Layers className="w-3.5 h-3.5 text-orange-500" />
+              <span>Free Swatches</span>
             </button>
           </div>
         </div>
 
         {/* Inline Vehicle Type-In Editor Drawer */}
         {showVehicleEditor && (
-          <form onSubmit={handleSaveVehicle} className="mb-6 p-4 sm:p-5 bg-[#141418] border border-orange-500/40 rounded-2xl shadow-xl space-y-3">
+          <form onSubmit={handleSaveVehicle} className="mb-6 p-4 sm:p-5 bg-[#141418] border border-orange-500/40 rounded-2xl shadow-xl space-y-3 animate-in fade-in duration-200">
             <div className="flex items-center justify-between border-b border-white/10 pb-2">
               <span className="text-xs font-bold uppercase text-white flex items-center gap-1.5 font-mono">
                 <Car className="w-4 h-4 text-orange-500" />
                 Type or Edit Your Exact Vehicle Spec
               </span>
-              <span className="text-[10px] text-zinc-400">Over 1,500+ CAD laser cut patterns available</span>
+              <span className="text-[10px] text-zinc-400 hidden sm:inline">Over 1,500+ CAD laser cut patterns</span>
             </div>
             
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5">
               <div>
                 <label className="block text-[10px] font-bold text-zinc-300 uppercase mb-1">Model Year</label>
                 <input
@@ -180,7 +183,7 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                   value={editYear}
                   onChange={(e) => setEditYear(e.target.value)}
                   placeholder="e.g. 2024"
-                  className="w-full bg-[#0c0c0e] border border-zinc-700 focus:border-orange-500 rounded-xl px-2.5 py-2 text-xs font-semibold text-white focus:outline-none"
+                  className="w-full bg-[#0c0c0e] border border-zinc-700 focus:border-orange-500 rounded-xl px-3 py-2 text-base sm:text-xs font-semibold text-white focus:outline-none"
                 />
               </div>
 
@@ -191,7 +194,7 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                   value={editMake}
                   onChange={(e) => setEditMake(e.target.value)}
                   placeholder="e.g. Toyota, Ford, Isuzu"
-                  className="w-full bg-[#0c0c0e] border border-zinc-700 focus:border-orange-500 rounded-xl px-2.5 py-2 text-xs font-semibold text-white focus:outline-none"
+                  className="w-full bg-[#0c0c0e] border border-zinc-700 focus:border-orange-500 rounded-xl px-3 py-2 text-base sm:text-xs font-semibold text-white focus:outline-none"
                 />
               </div>
 
@@ -202,7 +205,7 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                   value={editModel}
                   onChange={(e) => setEditModel(e.target.value)}
                   placeholder="e.g. Hilux Legend 50 / Wildtrak"
-                  className="w-full bg-[#0c0c0e] border border-zinc-700 focus:border-orange-500 rounded-xl px-2.5 py-2 text-xs font-semibold text-white focus:outline-none"
+                  className="w-full bg-[#0c0c0e] border border-zinc-700 focus:border-orange-500 rounded-xl px-3 py-2 text-base sm:text-xs font-semibold text-white focus:outline-none"
                 />
               </div>
 
@@ -213,7 +216,7 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                   value={editCab}
                   onChange={(e) => setEditCab(e.target.value)}
                   placeholder="e.g. Double Cab / SUV"
-                  className="w-full bg-[#0c0c0e] border border-zinc-700 focus:border-orange-500 rounded-xl px-2.5 py-2 text-xs font-semibold text-white focus:outline-none"
+                  className="w-full bg-[#0c0c0e] border border-zinc-700 focus:border-orange-500 rounded-xl px-3 py-2 text-base sm:text-xs font-semibold text-white focus:outline-none"
                 />
               </div>
             </div>
@@ -222,31 +225,138 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
               <button
                 type="button"
                 onClick={() => setShowVehicleEditor(false)}
-                className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-300 text-xs font-bold uppercase tracking-wider cursor-pointer"
+                className="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 text-xs font-bold uppercase tracking-wider cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-4 py-1.5 rounded-lg bg-white text-black hover:bg-zinc-200 text-xs font-bold uppercase tracking-wider cursor-pointer shadow"
+                className="px-4 py-2 rounded-xl bg-white text-black hover:bg-zinc-200 text-xs font-bold uppercase tracking-wider cursor-pointer shadow font-mono"
               >
-                Apply Vehicle
+                Apply Vehicle Spec
               </button>
             </div>
           </form>
         )}
 
+        {/* Mobile Sticky Mini Preview Quick-Trigger Bar */}
+        <div className="lg:hidden mb-4 p-3 bg-[#141418] border border-white/15 rounded-2xl flex items-center justify-between shadow-lg">
+          <div className="flex items-center space-x-2.5 overflow-hidden truncate">
+            <div 
+              className="w-8 h-8 rounded-full border-2 border-white/30 shrink-0 shadow"
+              style={{ backgroundColor: currentColor.hex }}
+            />
+            <div className="truncate">
+              <div className="text-xs font-bold text-white uppercase truncate">
+                {currentMaterial.name}
+              </div>
+              <div className="text-[10px] text-zinc-400 truncate">
+                {currentColor.name} • R{calculatedPrice.toLocaleString()}
+              </div>
+            </div>
+          </div>
+
+          <button
+            onClick={() => setMobilePreviewModal(true)}
+            className="px-3 py-2 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-bold uppercase text-[11px] tracking-wider flex items-center space-x-1.5 shrink-0 shadow cursor-pointer min-h-[36px]"
+          >
+            <Eye className="w-3.5 h-3.5" />
+            <span>3D Preview</span>
+          </button>
+        </div>
+
+        {/* Mobile Modal Visualizer Full View */}
+        {mobilePreviewModal && (
+          <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex flex-col justify-between p-4 overflow-y-auto animate-in fade-in duration-200">
+            <div className="flex items-center justify-between pb-3 border-b border-white/10">
+              <div className="text-xs font-bold text-white uppercase font-mono flex items-center gap-2">
+                <Sliders className="w-4 h-4 text-orange-500" />
+                <span>3D Visualizer: {vehicleDisplay}</span>
+              </div>
+              <button
+                onClick={() => setMobilePreviewModal(false)}
+                className="p-2 rounded-xl bg-zinc-800 text-white hover:bg-zinc-700 cursor-pointer min-w-[40px] min-h-[40px] flex items-center justify-center"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="my-auto py-4">
+              {/* View Switcher in Modal */}
+              <div className="flex items-center justify-center gap-1.5 mb-4 bg-zinc-900 p-1.5 rounded-2xl border border-white/10 max-w-sm mx-auto overflow-x-auto">
+                <button
+                  onClick={() => setViewMode('front')}
+                  className={`flex-1 py-2 px-2.5 rounded-xl text-[11px] font-bold uppercase transition whitespace-nowrap ${
+                    viewMode === 'front' ? 'bg-white text-black shadow' : 'text-zinc-400'
+                  }`}
+                >
+                  Front
+                </button>
+                <button
+                  onClick={() => setViewMode('rear')}
+                  className={`flex-1 py-2 px-2.5 rounded-xl text-[11px] font-bold uppercase transition whitespace-nowrap ${
+                    viewMode === 'rear' ? 'bg-white text-black shadow' : 'text-zinc-400'
+                  }`}
+                >
+                  Rear 60/40
+                </button>
+                <button
+                  onClick={() => setViewMode('real_photo')}
+                  className={`flex-1 py-2 px-2.5 rounded-xl text-[11px] font-bold uppercase transition whitespace-nowrap ${
+                    viewMode === 'real_photo' ? 'bg-orange-500 text-white shadow' : 'text-orange-400'
+                  }`}
+                >
+                  Real Photo
+                </button>
+                <button
+                  onClick={() => setViewMode('detail')}
+                  className={`flex-1 py-2 px-2.5 rounded-xl text-[11px] font-bold uppercase transition whitespace-nowrap ${
+                    viewMode === 'detail' ? 'bg-white text-black shadow' : 'text-zinc-400'
+                  }`}
+                >
+                  Texture
+                </button>
+              </div>
+
+              <SeatVisualizer
+                material={currentMaterial}
+                primaryColorHex={currentColor.hex}
+                secondaryColorHex={currentColor.hexSecondary || '#2b3035'}
+                patternType={currentColor.patternType || 'solid'}
+                embroideryText={
+                  customizerState.embroideryOption.enabled
+                    ? customizerState.embroideryOption.text
+                    : undefined
+                }
+                embroideryFont={customizerState.embroideryOption.font}
+                embroideryColor={customizerState.embroideryOption.threadColor}
+                includeConsoleCover={customizerState.includeConsoleCover}
+                mollePocketsAddon={customizerState.mollePocketsAddon}
+                viewMode={viewMode}
+                vehicleTitle={vehicleDisplay}
+              />
+            </div>
+
+            <button
+              onClick={() => setMobilePreviewModal(false)}
+              className="w-full py-3.5 rounded-2xl bg-white text-black font-bold uppercase text-xs tracking-wider shadow-lg cursor-pointer"
+            >
+              Continue Customizing →
+            </button>
+          </div>
+        )}
+
         {/* Studio Workspace Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* Left Column: Visualizer & View Mode Controls (5 Cols) */}
-          <div className="lg:col-span-5 space-y-4 sticky top-24">
+          <div className="lg:col-span-5 space-y-4 lg:sticky lg:top-24">
             {/* View Mode Switcher Pills */}
             <div className="flex items-center justify-between bg-[#141418] p-1.5 rounded-2xl border border-white/10">
               <span className="text-[11px] font-bold text-[#8C9BA8] px-2 uppercase font-mono">View:</span>
               <div className="flex space-x-1">
                 <button
                   onClick={() => setViewMode('front')}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider transition ${
+                  className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider transition cursor-pointer min-h-[36px] ${
                     viewMode === 'front'
                       ? 'bg-white text-black shadow'
                       : 'text-[#8C9BA8] hover:text-white'
@@ -256,7 +366,7 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                 </button>
                 <button
                   onClick={() => setViewMode('rear')}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider transition ${
+                  className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider transition cursor-pointer min-h-[36px] ${
                     viewMode === 'rear'
                       ? 'bg-white text-black shadow'
                       : 'text-[#8C9BA8] hover:text-white'
@@ -265,8 +375,18 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                   Rear 60/40
                 </button>
                 <button
+                  onClick={() => setViewMode('real_photo')}
+                  className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider transition cursor-pointer min-h-[36px] ${
+                    viewMode === 'real_photo'
+                      ? 'bg-orange-500 text-white shadow font-black'
+                      : 'text-orange-400 hover:text-white'
+                  }`}
+                >
+                  Real Photo
+                </button>
+                <button
                   onClick={() => setViewMode('detail')}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider transition ${
+                  className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider transition cursor-pointer min-h-[36px] ${
                     viewMode === 'detail'
                       ? 'bg-white text-black shadow'
                       : 'text-[#8C9BA8] hover:text-white'
@@ -299,7 +419,7 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
             {/* Quality Badges */}
             <div className="grid grid-cols-3 gap-2 text-center">
               <div className="bg-[#141418] border border-white/10 p-2.5 rounded-2xl">
-                <div className="text-[10px] text-[#8C9BA8] font-bold uppercase">UV Protection</div>
+                <div className="text-[10px] text-[#8C9BA8] font-bold uppercase">UV Shield</div>
                 <div className="text-xs sm:text-sm font-black text-white flex items-center justify-center gap-1 mt-0.5">
                   <Sun className="w-3.5 h-3.5 text-orange-500" />
                   {currentMaterial.uvResistanceRating}/10 UPF50+
@@ -324,66 +444,66 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
 
           {/* Right Column: Customizer Configuration Controls (7 Cols) */}
           <div className="lg:col-span-7 space-y-6">
-            {/* Step Navigation Tabs */}
-            <div className="grid grid-cols-4 gap-1.5 bg-[#141418] p-1.5 rounded-2xl border border-white/10">
+            {/* Step Navigation Tabs - Touch Optimized */}
+            <div className="grid grid-cols-4 gap-1 sm:gap-1.5 bg-[#141418] p-1.5 rounded-2xl border border-white/10">
               <button
                 onClick={() => setActiveTab('material')}
-                className={`py-2.5 px-1 sm:px-3 rounded-xl text-xs font-bold uppercase tracking-wider transition flex items-center justify-center gap-1.5 ${
+                className={`py-2.5 px-1 sm:px-3 rounded-xl text-[11px] sm:text-xs font-bold uppercase tracking-wider transition flex items-center justify-center gap-1 cursor-pointer min-h-[44px] ${
                   activeTab === 'material'
                     ? 'bg-white text-black shadow-md'
                     : 'text-[#8C9BA8] hover:text-white'
                 }`}
               >
-                <Layers className="w-3.5 h-3.5 shrink-0 text-orange-600" />
+                <Layers className="w-3.5 h-3.5 shrink-0 text-orange-600 hidden xs:inline" />
                 <span className="truncate">1. Fabric</span>
               </button>
 
               <button
                 onClick={() => setActiveTab('color')}
-                className={`py-2.5 px-1 sm:px-3 rounded-xl text-xs font-bold uppercase tracking-wider transition flex items-center justify-center gap-1.5 ${
+                className={`py-2.5 px-1 sm:px-3 rounded-xl text-[11px] sm:text-xs font-bold uppercase tracking-wider transition flex items-center justify-center gap-1 cursor-pointer min-h-[44px] ${
                   activeTab === 'color'
                     ? 'bg-white text-black shadow-md'
                     : 'text-[#8C9BA8] hover:text-white'
                 }`}
               >
-                <span className="w-3.5 h-3.5 rounded-full border border-black/40 shrink-0" style={{ backgroundColor: currentColor.hex }} />
+                <span className="w-3 h-3 rounded-full border border-black/40 shrink-0 hidden xs:inline" style={{ backgroundColor: currentColor.hex }} />
                 <span className="truncate">2. Colors</span>
               </button>
 
               <button
                 onClick={() => setActiveTab('rows')}
-                className={`py-2.5 px-1 sm:px-3 rounded-xl text-xs font-bold uppercase tracking-wider transition flex items-center justify-center gap-1.5 ${
+                className={`py-2.5 px-1 sm:px-3 rounded-xl text-[11px] sm:text-xs font-bold uppercase tracking-wider transition flex items-center justify-center gap-1 cursor-pointer min-h-[44px] ${
                   activeTab === 'rows'
                     ? 'bg-white text-black shadow-md'
                     : 'text-[#8C9BA8] hover:text-white'
                 }`}
               >
-                <Eye className="w-3.5 h-3.5 shrink-0 text-orange-600" />
+                <Eye className="w-3.5 h-3.5 shrink-0 text-orange-600 hidden xs:inline" />
                 <span className="truncate">3. Rows</span>
               </button>
 
               <button
                 onClick={() => setActiveTab('embroidery')}
-                className={`py-2.5 px-1 sm:px-3 rounded-xl text-xs font-bold uppercase tracking-wider transition flex items-center justify-center gap-1.5 ${
+                className={`py-2.5 px-1 sm:px-3 rounded-xl text-[11px] sm:text-xs font-bold uppercase tracking-wider transition flex items-center justify-center gap-1 cursor-pointer min-h-[44px] ${
                   activeTab === 'embroidery'
                     ? 'bg-white text-black shadow-md'
                     : 'text-[#8C9BA8] hover:text-white'
                 }`}
               >
-                <Type className="w-3.5 h-3.5 shrink-0 text-orange-600" />
+                <Type className="w-3.5 h-3.5 shrink-0 text-orange-600 hidden xs:inline" />
                 <span className="truncate">4. Custom</span>
               </button>
             </div>
 
             {/* TAB 1: MATERIAL SELECTION */}
             {activeTab === 'material' && (
-              <div className="space-y-4">
+              <div className="space-y-4 animate-in fade-in duration-150">
                 <div className="text-xs font-bold text-[#8C9BA8] uppercase tracking-wider flex items-center justify-between font-mono">
-                  <span>Choose Your High-Performance Fabric:</span>
-                  <span className="text-white font-semibold">100% Laser-Fit Tailored</span>
+                  <span>Choose Your Fabric:</span>
+                  <span className="text-white font-semibold">100% Laser Tailored</span>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {MATERIALS_DATA.map((mat) => {
                     const isSelected = customizerState.materialId === mat.id;
                     return (
@@ -405,7 +525,7 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                         {/* Top Info Bar */}
                         <div className="flex items-center justify-between gap-2 border-b border-white/5 pb-2">
                           <span className="text-[10px] font-bold uppercase tracking-wider text-orange-400 font-mono">
-                            {mat.warrantyYears} YEAR WARRANTY
+                            {mat.warrantyYears} YEAR SA WARRANTY
                           </span>
                           {mat.badgeText && (
                             <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-white/10 text-zinc-300 border border-white/10 shrink-0">
@@ -443,12 +563,12 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
 
             {/* TAB 2: COLOR & TWO-TONE PATTERNS */}
             {activeTab === 'color' && (
-              <div className="space-y-5">
+              <div className="space-y-5 animate-in fade-in duration-150">
                 <div>
-                  <h4 className="text-xs font-bold text-[#8C9BA8] uppercase tracking-wider mb-2 font-mono">
+                  <h4 className="text-xs font-bold text-[#8C9BA8] uppercase tracking-wider mb-3 font-mono">
                     Available Colors & Patterns for {currentMaterial.name}:
                   </h4>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3">
                     {currentMaterial.colors.map((c) => {
                       const isSelected = customizerState.primaryColorId === c.id;
                       return (
@@ -466,8 +586,8 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                               : 'bg-[#141418] border-white/10 hover:border-white/30'
                           }`}
                         >
-                          {/* Visual Color Pill Swatch */}
-                          <div className="relative w-14 h-14 rounded-full border-2 border-zinc-700 shadow-inner overflow-hidden mb-2.5 flex items-center justify-center">
+                          {/* Visual Color Swatch Dot */}
+                          <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-zinc-700 shadow-inner overflow-hidden mb-2 flex items-center justify-center">
                             <div
                               className="absolute inset-0"
                               style={{ backgroundColor: c.hex }}
@@ -479,15 +599,15 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                               />
                             )}
                             {isSelected && (
-                              <div className="relative z-10 w-6 h-6 rounded-full bg-white text-black flex items-center justify-center shadow">
+                              <div className="relative z-10 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white text-black flex items-center justify-center shadow">
                                 <Check className="w-3.5 h-3.5 font-black stroke-[3]" />
                               </div>
                             )}
                           </div>
 
-                          <div className="text-xs font-bold text-white uppercase">{c.name}</div>
+                          <div className="text-xs font-bold text-white uppercase line-clamp-1">{c.name}</div>
                           {c.badge && (
-                            <span className="mt-1 text-[9px] font-semibold text-orange-400 bg-orange-600/20 px-1.5 py-0.5 rounded border border-orange-500/30">
+                            <span className="mt-1 text-[9px] font-semibold text-orange-400 bg-orange-600/20 px-1.5 py-0.5 rounded border border-orange-500/30 truncate max-w-full">
                               {c.badge}
                             </span>
                           )}
@@ -497,10 +617,10 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                   </div>
                 </div>
 
-                <div className="p-4 bg-[#141418] rounded-2xl border border-white/10 text-xs text-zinc-300 flex items-start space-x-3">
+                <div className="p-3.5 sm:p-4 bg-[#141418] rounded-2xl border border-white/10 text-xs text-zinc-300 flex items-start space-x-3">
                   <Sparkles className="w-4 h-4 text-orange-400 shrink-0 mt-0.5" />
                   <div>
-                    <span className="font-semibold text-white">Factory Color Match:</span> All dyes and pigments are UV-stabilized to withstand the harsh South African sun without fading, cracking, or turning brittle.
+                    <span className="font-semibold text-white">UV-Stabilized Formula:</span> Pigments engineered specifically for extreme South African sun resistance without fading or cracking.
                   </div>
                 </div>
               </div>
@@ -508,7 +628,7 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
 
             {/* TAB 3: ROW CONFIGURATION */}
             {activeTab === 'rows' && (
-              <div className="space-y-4">
+              <div className="space-y-4 animate-in fade-in duration-150">
                 <div className="text-xs font-bold text-[#8C9BA8] uppercase tracking-wider font-mono">
                   Select Seating Row Coverage:
                 </div>
@@ -524,7 +644,7 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                     }`}
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <span className="font-heading text-lg font-bold text-white uppercase">Front Row Only</span>
+                      <span className="font-heading text-base sm:text-lg font-bold text-white uppercase">Front Row Only</span>
                       {customizerState.rowOption === 'front_only' && <Check className="w-4 h-4 text-orange-500" />}
                     </div>
                     <p className="text-xs text-[#8C9BA8] leading-relaxed">
@@ -544,11 +664,11 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                         : 'bg-[#141418] border-white/10 hover:border-white/30'
                     }`}
                   >
-                    <div className="absolute -top-2.5 right-3 text-[10px] font-bold bg-white text-black px-2 py-0.5 rounded-full shadow">
+                    <div className="absolute -top-2.5 right-3 text-[10px] font-bold bg-white text-black px-2 py-0.5 rounded-full shadow font-mono">
                       POPULAR
                     </div>
                     <div className="flex items-center justify-between mb-2">
-                      <span className="font-heading text-lg font-bold text-white uppercase">Full 2-Row Set</span>
+                      <span className="font-heading text-base sm:text-lg font-bold text-white uppercase">Full 2-Row Set</span>
                       {customizerState.rowOption === 'front_and_rear' && <Check className="w-4 h-4 text-orange-500" />}
                     </div>
                     <p className="text-xs text-[#8C9BA8] leading-relaxed">
@@ -569,7 +689,7 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                     }`}
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <span className="font-heading text-lg font-bold text-white uppercase">Full 7-Seater</span>
+                      <span className="font-heading text-base sm:text-lg font-bold text-white uppercase">Full 7-Seater</span>
                       {customizerState.rowOption === 'full_7_seater' && <Check className="w-4 h-4 text-orange-500" />}
                     </div>
                     <p className="text-xs text-[#8C9BA8] leading-relaxed">
@@ -581,22 +701,22 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                   </div>
                 </div>
 
-                {/* Free Included Console Cover Toggle */}
-                <div className="mt-4 p-4 bg-[#141418] rounded-2xl border border-white/10 flex items-center justify-between">
+                {/* Free Included Console Cover Badge */}
+                <div className="mt-4 p-3.5 sm:p-4 bg-[#141418] rounded-2xl border border-white/10 flex items-center justify-between gap-3">
                   <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white">
+                    <div className="w-8 h-8 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white shrink-0">
                       <ShieldCheck className="w-4 h-4 text-orange-500" />
                     </div>
                     <div>
                       <div className="text-xs font-bold text-white uppercase">
-                        Matching Center Armrest / Console Lid Cover
+                        Matching Center Armrest Lid Cover
                       </div>
-                      <div className="text-[11px] text-[#8C9BA8]">
+                      <div className="text-[11px] text-[#8C9BA8] hidden sm:block">
                         Tailored in matching fabric to prevent elbow sweat & pet claw scratches
                       </div>
                     </div>
                   </div>
-                  <div className="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-md border border-emerald-500/20">
+                  <div className="text-[11px] font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-md border border-emerald-500/20 shrink-0">
                     FREE INCLUDED
                   </div>
                 </div>
@@ -605,16 +725,16 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
 
             {/* TAB 4: EMBROIDERY & ADD-ONS */}
             {activeTab === 'embroidery' && (
-              <div className="space-y-5">
+              <div className="space-y-4 sm:space-y-5 animate-in fade-in duration-150">
                 {/* Custom Embroidery Card */}
-                <div className="p-5 bg-[#141418] rounded-2xl border border-white/10 space-y-4">
-                  <div className="flex items-center justify-between">
+                <div className="p-4 sm:p-5 bg-[#141418] rounded-2xl border border-white/10 space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div>
                       <h4 className="text-sm font-bold text-white uppercase flex items-center gap-2">
                         <Type className="w-4 h-4 text-orange-500" />
                         <span>Custom Headrest / Backrest Embroidery</span>
                       </h4>
-                      <p className="text-xs text-[#8C9BA8]">
+                      <p className="text-xs text-[#8C9BA8] mt-0.5">
                         Add your vehicle name (e.g. HILUX 4X4, WILDTRAK, KAROO), family name, or farm initials.
                       </p>
                     </div>
@@ -629,7 +749,7 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                           }
                         }))
                       }
-                      className={`text-xs font-bold px-3 py-1.5 rounded-xl border transition ${
+                      className={`text-xs font-bold px-3.5 py-2 rounded-xl border transition cursor-pointer min-h-[40px] shrink-0 ${
                         customizerState.embroideryOption.enabled
                           ? 'bg-white text-black border-white'
                           : 'bg-zinc-800 text-zinc-300 border-zinc-700'
@@ -640,7 +760,7 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                   </div>
 
                   {customizerState.embroideryOption.enabled && (
-                    <div className="space-y-3 pt-2 border-t border-white/10">
+                    <div className="space-y-3 pt-3 border-t border-white/10">
                       <div>
                         <label className="block text-xs font-bold text-zinc-300 uppercase mb-1">
                           Embroidery Text (Max 14 characters)
@@ -659,11 +779,11 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                             }))
                           }
                           placeholder="e.g. WILDTRAK V6"
-                          className="w-full bg-[#0c0c0e] border border-zinc-700 rounded-xl px-4 py-2.5 text-sm font-bold uppercase tracking-wider text-white focus:outline-none focus:border-white"
+                          className="w-full bg-[#0c0c0e] border border-zinc-700 rounded-xl px-4 py-2.5 text-base sm:text-sm font-bold uppercase tracking-wider text-white focus:outline-none focus:border-white"
                         />
                       </div>
 
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                           <label className="block text-xs font-bold text-zinc-300 uppercase mb-1">
                             Thread Color
@@ -679,7 +799,7 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                                 }
                               }))
                             }
-                            className="w-full bg-[#0c0c0e] border border-zinc-700 rounded-xl px-3 py-2 text-xs font-semibold text-white focus:outline-none"
+                            className="w-full bg-[#0c0c0e] border border-zinc-700 rounded-xl px-3 py-2.5 text-base sm:text-xs font-semibold text-white focus:outline-none"
                           >
                             <option value="#ffffff">Silver / Pure White</option>
                             <option value="#ea580c">Fiery Orange Thread</option>
@@ -705,7 +825,7 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                                 }
                               }))
                             }
-                            className="w-full bg-[#0c0c0e] border border-zinc-700 rounded-xl px-3 py-2 text-xs font-semibold text-white focus:outline-none"
+                            className="w-full bg-[#0c0c0e] border border-zinc-700 rounded-xl px-3 py-2.5 text-base sm:text-xs font-semibold text-white focus:outline-none"
                           >
                             <option value="block">Bold Heavy Block</option>
                             <option value="rugged">Rugged Overland Serif</option>
@@ -718,14 +838,14 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                 </div>
 
                 {/* Tactical MOLLE Addon Card */}
-                <div className="p-4 bg-[#141418] rounded-2xl border border-white/10 flex items-center justify-between">
-                  <div className="space-y-1">
+                <div className="p-4 bg-[#141418] rounded-2xl border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="space-y-0.5">
                     <div className="text-xs font-bold text-white uppercase flex items-center gap-1.5">
                       <Flame className="w-3.5 h-3.5 text-orange-500" />
-                      <span>Expedition MOLLE Side Grid + 2 Tactical Pouches</span>
+                      <span>Expedition MOLLE Side Grid + 2 Pouches</span>
                     </div>
                     <div className="text-[11px] text-[#8C9BA8]">
-                      Laser-cut webbing grid on driver/passenger bolster with detachable first aid & flashlight pouch.
+                      Laser-cut webbing grid with detachable utility pouches.
                     </div>
                   </div>
                   <button
@@ -735,7 +855,7 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                         mollePocketsAddon: !prev.mollePocketsAddon
                       }))
                     }
-                    className={`text-xs font-bold px-3 py-1.5 rounded-xl border transition whitespace-nowrap ${
+                    className={`text-xs font-bold px-3.5 py-2 rounded-xl border transition whitespace-nowrap cursor-pointer min-h-[40px] shrink-0 ${
                       customizerState.mollePocketsAddon
                         ? 'bg-white text-black border-white'
                         : 'bg-zinc-800 text-zinc-300 border-zinc-700'
@@ -748,11 +868,11 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
             )}
 
             {/* Price & Order Action Bar */}
-            <div className="p-6 bg-[#141418] rounded-3xl border border-white/20 shadow-2xl space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+            <div className="p-5 sm:p-6 bg-[#141418] rounded-3xl border border-white/20 shadow-2xl space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 border-b border-white/10 pb-4">
                 <div>
                   <div className="text-xs text-[#8C9BA8] uppercase font-mono">Custom Tailored Price (VAT Incl.)</div>
-                  <div className="font-heading text-3xl sm:text-4xl font-bold text-white">
+                  <div className="font-heading text-3xl sm:text-4xl font-bold text-white mt-0.5">
                     R{calculatedPrice.toLocaleString()}
                   </div>
                   <div className="text-[11px] text-emerald-400 font-semibold flex items-center gap-1 mt-0.5">
@@ -760,8 +880,8 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                   </div>
                 </div>
 
-                <div className="text-right sm:text-right text-xs text-[#8C9BA8] font-mono">
-                  <div className="font-bold text-white uppercase">Crafted in Sandton & Bellville</div>
+                <div className="text-left sm:text-right text-xs text-[#8C9BA8] font-mono">
+                  <div className="font-bold text-white uppercase">Handcrafted in Vereeniging</div>
                   <div>Lead time: 5-7 working days</div>
                 </div>
               </div>
@@ -770,14 +890,14 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <button
                   onClick={handleAddToCart}
-                  className="w-full py-4 px-6 rounded-2xl bg-white hover:bg-zinc-200 text-black font-bold uppercase text-sm tracking-wider flex items-center justify-center space-x-2 shadow-xl hover:scale-[1.01] active:scale-[0.99] transition cursor-pointer"
+                  className="w-full min-h-[48px] py-3.5 px-5 rounded-2xl bg-white hover:bg-zinc-200 text-black font-bold uppercase text-xs sm:text-sm tracking-wider flex items-center justify-center space-x-2 shadow-xl hover:scale-[1.01] active:scale-[0.99] transition cursor-pointer"
                 >
-                  <ShoppingCart className="w-5 h-5 text-orange-600" />
+                  <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 text-orange-600" />
                   <span>ADD TO CART & CHECKOUT</span>
                 </button>
 
                 <a
-                  href={`https://wa.me/27118874000?text=Hi%20Lifestyle%20Seat%20Covers!%20I%20would%20like%20a%20quote%20for%20my%20${encodeURIComponent(
+                  href={`https://wa.me/27834455370?text=Hi%20Lifestyle%20Seat%20Covers!%20I%20would%20like%20a%20quote%20for%20my%20${encodeURIComponent(
                     vehicleDisplay
                   )}%20in%20${encodeURIComponent(
                     currentMaterial.name
@@ -786,7 +906,7 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                   )})%20-%20R${calculatedPrice}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="w-full py-4 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold uppercase text-xs sm:text-sm tracking-wider flex items-center justify-center space-x-2 transition shadow-lg shadow-emerald-600/20"
+                  className="w-full min-h-[48px] py-3.5 px-5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold uppercase text-xs sm:text-sm tracking-wider flex items-center justify-center space-x-2 transition shadow-lg shadow-emerald-600/20 cursor-pointer"
                 >
                   <MessageCircle className="w-4 h-4" />
                   <span>ORDER VIA WHATSAPP</span>

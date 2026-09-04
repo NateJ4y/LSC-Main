@@ -22,6 +22,7 @@ import { CustomerReviews } from './components/CustomerReviews';
 import { ComprehensiveQuoteSystem } from './components/ComprehensiveQuoteSystem';
 import { ContactSection } from './components/ContactSection';
 import { FloatingWhatsAppCTA } from './components/FloatingWhatsAppCTA';
+import { MobileBottomNav } from './components/MobileBottomNav';
 import { FreeSwatchModal } from './components/FreeSwatchModal';
 import { CartDrawer } from './components/CartDrawer';
 import { CheckoutModal } from './components/CheckoutModal';
@@ -347,6 +348,16 @@ export default function App() {
       <Footer
         onOpenSwatches={() => setIsSwatchesOpen(true)}
         onSelectNav={handleNavSelection}
+      />
+
+      {/* Mobile Sticky Bottom Action Bar */}
+      <MobileBottomNav
+        cartCount={cartItems.reduce((sum, item) => sum + item.quantity, 0)}
+        onOpenCart={() => setIsCartOpen(true)}
+        onNavigate={(sectionId) => {
+          scrollToSection(sectionId);
+          setActiveNav(sectionId === 'quote-builder' ? 'quote' : sectionId === 'customizer-studio' ? 'customise' : 'gallery');
+        }}
       />
     </div>
   );

@@ -1,116 +1,140 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { 
+  OFFICIAL_LOGO_FILENAME, 
+  getAuthenticImageUrl, 
+  subscribeToAssetChanges, 
+  hasUserUploadedAsset,
+  registerUserUploadedAsset 
+} from '../utils/userAssetStore';
+import { ShieldCheck, Upload } from 'lucide-react';
 
 interface BrandLogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
   showSubtitle?: boolean;
   iconOnly?: boolean;
   className?: string;
+  onClick?: () => void;
 }
 
 export const BrandLogo: React.FC<BrandLogoProps> = ({
   size = 'md',
-  showSubtitle = false,
-  iconOnly = false,
-  className = ''
+  className = '',
+  onClick
 }) => {
-  // Dimension mappings for the circular badge & typography matching official Logo.jpeg
-  const sizeMap = {
-    sm: { 
-      badge: 34, 
-      lifestyle: 'text-lg sm:text-xl', 
-      seatCovers: 'text-[9px] sm:text-[10px]', 
-      sub: 'text-[8px]' 
-    },
-    md: { 
-      badge: 48, 
-      lifestyle: 'text-2xl sm:text-3xl', 
-      seatCovers: 'text-[11px] sm:text-xs', 
-      sub: 'text-[9px]' 
-    },
-    lg: { 
-      badge: 60, 
-      lifestyle: 'text-3xl sm:text-4xl', 
-      seatCovers: 'text-xs sm:text-sm', 
-      sub: 'text-[10px]' 
-    },
-    xl: { 
-      badge: 76, 
-      lifestyle: 'text-4xl sm:text-5xl', 
-      seatCovers: 'text-sm sm:text-base', 
-      sub: 'text-xs' 
-    },
+  // Candidate image paths to check for the supplied Logo-removebg-preview.png
+  const candidatePaths = [
+    getAuthenticImageUrl(OFFICIAL_LOGO_FILENAME),
+    `/${OFFICIAL_LOGO_FILENAME}`,
+    `/images/${OFFICIAL_LOGO_FILENAME}`,
+    `/assets/${OFFICIAL_LOGO_FILENAME}`,
+  ];
+
+  const [pathIndex, setPathIndex] = useState(0);
+  const [hasFailedAll, setHasFailedAll] = useState(false);
+  const [, setTick] = useState(0);
+
+  // Subscribe to changes if the user uploads the logo during the session
+  useEffect(() => {
+    const unsubscribe = subscribeToAssetChanges(() => {
+      setHasFailedAll(false);
+      setPathIndex(0);
+      setTick(t => t + 1);
+    });
+    return unsubscribe;
+  }, []);
+
+  // Size specifications preserving proportional height and natural aspect ratio
+  const heightClasses = {
+    sm: 'h-8 sm:h-9 max-w-[200px]',
+    md: 'h-10 sm:h-12 max-w-[240px]',
+    lg: 'h-14 sm:h-16 max-w-[320px]',
+    xl: 'h-20 sm:h-24 max-w-[420px]',
+  }[size];
+
+  const handleImageError = () => {
+    if (pathIndex < candidatePaths.length - 1) {
+      setPathIndex(prev => prev + 1);
+    } else {
+      setHasFailedAll(true);
+    }
   };
 
-  const current = sizeMap[size];
+  const handleManualLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === 'string') {
+        registerUserUploadedAsset(OFFICIAL_LOGO_FILENAME, reader.result);
+        registerUserUploadedAsset(file.name, reader.result);
+        setHasFailedAll(false);
+        setPathIndex(0);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
 
-  return (
-    <div className={`inline-flex items-center space-x-3.5 select-none ${className}`}>
-      {/* Precision Circular LS Monogram Emblem SVG replicating the exact official logo */}
-      <svg
-        width={current.badge}
-        height={current.badge}
-        viewBox="0 0 200 200"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="shrink-0 transition-transform duration-300 group-hover:scale-105"
-        aria-label="Lifestyle Seat Covers Monogram Logo"
+  // Neutral placeholder per AGENTS.md rule when asset is awaiting placement
+  if (hasFailedAll && !hasUserUploadedAsset(OFFICIAL_LOGO_FILENAME)) {
+    return (
+      <div
+        className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#121316] border border-zinc-800 text-zinc-300 select-none shadow-sm ${className}`}
+        id="brand-logo-placeholder"
       >
-        {/* Top-Left Outer White Swoosh Arc */}
-        <path
-          d="M 16 102 C 14 62 46 22 96 16 C 104 15 110 15 110 15"
-          className="stroke-white transition-colors duration-200 [html.light_&]:stroke-[#0f172a]"
-          stroke="currentColor"
-          strokeWidth="13"
-          strokeLinecap="round"
-        />
-
-        {/* Bottom-Right Outer White Arc */}
-        <path
-          d="M 98 184 C 146 182 184 148 184 100 C 184 88 180 72 174 62"
-          className="stroke-white transition-colors duration-200 [html.light_&]:stroke-[#0f172a]"
-          stroke="currentColor"
-          strokeWidth="13"
-          strokeLinecap="round"
-        />
-
-        {/* The 'L' Monogram (Solid Crisp White, Left Half) */}
-        <path
-          d="M 48 38 L 84 38 L 84 136 L 98 136 L 98 162 L 48 162 Z"
-          className="fill-white transition-colors duration-200 [html.light_&]:fill-[#0f172a]"
-          fill="currentColor"
-        />
-
-        {/* The 'S' Monogram (Automotive Slate Grey, Right Half) */}
-        <path
-          d="M 106 38 H 162 V 80 H 132 V 96 H 162 V 162 H 106 V 120 H 136 V 104 H 106 Z"
-          fill="#8C9BA8"
-        />
-      </svg>
-
-      {/* Brand Logotype Typography matching Logo.jpeg */}
-      {!iconOnly && (
-        <div className="flex flex-col justify-center">
-          <div className="flex flex-col leading-none">
-            <span
-              className={`font-heading font-black tracking-tight text-white uppercase ${current.lifestyle}`}
-              style={{ letterSpacing: '0.035em', fontFamily: 'Montserrat, sans-serif' }}
-            >
-              LIFESTYLE
+        <div className="flex items-center gap-2">
+          <ShieldCheck className="w-4 h-4 text-orange-400 shrink-0" />
+          <div className="flex flex-col text-left">
+            <span className="text-[11px] font-mono font-bold text-white tracking-tight leading-tight">
+              Logo-removebg-preview.png
             </span>
-            <span
-              className={`font-heading font-bold uppercase text-[#8C9BA8] tracking-[0.26em] mt-1 ${current.seatCovers}`}
-              style={{ letterSpacing: '0.24em', fontFamily: 'Montserrat, sans-serif' }}
-            >
-              SEAT COVERS
+            <span className="text-[9px] font-mono text-zinc-400 leading-tight">
+              Protected Brand Asset • Strict Rule Active
             </span>
           </div>
-          {showSubtitle && (
-            <span className={`text-zinc-500 font-mono tracking-wider uppercase mt-1 ${current.sub}`}>
-              Custom-Fit Automotive Defense • SA
-            </span>
-          )}
         </div>
-      )}
+
+        {/* Quick file loader button directly in the placeholder */}
+        <label 
+          className="ml-2 px-2 py-1 bg-orange-600 hover:bg-orange-500 text-white rounded text-[10px] font-mono font-bold flex items-center gap-1 cursor-pointer transition shrink-0"
+          title="Attach Logo-removebg-preview.png"
+        >
+          <Upload className="w-3 h-3" />
+          <span>Upload</span>
+          <input
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleManualLogoUpload}
+          />
+        </label>
+      </div>
+    );
+  }
+
+  return (
+    <div 
+      className={`inline-flex items-center select-none ${className}`}
+      onClick={onClick}
+    >
+      {/* 
+        CRITICAL IMAGE ASSET PRESERVATION RULE COMPLIANT:
+        - Exact supplied PNG file (Logo-removebg-preview.png)
+        - Preserves 100% transparency
+        - Preserves exact original typography, colors, and proportions
+        - object-fit: contain ensures no stretching, cropping, or distortion
+        - No CSS filters (no brightness, contrast, saturate, or hue alterations)
+      */}
+      <img
+        src={candidatePaths[pathIndex]}
+        alt="Lifestyle Seat Covers South Africa"
+        referrerPolicy="no-referrer"
+        onError={handleImageError}
+        className={`w-auto ${heightClasses} object-contain object-left transition-opacity duration-200`}
+        style={{
+          objectFit: 'contain',
+          maxWidth: '100%',
+        }}
+      />
     </div>
   );
 };

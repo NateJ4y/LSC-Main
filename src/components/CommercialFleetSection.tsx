@@ -158,7 +158,7 @@ export const CommercialFleetSection: React.FC<CommercialFleetSectionProps> = ({
                   REQUEST A B2B FLEET PROPOSAL
                 </h4>
                 <p className="text-xs text-[#8C9BA8]">
-                  Direct factory tier volume pricing from our Polokwane facility.
+                  Direct factory tier volume pricing from our Vereeniging facility.
                 </p>
               </div>
 

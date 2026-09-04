@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { 
-  Sparkles, 
   ShieldAlert, 
   ShieldCheck, 
   SlidersHorizontal,
-  ArrowRight,
-  CheckCircle2
+  ArrowRight
 } from 'lucide-react';
+import { getAuthenticImageUrl } from '../utils/userAssetStore';
+import { AssetImage } from './AssetImage';
 
 interface BeforeAfterSliderProps {
   onGetQuote: () => void;
@@ -15,6 +15,11 @@ interface BeforeAfterSliderProps {
 export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({ onGetQuote }) => {
   const [sliderPos, setSliderPos] = useState<number>(50);
   const [activePreset, setActivePreset] = useState<'bakkie' | 'suv'>('bakkie');
+
+  const activeFilename = activePreset === 'bakkie' 
+    ? 'WhatsApp Image 2026-08-31 at 8.09.01 AM.jpeg' 
+    : 'WhatsApp Image 2026-08-31 at 8.08.57 AM (2).jpeg';
+  const activeTitle = activePreset === 'bakkie' ? 'Toyota Hilux GD-6' : 'Land Cruiser 79 Series';
 
   return (
     <section id="transformation-before-after" className="w-full bg-[#101014] py-16 px-4 sm:px-6 lg:px-8 border-b border-white/10 scroll-mt-20">
@@ -43,7 +48,7 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({ onGetQuote
                 activePreset === 'bakkie' ? 'bg-white text-black' : 'bg-black/50 text-[#8C9BA8] border border-white/10'
               }`}
             >
-              Toyota Hilux / 4x4 Bakkie Set
+              Toyota Hilux GD-6 Fitment
             </button>
             <button
               onClick={() => setActivePreset('suv')}
@@ -51,15 +56,15 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({ onGetQuote
                 activePreset === 'suv' ? 'bg-white text-black' : 'bg-black/50 text-[#8C9BA8] border border-white/10'
               }`}
             >
-              Executive SUV / Overland Leather
+              Land Cruiser 79 Bushveld Fitment
             </button>
           </div>
 
           {/* Interactive Split View Container */}
-          <div className="relative w-full aspect-video md:aspect-[21/9] rounded-2xl overflow-hidden border border-white/10 bg-black select-none">
+          <div className="relative w-full aspect-[4/3] sm:aspect-video md:aspect-[21/9] rounded-2xl overflow-hidden border border-white/10 bg-black select-none">
             
             {/* Left Side: "BEFORE" - Unprotected Worn Seat */}
-            <div className="absolute inset-0 bg-gradient-to-br from-zinc-900 to-stone-950 flex flex-col justify-between p-6 sm:p-8">
+            <div className="absolute inset-0 bg-gradient-to-br from-zinc-950 via-stone-900 to-black flex flex-col justify-between p-5 sm:p-8">
               <div className="flex items-center justify-between">
                 <span className="bg-red-500/20 border border-red-500/40 text-red-400 font-mono text-xs font-bold uppercase px-3 py-1 rounded-md flex items-center gap-1.5">
                   <ShieldAlert className="w-3.5 h-3.5" /> UNPROTECTED FACTORY SEAT
@@ -67,41 +72,41 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({ onGetQuote
               </div>
 
               {/* Graphic Representation of Worn Upholstery */}
-              <div className="space-y-3 max-w-sm">
-                <div className="p-3.5 bg-black/60 border border-red-500/20 rounded-xl space-y-1">
-                  <div className="text-red-400 font-bold text-xs font-mono">⚠️ Severe UV Degradation & Red Dust</div>
+              <div className="space-y-2 max-w-xs sm:max-w-sm">
+                <div className="p-3 bg-black/80 border border-red-500/30 rounded-xl space-y-1">
+                  <div className="text-red-400 font-bold text-xs font-mono">⚠️ Sun Cracking & Grease Penetration</div>
                   <p className="text-[11px] text-zinc-400">
-                    Frayed bolster stitching, cracked vinyl edges from farm sweat, and deep coffee stain penetration into core foam cushions.
+                    Frayed bolster stitching, ripped cloth foam from work pants, and coffee stain soaking.
                   </p>
                 </div>
-                <div className="text-xs font-mono text-zinc-500">
-                  Dealer Reupholstery Quote: <span className="text-red-400 line-through font-bold">R28,500</span>
+                <div className="text-[11px] font-mono text-zinc-400">
+                  Dealer Re-trim Cost: <span className="text-red-400 line-through font-bold">R28,500</span>
                 </div>
               </div>
             </div>
 
-            {/* Right Side: "AFTER" - Lifestyle Custom Protected (Clipped with slider) */}
+            {/* Right Side: "AFTER" - Real Authentic Workshop Photo (Clipped with slider) */}
             <div 
-              className="absolute inset-0 bg-gradient-to-br from-[#1c1d22] to-[#121316] flex flex-col justify-between p-6 sm:p-8 border-l border-white/30"
+              className="absolute inset-0 bg-black flex items-center justify-center border-l border-white/40 overflow-hidden"
               style={{ clipPath: `polygon(${sliderPos}% 0, 100% 0, 100% 100%, ${sliderPos}% 100%)` }}
             >
-              <div className="flex items-center justify-end">
-                <span className="bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 font-mono text-xs font-bold uppercase px-3 py-1 rounded-md flex items-center gap-1.5">
-                  <ShieldCheck className="w-3.5 h-3.5" /> LIFESTYLE PROTECTED
+              <AssetImage
+                filename={activeFilename}
+                alt={`${activeTitle} Custom Fitment`}
+                fit="contain"
+                className="w-full h-full"
+                allowEnlarge={true}
+              />
+              
+              <div className="absolute top-4 right-4 z-10">
+                <span className="bg-black/85 backdrop-blur-md border border-emerald-500/50 text-emerald-400 font-mono text-xs font-bold uppercase px-3 py-1 rounded-md flex items-center gap-1.5 shadow-lg">
+                  <ShieldCheck className="w-3.5 h-3.5" /> {activeTitle} FITMENT
                 </span>
               </div>
 
-              {/* Graphic Representation of Protected Seat */}
-              <div className="space-y-3 max-w-sm ml-auto text-right">
-                <div className="p-3.5 bg-black/70 border border-emerald-500/30 rounded-xl space-y-1">
-                  <div className="text-emerald-400 font-bold text-xs font-mono">✅ 100% Laser-Fit Protective Shield</div>
-                  <p className="text-[11px] text-zinc-300">
-                    510g Heavy Riptech® Canvas, high-tensile contrast stitching, and SABS airbag break-away seams.
-                  </p>
-                </div>
-                <div className="text-xs font-mono text-emerald-400 font-bold">
-                  Guaranteed Resale Protection • 24-Mo Warranty
-                </div>
+              <div className="absolute bottom-4 right-4 z-10 bg-black/85 backdrop-blur-md border border-white/20 p-2.5 rounded-xl text-right max-w-xs hidden sm:block shadow-lg">
+                <div className="text-emerald-400 font-bold text-xs font-mono">✅ 100% Original Workshop Tailored</div>
+                <div className="text-[10px] text-zinc-300">Unedited photo of direct workshop installation</div>
               </div>
             </div>
 
