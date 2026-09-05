@@ -23,6 +23,15 @@ export const AssetImage: React.FC<AssetImageProps> = ({
   onClick,
   ...props
 }) => {
+  const candidatePaths = [
+    getAuthenticImageUrl(filename),
+    `/api/blob/${encodeURIComponent(filename)}`,
+    `/.netlify/functions/api/blob/${encodeURIComponent(filename)}`,
+    `/images/${encodeURIComponent(filename)}`,
+    `/${encodeURIComponent(filename)}`,
+  ];
+
+  const [pathIndex, setPathIndex] = useState(0);
   const [hasError, setHasError] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isEnlarged, setIsEnlarged] = useState(false);
@@ -32,6 +41,7 @@ export const AssetImage: React.FC<AssetImageProps> = ({
     // Listen for uploaded assets
     const unsubscribe = subscribeToAssetChanges(() => {
       setHasError(false);
+      setPathIndex(0);
       setIsLoaded(false);
       setTick(t => t + 1);
     });
@@ -50,7 +60,15 @@ export const AssetImage: React.FC<AssetImageProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isEnlarged]);
 
-  const imageUrl = getAuthenticImageUrl(filename);
+  const currentImageUrl = candidatePaths[pathIndex] || candidatePaths[0];
+
+  const handleImageError = () => {
+    if (pathIndex < candidatePaths.length - 1) {
+      setPathIndex(prev => prev + 1);
+    } else {
+      setHasError(true);
+    }
+  };
 
   if (hasError) {
     return (
@@ -97,10 +115,10 @@ export const AssetImage: React.FC<AssetImageProps> = ({
         className={`relative overflow-hidden flex items-center justify-center ${allowEnlarge ? 'cursor-zoom-in group/asset' : ''} ${className}`}
       >
         <img
-          src={imageUrl}
+          src={currentImageUrl}
           alt={alt}
           referrerPolicy="no-referrer"
-          onError={() => setHasError(true)}
+          onError={handleImageError}
           onLoad={() => setIsLoaded(true)}
           className={`w-full h-full ${fit === 'contain' ? 'object-contain' : 'object-cover'} object-center transition-all duration-300 ${
             isLoaded ? 'opacity-100' : 'opacity-90'
@@ -157,9 +175,10 @@ export const AssetImage: React.FC<AssetImageProps> = ({
             {/* Preview Box - Strictly fits/contains the enlarged image */}
             <div className="relative w-full flex-1 min-h-[300px] sm:min-h-[500px] max-h-[76vh] bg-black p-3 sm:p-6 flex items-center justify-center overflow-hidden">
               <img
-                src={imageUrl}
+                src={currentImageUrl}
                 alt={alt}
                 referrerPolicy="no-referrer"
+                onError={handleImageError}
                 className="max-w-full max-h-[72vh] w-auto h-auto object-contain rounded-lg shadow-2xl select-none"
               />
             </div>

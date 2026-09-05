@@ -1,7 +1,7 @@
 import express from 'express';
 import path from 'path';
 import { createServer as createViteServer } from 'vite';
-import { listAssets, saveAsset, deleteAsset, restoreAssetsOnBoot } from './server/assetHandler';
+import { listAssets, saveAsset, deleteAsset, restoreAssetsOnBoot, getAsset } from './server/assetHandler';
 
 async function startServer() {
   const app = express();
@@ -30,9 +30,26 @@ async function startServer() {
   app.get('/api/assets', (req, res) => {
     try {
       const assets = listAssets();
-      res.json({ assets, count: assets.length });
+      res.json({ assets, count: assets.length, storage: 'local-and-blobs' });
     } catch (err: any) {
       res.status(500).json({ error: err.message || 'Failed to list assets' });
+    }
+  });
+
+  // Serve image blob directly
+  app.get(['/api/blob/:filename', '/blob/:filename'], (req, res) => {
+    try {
+      const { filename } = req.params;
+      const cleanFilename = decodeURIComponent(filename);
+      const asset = getAsset(cleanFilename);
+      if (!asset) {
+        return res.status(404).send('Asset not found');
+      }
+      res.setHeader('Content-Type', asset.mimeType);
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+      return res.send(asset.buffer);
+    } catch (err: any) {
+      return res.status(500).send('Error serving blob');
     }
   });
 

@@ -9,7 +9,11 @@ import {
   syncAssetsFromServer,
   hasUserUploadedAsset,
   getAuthenticImageUrl,
-  ServerAssetInfo
+  ServerAssetInfo,
+  getNetlifyConfig,
+  saveNetlifyConfig,
+  testNetlifyBlobsConnection,
+  getActiveStorageType
 } from '../utils/userAssetStore';
 import { 
   ShieldCheck, 
@@ -26,7 +30,13 @@ import {
   ExternalLink,
   Lock,
   Sparkles,
-  Info
+  Info,
+  Cloud,
+  Database,
+  Copy,
+  Check,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 
@@ -48,6 +58,34 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
   const [activeTab, setActiveTab] = useState<'images' | 'info'>('images');
   const [filter, setFilter] = useState<'all' | 'uploaded' | 'missing'>('all');
   const [isSyncing, setIsSyncing] = useState(false);
+
+  const [showNetlifySettings, setShowNetlifySettings] = useState(false);
+  const [netlifySiteIdInput, setNetlifySiteIdInput] = useState(() => getNetlifyConfig().siteId);
+  const [netlifyTokenInput, setNetlifyTokenInput] = useState(() => getNetlifyConfig().token);
+  const [testResult, setTestResult] = useState<{ ok: boolean; message: string; details?: any } | null>(null);
+  const [isTestingNetlify, setIsTestingNetlify] = useState(false);
+  const [copiedFilename, setCopiedFilename] = useState<string | null>(null);
+
+  const handleSaveNetlifyConfig = () => {
+    saveNetlifyConfig(netlifySiteIdInput, netlifyTokenInput);
+    setUploadStatus('✅ Netlify Blobs credentials updated in session.');
+    refreshAssets();
+  };
+
+  const handleTestNetlifyBlobs = async () => {
+    setIsTestingNetlify(true);
+    setTestResult(null);
+    const result = await testNetlifyBlobsConnection();
+    setTestResult(result);
+    setIsTestingNetlify(false);
+  };
+
+  const handleCopyBlobUrl = (filename: string) => {
+    const url = `${window.location.origin}/api/blob/${encodeURIComponent(filename)}`;
+    navigator.clipboard?.writeText(url);
+    setCopiedFilename(filename);
+    setTimeout(() => setCopiedFilename(null), 2000);
+  };
 
   const refreshAssets = async () => {
     setIsSyncing(true);
@@ -252,9 +290,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
               </h1>
               <div className="flex items-center gap-2 text-[10px] text-zinc-400 font-mono">
                 <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span>Permanent Server Storage Active</span>
+                <span className="text-emerald-400 font-bold">Netlify Blobs Engine Active</span>
                 <span>•</span>
-                <span>Port 3000 API</span>
+                <span>Store: <code className="text-orange-400">lifestyle-assets</code></span>
               </div>
             </div>
           </div>
@@ -262,13 +300,23 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
 
         <div className="flex items-center space-x-2 sm:space-x-3">
           <button
+            onClick={() => setShowNetlifySettings(!showNetlifySettings)}
+            className="p-2 sm:px-3 sm:py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-white/10 text-xs font-mono transition flex items-center gap-1.5 cursor-pointer"
+            title="Netlify Blobs Configuration"
+          >
+            <Cloud className="w-3.5 h-3.5 text-cyan-400" />
+            <span className="hidden sm:inline">Netlify Blobs Info</span>
+            {showNetlifySettings ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+          </button>
+
+          <button
             onClick={refreshAssets}
             disabled={isSyncing}
             className="p-2 sm:px-3 sm:py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-white/10 text-xs font-mono transition flex items-center gap-1.5 cursor-pointer"
             title="Sync with server"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin text-orange-400' : ''}`} />
-            <span className="hidden sm:inline">Refresh Server Cache</span>
+            <span className="hidden sm:inline">Sync Blobs</span>
           </button>
 
           <button
@@ -286,29 +334,94 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
         <div className="bg-gradient-to-r from-orange-950/40 via-zinc-900 to-zinc-900 border border-orange-500/30 rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-start sm:items-center gap-3">
             <div className="p-2.5 rounded-xl bg-orange-500/20 text-orange-400 shrink-0">
-              <HardDrive className="w-5 h-5" />
+              <Cloud className="w-5 h-5 text-cyan-400" />
             </div>
             <div>
               <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                <span>Permanent Server-Side Storage Enabled</span>
+                <span>Netlify Blobs Cloud Storage Active</span>
+                <span className="text-[10px] bg-cyan-600 text-white font-mono px-2 py-0.5 rounded-full font-bold">Deploy-Proof</span>
                 <span className="text-[10px] bg-orange-500 text-white font-mono px-2 py-0.5 rounded-full font-bold">1-Time Upload</span>
               </h3>
               <p className="text-xs text-zinc-300 mt-0.5 leading-relaxed max-w-3xl">
-                Images uploaded here are saved directly to the server's public disk (<code className="text-orange-400 font-mono">/public/images/</code> and <code className="text-orange-400 font-mono">/public/Logo-removebg-preview.png</code>). 
-                Once set, they stay on the website <strong className="text-white">permanently</strong> for all visitors, page reloads, and new customers without requiring re-uploading.
+                Images uploaded here are saved directly into <strong className="text-white">Netlify Blobs</strong> (Store: <code className="text-cyan-400 font-mono">lifestyle-assets</code>) via <code className="text-orange-400 font-mono">@netlify/blobs</code> and public disk. 
+                Once set, they stay on the Netlify deployment <strong className="text-emerald-400">permanently</strong> for all visitors, reloads, and new customers.
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-3 shrink-0">
             <div className="px-3.5 py-2 rounded-xl bg-black/60 border border-white/10 text-right font-mono">
-              <div className="text-[10px] text-zinc-400 uppercase">Live Assets</div>
+              <div className="text-[10px] text-zinc-400 uppercase">Live Blobs</div>
               <div className="text-sm font-bold text-emerald-400">
                 {totalUploadedCount} / {totalProtectedCount} Active
               </div>
             </div>
           </div>
         </div>
+
+        {/* Expandable Netlify Blobs Configuration Card */}
+        {showNetlifySettings && (
+          <div className="bg-[#15171c] border border-cyan-500/30 rounded-2xl p-5 space-y-4 shadow-xl animate-in fade-in duration-200">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-sm font-bold text-white uppercase">
+                <Cloud className="w-4 h-4 text-cyan-400" />
+                <span>Netlify Blobs Cloud Integration Details</span>
+              </div>
+              <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-cyan-950/80 border border-cyan-800 text-cyan-300">
+                @netlify/blobs v11
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+              <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+                <div className="text-[10px] uppercase font-mono text-zinc-400">Blob Store Name</div>
+                <div className="font-mono text-orange-400 font-bold">lifestyle-assets</div>
+                <div className="text-[11px] text-zinc-500">Site-scoped, strong consistency</div>
+              </div>
+              <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+                <div className="text-[10px] uppercase font-mono text-zinc-400">Netlify Function Endpoint</div>
+                <div className="font-mono text-emerald-400 font-bold">/api/* &amp; /blob/*</div>
+                <div className="text-[11px] text-zinc-500">Auto-routed via netlify.toml rewrite</div>
+              </div>
+              <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+                <div className="text-[10px] uppercase font-mono text-zinc-400">Environment Context</div>
+                <div className="font-mono text-cyan-300 font-bold">Netlify Native Runtime</div>
+                <div className="text-[11px] text-zinc-500">Zero-config inside Netlify Functions</div>
+              </div>
+            </div>
+
+            <div className="pt-2 border-t border-white/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div className="text-xs text-zinc-400 max-w-xl">
+                <span>When deployed to Netlify, Netlify Blobs works automatically without any API keys. </span>
+                <span className="text-zinc-500">For cross-site debugging, you can test the API connection:</span>
+              </div>
+
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  onClick={handleTestNetlifyBlobs}
+                  disabled={isTestingNetlify}
+                  className="px-3 py-1.5 rounded-lg bg-cyan-950 hover:bg-cyan-900 border border-cyan-700/60 text-cyan-200 text-xs font-mono flex items-center gap-1.5 transition cursor-pointer"
+                >
+                  <RefreshCw className={`w-3 h-3 ${isTestingNetlify ? 'animate-spin' : ''}`} />
+                  <span>Test API Connection</span>
+                </button>
+              </div>
+            </div>
+
+            {testResult && (
+              <div className={`p-3 rounded-xl text-xs font-mono border ${
+                testResult.ok 
+                  ? 'bg-emerald-950/40 border-emerald-800/60 text-emerald-300' 
+                  : 'bg-red-950/40 border-red-800/60 text-red-300'
+              }`}>
+                {testResult.message}
+                {testResult.details && (
+                  <span className="ml-2 text-zinc-400">({JSON.stringify(testResult.details)})</span>
+                )}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Global Status Message */}
         {uploadStatus && (
@@ -405,13 +518,22 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
               <div className="p-4 bg-zinc-950/80 rounded-xl border border-white/5 flex items-center justify-center">
                 <BrandLogo size="lg" />
               </div>
-              <div className="mt-3 text-[11px] font-mono text-zinc-400 flex items-center gap-2">
-                <span>Direct Path: <code className="text-orange-400">/Logo-removebg-preview.png</code></span>
+              <div className="mt-3 text-[11px] font-mono text-zinc-400 flex flex-wrap items-center justify-center gap-2">
+                <span>Netlify Blob: <code className="text-cyan-400">/api/blob/{OFFICIAL_LOGO_FILENAME}</code></span>
+                <button
+                  onClick={() => handleCopyBlobUrl(OFFICIAL_LOGO_FILENAME)}
+                  className="px-2 py-0.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white text-[10px] inline-flex items-center gap-1 transition"
+                  title="Copy permanent Blob URL"
+                >
+                  {copiedFilename === OFFICIAL_LOGO_FILENAME ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                  <span>{copiedFilename === OFFICIAL_LOGO_FILENAME ? 'Copied!' : 'Copy'}</span>
+                </button>
                 <a 
-                  href={`/${OFFICIAL_LOGO_FILENAME}`} 
+                  href={`/api/blob/${encodeURIComponent(OFFICIAL_LOGO_FILENAME)}`} 
                   target="_blank" 
                   rel="noreferrer"
                   className="text-zinc-500 hover:text-white inline-flex items-center gap-0.5"
+                  title="Open Blob in new tab"
                 >
                   <ExternalLink className="w-3 h-3" />
                 </a>
@@ -554,14 +676,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                       <div className="text-xs font-bold text-white truncate" title={filename}>
                         {filename}
                       </div>
-                      <div className="text-[10px] text-zinc-400 mt-0.5">
-                        {isLive ? `Permanent URL: /images/${encodeURIComponent(filename).slice(0, 20)}...` : 'Not loaded yet'}
+                      <div className="text-[10px] text-zinc-400 mt-0.5 truncate">
+                        {isLive ? (
+                          <span className="text-cyan-400">Blob: /api/blob/{encodeURIComponent(filename).slice(0, 18)}...</span>
+                        ) : (
+                          'Awaiting upload to Netlify Blobs'
+                        )}
                       </div>
                     </div>
                   </div>
 
                   {/* Actions */}
-                  <div className="mt-3 pt-2.5 border-t border-white/5 flex items-center justify-between gap-2">
+                  <div className="mt-3 pt-2.5 border-t border-white/5 flex items-center justify-between gap-1.5">
                     <label className="flex-1 py-1.5 px-2 rounded-lg bg-zinc-800 hover:bg-orange-600 text-zinc-300 hover:text-white text-[11px] font-mono font-bold flex items-center justify-center gap-1.5 cursor-pointer transition">
                       <Upload className="w-3 h-3" />
                       <span>{isLive ? 'Replace' : 'Upload'}</span>
@@ -574,13 +700,23 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                     </label>
 
                     {isLive && (
-                      <button
-                        onClick={() => handleDeleteAsset(filename)}
-                        className="p-1.5 rounded-lg bg-zinc-800/80 hover:bg-red-950 text-zinc-400 hover:text-red-400 transition"
-                        title="Delete this asset from server"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
+                      <>
+                        <button
+                          onClick={() => handleCopyBlobUrl(filename)}
+                          className="p-1.5 rounded-lg bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 hover:text-white transition"
+                          title="Copy Netlify Blob URL"
+                        >
+                          {copiedFilename === filename ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                        </button>
+
+                        <button
+                          onClick={() => handleDeleteAsset(filename)}
+                          className="p-1.5 rounded-lg bg-zinc-800/80 hover:bg-red-950 text-zinc-400 hover:text-red-400 transition"
+                          title="Delete this asset from Netlify Blobs"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </>
                     )}
                   </div>
                 </div>

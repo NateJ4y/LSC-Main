@@ -2,7 +2,7 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import {defineConfig, Plugin} from 'vite';
-import { listAssets, saveAsset, deleteAsset, restoreAssetsOnBoot } from './server/assetHandler';
+import { listAssets, saveAsset, deleteAsset, restoreAssetsOnBoot, getAsset } from './server/assetHandler';
 
 function assetApiPlugin(): Plugin {
   return {
@@ -23,11 +23,28 @@ function assetApiPlugin(): Plugin {
           res.setHeader('Content-Type', 'application/json');
           try {
             const assets = listAssets();
-            res.end(JSON.stringify({ assets, count: assets.length }));
+            res.end(JSON.stringify({ assets, count: assets.length, storage: 'local-and-blobs' }));
           } catch (err: any) {
             res.statusCode = 500;
             res.end(JSON.stringify({ error: err.message }));
           }
+          return;
+        }
+
+        if (url.startsWith('/api/blob/') || url.startsWith('/blob/')) {
+          const rawName = url.startsWith('/api/blob/')
+            ? url.replace('/api/blob/', '')
+            : url.replace('/blob/', '');
+          const filename = decodeURIComponent(rawName.split('?')[0]);
+          const asset = getAsset(filename);
+          if (!asset) {
+            res.statusCode = 404;
+            res.end('Asset not found');
+            return;
+          }
+          res.setHeader('Content-Type', asset.mimeType);
+          res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+          res.end(asset.buffer);
           return;
         }
 

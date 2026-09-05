@@ -194,6 +194,60 @@ export function saveAsset(filename: string, base64Data: string): { success: bool
   };
 }
 
+export function getMimeType(filename: string): string {
+  const ext = filename.split('.').pop()?.toLowerCase() || '';
+  switch (ext) {
+    case 'png': return 'image/png';
+    case 'jpg':
+    case 'jpeg': return 'image/jpeg';
+    case 'webp': return 'image/webp';
+    case 'svg': return 'image/svg+xml';
+    case 'gif': return 'image/gif';
+    default: return 'application/octet-stream';
+  }
+}
+
+export function getAsset(filename: string): { buffer: Buffer; mimeType: string } | null {
+  ensureDirs();
+  const cleanFilename = path.basename(filename);
+  
+  // 1. Check public/images/<filename>
+  const imagePath = path.join(IMAGES_DIR, cleanFilename);
+  if (fs.existsSync(imagePath)) {
+    try {
+      return {
+        buffer: fs.readFileSync(imagePath),
+        mimeType: getMimeType(cleanFilename),
+      };
+    } catch {}
+  }
+
+  // 2. Check public/<filename>
+  const rootPath = path.join(PUBLIC_DIR, cleanFilename);
+  if (fs.existsSync(rootPath)) {
+    try {
+      return {
+        buffer: fs.readFileSync(rootPath),
+        mimeType: getMimeType(cleanFilename),
+      };
+    } catch {}
+  }
+
+  // 3. Check JSON store
+  const store = loadStore();
+  if (store[cleanFilename]?.base64Data) {
+    try {
+      const base64Content = store[cleanFilename].base64Data.replace(/^data:[^;]+;base64,/, '');
+      return {
+        buffer: Buffer.from(base64Content, 'base64'),
+        mimeType: getMimeType(cleanFilename),
+      };
+    } catch {}
+  }
+
+  return null;
+}
+
 export function deleteAsset(filename: string): boolean {
   ensureDirs();
   const cleanFilename = path.basename(filename);

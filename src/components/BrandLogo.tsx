@@ -23,6 +23,8 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
   // Candidate image paths to check for the supplied Logo-removebg-preview.png
   const candidatePaths = [
     getAuthenticImageUrl(OFFICIAL_LOGO_FILENAME),
+    `/api/blob/${encodeURIComponent(OFFICIAL_LOGO_FILENAME)}`,
+    `/.netlify/functions/api/blob/${encodeURIComponent(OFFICIAL_LOGO_FILENAME)}`,
     `/${OFFICIAL_LOGO_FILENAME}`,
     `/images/${OFFICIAL_LOGO_FILENAME}`,
     `/assets/${OFFICIAL_LOGO_FILENAME}`,

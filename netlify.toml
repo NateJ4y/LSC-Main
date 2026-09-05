@@ -1,0 +1,24 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# Netlify Blobs API and image serving rewrites
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/blob/*"
+  to = "/.netlify/functions/api/blob/:splat"
+  status = 200
+
+# Client-side SPA fallback
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

@@ -47,12 +47,71 @@ export interface ServerAssetInfo {
   size: number;
   updatedAt: string;
   isLogo: boolean;
+  storage?: string;
 }
 
 // In-memory cache for loaded image URLs
 const loadedBlobUrls = new Map<string, string>();
 const serverAssetsRegistry = new Map<string, ServerAssetInfo>();
 const listeners = new Set<() => void>();
+let currentStorageType: 'netlify-blobs' | 'server-disk' | 'local-cache' = 'local-cache';
+
+export function getNetlifyConfig(): { siteId: string; token: string } {
+  if (typeof window === 'undefined') return { siteId: '', token: '' };
+  return {
+    siteId: localStorage.getItem('netlify_site_id') || '',
+    token: localStorage.getItem('netlify_blobs_token') || '',
+  };
+}
+
+export function saveNetlifyConfig(siteId: string, token: string): void {
+  if (typeof window === 'undefined') return;
+  if (siteId) localStorage.setItem('netlify_site_id', siteId.trim());
+  else localStorage.removeItem('netlify_site_id');
+
+  if (token) localStorage.setItem('netlify_blobs_token', token.trim());
+  else localStorage.removeItem('netlify_blobs_token');
+
+  syncAssetsFromServer();
+}
+
+function getRequestHeaders(): Record<string, string> {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+  const { siteId, token } = getNetlifyConfig();
+  if (siteId) headers['x-netlify-site-id'] = siteId;
+  if (token) headers['x-netlify-blobs-token'] = token;
+  return headers;
+}
+
+export function getActiveStorageType(): 'netlify-blobs' | 'server-disk' | 'local-cache' {
+  return currentStorageType;
+}
+
+// Helper to query API with Netlify Functions fallback
+async function fetchApi(path: string, init?: RequestInit): Promise<Response> {
+  const headers = {
+    ...getRequestHeaders(),
+    ...(init?.headers || {})
+  };
+
+  try {
+    const res = await fetch(path, { ...init, headers });
+    if (res.ok || res.status !== 404) {
+      return res;
+    }
+  } catch (err) {
+    // If primary failed, try direct netlify function path
+  }
+
+  // Fallback to direct Netlify Functions path
+  const functionPath = path.startsWith('/api/') 
+    ? path.replace('/api/', '/.netlify/functions/api/')
+    : `/.netlify/functions/api${path}`;
+
+  return fetch(functionPath, { ...init, headers });
+}
 
 // Hydrate from localStorage as initial instant fallback
 if (typeof window !== 'undefined') {
@@ -72,13 +131,33 @@ if (typeof window !== 'undefined') {
   } catch {}
 }
 
+// Test Netlify Blobs connection health
+export async function testNetlifyBlobsConnection(): Promise<{ ok: boolean; message: string; details?: any }> {
+  try {
+    const res = await fetchApi('/api/health');
+    if (!res.ok) {
+      return { ok: false, message: `Server responded with status ${res.status}` };
+    }
+    const data = await res.json();
+    return { ok: true, message: 'Connected to Netlify Blobs API successfully!', details: data };
+  } catch (err: any) {
+    return { ok: false, message: `Failed to connect to API: ${err.message || String(err)}` };
+  }
+}
+
 // Query the server API to discover all permanently stored assets
 export async function syncAssetsFromServer(): Promise<ServerAssetInfo[]> {
   try {
-    const res = await fetch('/api/assets');
+    const res = await fetchApi('/api/assets');
     if (!res.ok) return [];
     const data = await res.json();
     const assets: ServerAssetInfo[] = data.assets || [];
+
+    if (data.storage === 'netlify-blobs') {
+      currentStorageType = 'netlify-blobs';
+    } else {
+      currentStorageType = 'server-disk';
+    }
 
     assets.forEach((asset) => {
       serverAssetsRegistry.set(asset.filename, asset);
@@ -141,12 +220,11 @@ export function registerUserUploadedAsset(filename: string, objectUrlOrDataUrl: 
   listeners.forEach(fn => fn());
 }
 
-// Upload an asset permanently to the Express backend server
+// Upload an asset permanently to the Netlify Blobs / server backend
 export async function uploadAssetToServer(filename: string, base64Data: string): Promise<{ success: boolean; url?: string; error?: string }> {
   try {
-    const res = await fetch('/api/admin/assets/upload', {
+    const res = await fetchApi('/api/admin/assets/upload', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ filename, base64Data }),
     });
 
@@ -155,7 +233,7 @@ export async function uploadAssetToServer(filename: string, base64Data: string):
       throw new Error(data.error || 'Server upload failed');
     }
 
-    const finalUrl = data.url || (filename === OFFICIAL_LOGO_FILENAME ? `/${OFFICIAL_LOGO_FILENAME}` : `/images/${encodeURIComponent(filename)}`);
+    const finalUrl = data.url || `/api/blob/${encodeURIComponent(filename)}`;
     registerUserUploadedAsset(filename, finalUrl);
 
     // Also persist dataUrl locally so it's instant everywhere
@@ -178,14 +256,13 @@ export async function uploadAssetToServer(filename: string, base64Data: string):
   }
 }
 
-// Batch upload multiple assets permanently to the server
+// Batch upload multiple assets permanently to Netlify Blobs / server backend
 export async function batchUploadAssetsToServer(
   files: Array<{ filename: string; base64Data: string }>
 ): Promise<{ success: boolean; count: number; errors?: string[] }> {
   try {
-    const res = await fetch('/api/admin/assets/batch-upload', {
+    const res = await fetchApi('/api/admin/assets/batch-upload', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ files }),
     });
 
@@ -211,7 +288,7 @@ export async function batchUploadAssetsToServer(
 
 export async function deleteAssetFromServer(filename: string): Promise<boolean> {
   try {
-    const res = await fetch(`/api/admin/assets/${encodeURIComponent(filename)}`, {
+    const res = await fetchApi(`/api/admin/assets/${encodeURIComponent(filename)}`, {
       method: 'DELETE',
     });
     const data = await res.json();
