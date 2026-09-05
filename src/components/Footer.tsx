@@ -7,7 +7,8 @@ import {
   MessageCircle, 
   HeartHandshake,
   Award,
-  Clock
+  Clock,
+  Lock
 } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 
@@ -208,13 +209,22 @@ export const Footer: React.FC<FooterProps> = ({ onOpenSwatches, onSelectNav }) =
             © {new Date().getFullYear()} Lifestyle Seat Covers. Powered by Stealth Seat Covers (stealthseatcovers.co.za). Handcrafted in Vereeniging, South Africa.
           </div>
 
-          {/* Payment Badges */}
+          {/* Payment Badges & Admin Link */}
           <div className="flex flex-wrap items-center justify-center gap-2 text-[10px] font-mono text-zinc-400">
             <span className="bg-[#16161b] px-2 py-1 rounded border border-white/10">PayFast</span>
             <span className="bg-[#16161b] px-2 py-1 rounded border border-white/10">Ozow Instant EFT</span>
             <span className="bg-[#16161b] px-2 py-1 rounded border border-white/10">Capitec Pay</span>
             <span className="bg-[#16161b] px-2 py-1 rounded border border-white/10">Visa / Mastercard</span>
             <span className="bg-[#16161b] px-2 py-1 rounded border border-white/10">The Courier Guy</span>
+            <span className="text-zinc-700 hidden sm:inline">|</span>
+            <button
+              onClick={() => onSelectNav('admin')}
+              className="px-2.5 py-1 rounded bg-zinc-900/90 hover:bg-orange-500/20 text-zinc-400 hover:text-orange-400 border border-white/10 hover:border-orange-500/30 transition cursor-pointer flex items-center gap-1 text-[11px]"
+              title="Vereeniging Workshop Asset & Image Management Portal"
+            >
+              <Lock className="w-3 h-3 text-orange-400" />
+              <span>Workshop Admin</span>
+            </button>
           </div>
         </div>
       </div>

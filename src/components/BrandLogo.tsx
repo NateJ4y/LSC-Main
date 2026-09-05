@@ -3,10 +3,9 @@ import {
   OFFICIAL_LOGO_FILENAME, 
   getAuthenticImageUrl, 
   subscribeToAssetChanges, 
-  hasUserUploadedAsset,
-  registerUserUploadedAsset 
+  hasUserUploadedAsset
 } from '../utils/userAssetStore';
-import { ShieldCheck, Upload } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
 
 interface BrandLogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -59,21 +58,6 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
     }
   };
 
-  const handleManualLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === 'string') {
-        registerUserUploadedAsset(OFFICIAL_LOGO_FILENAME, reader.result);
-        registerUserUploadedAsset(file.name, reader.result);
-        setHasFailedAll(false);
-        setPathIndex(0);
-      }
-    };
-    reader.readAsDataURL(file);
-  };
-
   // Neutral placeholder per AGENTS.md rule when asset is awaiting placement
   if (hasFailedAll && !hasUserUploadedAsset(OFFICIAL_LOGO_FILENAME)) {
     return (
@@ -85,28 +69,13 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
           <ShieldCheck className="w-4 h-4 text-orange-400 shrink-0" />
           <div className="flex flex-col text-left">
             <span className="text-[11px] font-mono font-bold text-white tracking-tight leading-tight">
-              Logo-removebg-preview.png
+              Lifestyle Seat Covers
             </span>
             <span className="text-[9px] font-mono text-zinc-400 leading-tight">
-              Protected Brand Asset • Strict Rule Active
+              Protected Brand Asset • {OFFICIAL_LOGO_FILENAME}
             </span>
           </div>
         </div>
-
-        {/* Quick file loader button directly in the placeholder */}
-        <label 
-          className="ml-2 px-2 py-1 bg-orange-600 hover:bg-orange-500 text-white rounded text-[10px] font-mono font-bold flex items-center gap-1 cursor-pointer transition shrink-0"
-          title="Attach Logo-removebg-preview.png"
-        >
-          <Upload className="w-3 h-3" />
-          <span>Upload</span>
-          <input
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={handleManualLogoUpload}
-          />
-        </label>
       </div>
     );
   }

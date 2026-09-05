@@ -8,12 +8,10 @@ import {
   Calculator, 
   Filter, 
   Search, 
-  ShieldCheck,
-  FolderUp
+  ShieldCheck
 } from 'lucide-react';
 import { WORKSHOP_PHOTOS, WorkshopPhoto } from '../data/workshopImages';
 import { AssetImage } from './AssetImage';
-import { AssetUploaderModal } from './AssetUploaderModal';
 
 interface RealFitmentGalleryProps {
   onStartQuote?: (vehicleName?: string) => void;
@@ -23,7 +21,6 @@ export const RealFitmentGallery: React.FC<RealFitmentGalleryProps> = ({ onStartQ
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activeModalItem, setActiveModalItem] = useState<WorkshopPhoto | null>(null);
-  const [isUploaderOpen, setIsUploaderOpen] = useState<boolean>(false);
 
   const categories = [
     { key: 'all', label: `All Workshop Photos (${WORKSHOP_PHOTOS.length})` },
@@ -71,14 +68,6 @@ export const RealFitmentGallery: React.FC<RealFitmentGalleryProps> = ({ onStartQ
           </div>
 
           <div className="flex items-center gap-3">
-            <button
-              onClick={() => setIsUploaderOpen(true)}
-              className="py-3 px-4 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700/80 text-xs font-mono font-bold transition flex items-center gap-2"
-              title="Manage and drop authentic image assets"
-            >
-              <FolderUp className="w-4 h-4 text-orange-400" />
-              <span>Original Asset Manager</span>
-            </button>
             <div className="bg-[#141418] border border-white/10 rounded-2xl p-4 sm:p-5 flex items-center space-x-4">
               <div className="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/30 flex items-center justify-center text-orange-500">
                 <ShieldCheck className="w-6 h-6" />
@@ -376,12 +365,6 @@ export const RealFitmentGallery: React.FC<RealFitmentGalleryProps> = ({ onStartQ
           </div>
         </div>
       )}
-
-      {/* Asset Uploader Modal */}
-      <AssetUploaderModal
-        isOpen={isUploaderOpen}
-        onClose={() => setIsUploaderOpen(false)}
-      />
     </section>
   );
 };

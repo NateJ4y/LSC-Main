@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { HeroVehicleSelector } from './components/HeroVehicleSelector';
 import { TrustProofBar } from './components/TrustProofBar';
@@ -27,6 +27,7 @@ import { FreeSwatchModal } from './components/FreeSwatchModal';
 import { CartDrawer } from './components/CartDrawer';
 import { CheckoutModal } from './components/CheckoutModal';
 import { Footer } from './components/Footer';
+import { AdminDashboard } from './components/AdminDashboard';
 import { CustomizerState, CartItem, VehicleSelection } from './types';
 import { POPULAR_SA_VEHICLES } from './data/vehicleDatabase';
 import { MATERIALS_DATA } from './data/materialsData';
@@ -82,6 +83,19 @@ export default function App() {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isSwatchesOpen, setIsSwatchesOpen] = useState(false);
   const [activeNav, setActiveNav] = useState('home');
+
+  // Listen for #admin or /admin in URL
+  useEffect(() => {
+    const checkAdminHash = () => {
+      const hash = window.location.hash.replace('#', '').toLowerCase();
+      if (hash === 'admin' || window.location.pathname === '/admin') {
+        setActiveNav('admin');
+      }
+    };
+    checkAdminHash();
+    window.addEventListener('hashchange', checkAdminHash);
+    return () => window.removeEventListener('hashchange', checkAdminHash);
+  }, []);
 
   // Coupon State
   const [activeCoupon, setActiveCoupon] = useState<string | null>('LIFESTYLE10');
@@ -204,6 +218,16 @@ export default function App() {
 
   const handleNavSelection = (nav: string) => {
     setActiveNav(nav);
+    if (nav === 'admin') {
+      window.location.hash = 'admin';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    if (window.location.hash === '#admin') {
+      history.replaceState(null, '', window.location.pathname);
+    }
+
     if (nav === 'home') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (nav === 'gallery') {
@@ -230,6 +254,15 @@ export default function App() {
   const subtotal = Math.max(0, rawSubtotal - totalDiscount);
   const shippingCost = rawSubtotal >= 2500 || cartItems.length === 0 ? 0 : 250;
   const grandTotal = subtotal + shippingCost;
+
+  // Render Admin Dashboard exclusively if activeNav is 'admin'
+  if (activeNav === 'admin') {
+    return (
+      <AdminDashboard
+        onBackToSite={() => handleNavSelection('home')}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#0c0c0e] text-white flex flex-col font-sans selection:bg-orange-600 selection:text-white">
