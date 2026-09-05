@@ -1,10 +1,12 @@
 import fs from 'fs';
 import path from 'path';
+import { getStore } from '@netlify/blobs';
 
 // Standard directories
 const CWD = process.cwd();
 const PUBLIC_DIR = path.join(CWD, 'public');
 const IMAGES_DIR = path.join(PUBLIC_DIR, 'images');
+const ASSETS_DIR = path.join(PUBLIC_DIR, 'assets');
 const DATA_DIR = path.join(CWD, 'data');
 const STORE_FILE = path.join(DATA_DIR, 'assets-store.json');
 
@@ -12,6 +14,7 @@ const STORE_FILE = path.join(DATA_DIR, 'assets-store.json');
 function ensureDirs() {
   if (!fs.existsSync(PUBLIC_DIR)) fs.mkdirSync(PUBLIC_DIR, { recursive: true });
   if (!fs.existsSync(IMAGES_DIR)) fs.mkdirSync(IMAGES_DIR, { recursive: true });
+  if (!fs.existsSync(ASSETS_DIR)) fs.mkdirSync(ASSETS_DIR, { recursive: true });
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 }
 
@@ -45,7 +48,7 @@ function saveStore(store: Record<string, StoredAsset>) {
   }
 }
 
-// Restore all saved assets into public/ and public/images/ on startup
+// Restore all saved assets into public/, public/images/, and public/assets/ on startup
 export function restoreAssetsOnBoot() {
   ensureDirs();
   const store = loadStore();
@@ -56,7 +59,7 @@ export function restoreAssetsOnBoot() {
     if (!item?.base64Data) continue;
 
     try {
-      const base64Content = item.base64Data.replace(/^data:image\/\w+;base64,/, '');
+      const base64Content = item.base64Data.replace(/^data:[^;]+;base64,/, '');
       const buffer = Buffer.from(base64Content, 'base64');
       
       const targetPath = path.join(IMAGES_DIR, filename);
@@ -64,7 +67,12 @@ export function restoreAssetsOnBoot() {
         fs.writeFileSync(targetPath, buffer);
       }
 
-      // If logo, ensure it's also at public root
+      const assetPath = path.join(ASSETS_DIR, filename);
+      if (!fs.existsSync(assetPath)) {
+        fs.writeFileSync(assetPath, buffer);
+      }
+
+      // If logo, ensure it's also at public root and asset locations
       if (filename.toLowerCase().includes('logo') || filename === 'Logo-removebg-preview.png') {
         const rootLogoPath = path.join(PUBLIC_DIR, filename);
         if (!fs.existsSync(rootLogoPath)) {
@@ -73,6 +81,14 @@ export function restoreAssetsOnBoot() {
         const canonicalLogoPath = path.join(PUBLIC_DIR, 'Logo-removebg-preview.png');
         if (!fs.existsSync(canonicalLogoPath)) {
           fs.writeFileSync(canonicalLogoPath, buffer);
+        }
+        const assetLogoPath = path.join(ASSETS_DIR, 'Logo-removebg-preview.png');
+        if (!fs.existsSync(assetLogoPath)) {
+          fs.writeFileSync(assetLogoPath, buffer);
+        }
+        const assetLogoGeneric = path.join(ASSETS_DIR, 'logo.png');
+        if (!fs.existsSync(assetLogoGeneric)) {
+          fs.writeFileSync(assetLogoGeneric, buffer);
         }
       }
     } catch (e) {
@@ -155,22 +171,34 @@ export function listAssets(): AssetInfo[] {
   return results;
 }
 
-export function saveAsset(filename: string, base64Data: string): { success: boolean; filename: string; url: string } {
+export async function saveAsset(
+  filename: string, 
+  base64Data: string,
+  netlifyConfig?: { token?: string; siteId?: string }
+): Promise<{ success: boolean; filename: string; url: string; netlifySaved?: boolean }> {
   ensureDirs();
   const cleanFilename = path.basename(filename);
-  const base64Content = base64Data.replace(/^data:image\/\w+;base64,/, '');
+  const base64Content = base64Data.replace(/^data:[^;]+;base64,/, '');
   const buffer = Buffer.from(base64Content, 'base64');
+  const mimeType = getMimeType(cleanFilename);
 
-  // Write to public/images/<filename>
+  // Write to public/images/<filename> and public/assets/<filename>
   const targetPath = path.join(IMAGES_DIR, cleanFilename);
   fs.writeFileSync(targetPath, buffer);
 
+  const assetPath = path.join(ASSETS_DIR, cleanFilename);
+  fs.writeFileSync(assetPath, buffer);
+
   const isLogo = cleanFilename.toLowerCase().includes('logo') || cleanFilename === 'Logo-removebg-preview.png';
 
-  // Also write to root of public/ if it's the logo
+  // Also write to root of public/ and all logo alias locations if it's the logo
   if (isLogo) {
     fs.writeFileSync(path.join(PUBLIC_DIR, cleanFilename), buffer);
     fs.writeFileSync(path.join(PUBLIC_DIR, 'Logo-removebg-preview.png'), buffer);
+    fs.writeFileSync(path.join(IMAGES_DIR, 'Logo-removebg-preview.png'), buffer);
+    fs.writeFileSync(path.join(ASSETS_DIR, 'Logo-removebg-preview.png'), buffer);
+    fs.writeFileSync(path.join(ASSETS_DIR, 'logo.png'), buffer);
+    fs.writeFileSync(path.join(PUBLIC_DIR, 'logo.png'), buffer);
   }
 
   // Save to permanent JSON store
@@ -181,7 +209,54 @@ export function saveAsset(filename: string, base64Data: string): { success: bool
     size: buffer.length,
     updatedAt: new Date().toISOString(),
   };
+  if (isLogo && cleanFilename !== 'Logo-removebg-preview.png') {
+    store['Logo-removebg-preview.png'] = {
+      filename: 'Logo-removebg-preview.png',
+      base64Data,
+      size: buffer.length,
+      updatedAt: new Date().toISOString(),
+    };
+  }
   saveStore(store);
+
+  // If Netlify Blobs token/siteId are provided, also persist directly to Netlify Blobs!
+  let netlifySaved = false;
+  const token = netlifyConfig?.token || process.env.NETLIFY_BLOBS_TOKEN;
+  const siteID = netlifyConfig?.siteId || process.env.NETLIFY_SITE_ID;
+  if (token && siteID) {
+    try {
+      const blobStore = getStore({
+        name: 'lifestyle-assets',
+        siteID,
+        token,
+        consistency: 'strong',
+      });
+      await blobStore.set(cleanFilename, buffer, {
+        metadata: {
+          filename: cleanFilename,
+          contentType: mimeType,
+          size: buffer.length,
+          updatedAt: new Date().toISOString(),
+          isLogo,
+        }
+      });
+      if (isLogo && cleanFilename !== 'Logo-removebg-preview.png') {
+        await blobStore.set('Logo-removebg-preview.png', buffer, {
+          metadata: {
+            filename: 'Logo-removebg-preview.png',
+            contentType: mimeType,
+            size: buffer.length,
+            updatedAt: new Date().toISOString(),
+            isLogo: true,
+          }
+        });
+      }
+      netlifySaved = true;
+      console.log(`[Netlify Blobs] Successfully uploaded ${cleanFilename} to Netlify Blobs!`);
+    } catch (blobErr) {
+      console.warn(`[Netlify Blobs] Warning: could not upload ${cleanFilename} to Netlify Blobs:`, blobErr);
+    }
+  }
 
   const publicUrl = isLogo && cleanFilename === 'Logo-removebg-preview.png' 
     ? '/Logo-removebg-preview.png' 
@@ -191,6 +266,7 @@ export function saveAsset(filename: string, base64Data: string): { success: bool
     success: true,
     filename: cleanFilename,
     url: publicUrl,
+    netlifySaved,
   };
 }
 
@@ -248,20 +324,39 @@ export function getAsset(filename: string): { buffer: Buffer; mimeType: string }
   return null;
 }
 
-export function deleteAsset(filename: string): boolean {
+export async function deleteAsset(
+  filename: string,
+  netlifyConfig?: { token?: string; siteId?: string }
+): Promise<boolean> {
   ensureDirs();
   const cleanFilename = path.basename(filename);
   let removed = false;
 
   const imagePath = path.join(IMAGES_DIR, cleanFilename);
   if (fs.existsSync(imagePath)) {
-    fs.unlinkSync(imagePath);
+    try { fs.unlinkSync(imagePath); } catch {}
+    removed = true;
+  }
+
+  const assetPath = path.join(ASSETS_DIR, cleanFilename);
+  if (fs.existsSync(assetPath)) {
+    try { fs.unlinkSync(assetPath); } catch {}
     removed = true;
   }
 
   if (cleanFilename.toLowerCase().includes('logo')) {
     const rootPath = path.join(PUBLIC_DIR, cleanFilename);
-    if (fs.existsSync(rootPath)) fs.unlinkSync(rootPath);
+    if (fs.existsSync(rootPath)) {
+      try { fs.unlinkSync(rootPath); } catch {}
+    }
+    const rootCanonical = path.join(PUBLIC_DIR, 'Logo-removebg-preview.png');
+    if (fs.existsSync(rootCanonical)) {
+      try { fs.unlinkSync(rootCanonical); } catch {}
+    }
+    const assetCanonical = path.join(ASSETS_DIR, 'Logo-removebg-preview.png');
+    if (fs.existsSync(assetCanonical)) {
+      try { fs.unlinkSync(assetCanonical); } catch {}
+    }
   }
 
   const store = loadStore();
@@ -269,6 +364,24 @@ export function deleteAsset(filename: string): boolean {
     delete store[cleanFilename];
     saveStore(store);
     removed = true;
+  }
+
+  const token = netlifyConfig?.token || process.env.NETLIFY_BLOBS_TOKEN;
+  const siteID = netlifyConfig?.siteId || process.env.NETLIFY_SITE_ID;
+  if (token && siteID) {
+    try {
+      const blobStore = getStore({
+        name: 'lifestyle-assets',
+        siteID,
+        token,
+        consistency: 'strong',
+      });
+      await blobStore.delete(cleanFilename);
+      if (cleanFilename.toLowerCase().includes('logo')) {
+        try { await blobStore.delete('Logo-removebg-preview.png'); } catch {}
+      }
+      removed = true;
+    } catch {}
   }
 
   return removed;

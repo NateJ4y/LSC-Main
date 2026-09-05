@@ -7,6 +7,8 @@ import {
   batchUploadAssetsToServer, 
   deleteAssetFromServer,
   syncAssetsFromServer,
+  syncBrowserCacheToRepository,
+  getBrowserCachedAssetsCount,
   hasUserUploadedAsset,
   getAuthenticImageUrl,
   ServerAssetInfo,
@@ -36,7 +38,9 @@ import {
   Copy,
   Check,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  GitBranch,
+  Save
 } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 
@@ -58,6 +62,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
   const [activeTab, setActiveTab] = useState<'images' | 'info'>('images');
   const [filter, setFilter] = useState<'all' | 'uploaded' | 'missing'>('all');
   const [isSyncing, setIsSyncing] = useState(false);
+  const [isSyncingRepo, setIsSyncingRepo] = useState(false);
+  const [cachedBrowserCount, setCachedBrowserCount] = useState(0);
 
   const [showNetlifySettings, setShowNetlifySettings] = useState(false);
   const [netlifySiteIdInput, setNetlifySiteIdInput] = useState(() => getNetlifyConfig().siteId);
@@ -92,11 +98,31 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
     const assets = await syncAssetsFromServer();
     setServerAssets(assets);
     setIsSyncing(false);
+    setCachedBrowserCount(getBrowserCachedAssetsCount());
+  };
+
+  const handlePushBrowserCacheToRepo = async () => {
+    setIsSyncingRepo(true);
+    setUploadStatus('Committing browser assets to Git repository (public/images/ and public/assets/)...');
+    try {
+      const res = await syncBrowserCacheToRepository();
+      if (res.count > 0) {
+        setUploadStatus(`✅ Successfully saved ${res.count} image(s) to public/images/ and public/assets/ in the Git repository! All new guest sessions and Git exports will now have these images immediately.`);
+      } else {
+        setUploadStatus(res.message || 'No pending browser assets found to sync.');
+      }
+      await refreshAssets();
+    } catch (err: any) {
+      setUploadStatus(`❌ Git repository sync failed: ${err.message || 'Unknown error'}`);
+    } finally {
+      setIsSyncingRepo(false);
+    }
   };
 
   useEffect(() => {
     if (isAuthenticated) {
       refreshAssets();
+      setCachedBrowserCount(getBrowserCachedAssetsCount());
     }
   }, [isAuthenticated]);
 
@@ -134,30 +160,52 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
   const processFiles = async (files: FileList | null) => {
     if (!files || files.length === 0) return;
     setIsLoading(true);
-    setUploadStatus('Uploading assets permanently to server...');
 
     try {
       const fileList = Array.from(files);
-      const payload: Array<{ filename: string; base64Data: string }> = [];
+      let successCount = 0;
+      const errors: string[] = [];
 
-      for (const file of fileList) {
-        const base64Data = await fileToBase64(file);
+      for (let i = 0; i < fileList.length; i++) {
+        const file = fileList[i];
+        setUploadStatus(`Uploading (${i + 1}/${fileList.length}): ${file.name}...`);
 
         // Check if file is official logo
         const isLogo = LOGO_ALIASES.some(
           alias => alias.toLowerCase() === file.name.toLowerCase() ||
-                   alias.replace(/[^a-zA-Z0-9]/g, '').toLowerCase() === file.name.replace(/[^a-zA-Z0-9]/g, '').toLowerCase()
+                   alias.replace(/[^a-zA-Z0-9]/g, '').toLowerCase() === file.name.replace(/[^a-zA-Z0-9]/g, '').toLowerCase() ||
+                   file.name.toLowerCase().includes('logo')
         );
 
-        const targetFilename = isLogo ? OFFICIAL_LOGO_FILENAME : file.name;
-        payload.push({ filename: targetFilename, base64Data });
+        let targetFilename = isLogo ? OFFICIAL_LOGO_FILENAME : file.name;
+
+        // Try exact or fuzzy match with authentic filenames if not logo
+        if (!isLogo) {
+          const match = AUTHENTIC_IMAGE_FILENAMES.find(
+            authName => authName.toLowerCase() === file.name.toLowerCase() ||
+                        authName.replace(/\.jpeg$/i, '.jpg').toLowerCase() === file.name.toLowerCase() ||
+                        authName.toLowerCase().replace(/[^a-z0-9]/g, '') === file.name.toLowerCase().replace(/[^a-z0-9]/g, '')
+          );
+          if (match) {
+            targetFilename = match;
+          }
+        }
+
+        const base64Data = await fileToBase64(file);
+        const res = await uploadAssetToServer(targetFilename, base64Data);
+        if (res.success) {
+          successCount++;
+        } else {
+          errors.push(`${file.name}: ${res.error || 'Failed'}`);
+        }
       }
 
-      const result = await batchUploadAssetsToServer(payload);
-      if (result.success) {
-        setUploadStatus(`✅ Successfully saved ${result.count} asset(s) permanently to server! Live on site for all customers.`);
+      if (successCount === fileList.length) {
+        setUploadStatus(`✅ Successfully saved all ${successCount} asset(s) permanently to Netlify Blobs & server! Live for all customers.`);
+      } else if (successCount > 0) {
+        setUploadStatus(`⚠️ Uploaded ${successCount} of ${fileList.length} assets. Errors: ${errors.join(', ')}`);
       } else {
-        setUploadStatus(`⚠️ Upload partially complete. Refreshing server status...`);
+        setUploadStatus(`❌ Upload failed: ${errors.join(', ')}`);
       }
       await refreshAssets();
     } catch (err: any) {
@@ -439,6 +487,95 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
           </div>
         )}
 
+        {/* GitHub Repository & Public Assets Bundler */}
+        <div className="bg-[#121316] border border-orange-500/30 rounded-2xl p-5 sm:p-6 space-y-4 shadow-xl">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-orange-500/10 border border-orange-500/30 text-orange-400">
+                <GitBranch className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-sm font-heading font-black uppercase text-white tracking-wider flex items-center gap-2">
+                  <span>GitHub Repository Public Assets</span>
+                  <span className="text-[10px] bg-orange-500/20 text-orange-300 font-mono px-2 py-0.5 rounded border border-orange-500/30">
+                    public/images & public/assets
+                  </span>
+                </h3>
+                <p className="text-xs text-zinc-400">
+                  Pre-bundles the logo and workshop fitment photos directly into the repository filesystem so every guest session sees them immediately.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handlePushBrowserCacheToRepo}
+                disabled={isSyncingRepo}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-orange-600 hover:bg-orange-500 disabled:opacity-50 text-white text-xs font-bold uppercase tracking-wider transition shadow-lg shadow-orange-900/20"
+              >
+                <Save className={`w-4 h-4 ${isSyncingRepo ? 'animate-spin' : ''}`} />
+                <span>{isSyncingRepo ? 'Writing to Repo...' : 'Push Browser Uploads to Git Repo'}</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="bg-black/40 border border-white/5 rounded-xl p-3.5 space-y-1">
+              <span className="text-[10px] font-mono uppercase text-zinc-400">Official Brand Logo</span>
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-white font-mono truncate">public/Logo-removebg-preview.png</span>
+                {logoUploaded ? (
+                  <span className="text-[10px] text-emerald-400 font-bold flex items-center gap-1">
+                    <CheckCircle2 className="w-3.5 h-3.5" /> Committed
+                  </span>
+                ) : (
+                  <span className="text-[10px] text-zinc-500 font-mono">Awaiting Upload</span>
+                )}
+              </div>
+            </div>
+
+            <div className="bg-black/40 border border-white/5 rounded-xl p-3.5 space-y-1">
+              <span className="text-[10px] font-mono uppercase text-zinc-400">Workshop Photographs</span>
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-white font-mono">public/images/</span>
+                <span className="text-[10px] text-orange-400 font-mono font-bold">
+                  {photosUploadedCount} / {AUTHENTIC_IMAGE_FILENAMES.length} Files
+                </span>
+              </div>
+            </div>
+
+            <div className="bg-black/40 border border-white/5 rounded-xl p-3.5 space-y-1">
+              <span className="text-[10px] font-mono uppercase text-zinc-400">Browser Cache Status</span>
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-zinc-300 font-mono">Pending in Browser</span>
+                <span className={`text-[10px] font-mono font-bold ${cachedBrowserCount > 0 ? 'text-amber-400' : 'text-zinc-500'}`}>
+                  {cachedBrowserCount} Asset(s)
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {cachedBrowserCount > 0 && (
+            <div className="bg-amber-950/20 border border-amber-600/30 rounded-xl p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-amber-200">
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
+                <span>
+                  Found <strong>{cachedBrowserCount}</strong> uploaded asset(s) stored in your local browser cache. Click "Push Browser Uploads to Git Repo" to ensure they are written directly to <code className="text-orange-300">public/images/</code> and <code className="text-orange-300">public/assets/</code> on the repository disk.
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={handlePushBrowserCacheToRepo}
+                disabled={isSyncingRepo}
+                className="shrink-0 px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-black font-bold text-xs uppercase tracking-wider transition"
+              >
+                Sync to Disk Now
+              </button>
+            </div>
+          )}
+        </div>
+
         {/* Universal Batch Drop Zone */}
         <div
           onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
@@ -456,11 +593,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
         >
           <FolderUp className="w-12 h-12 text-orange-400 mx-auto mb-3" />
           <h3 className="text-base font-bold text-white mb-1">
-            Drop Official Logo & 21 WhatsApp Fitment Photographs Here
+            Drop Official Logo & {AUTHENTIC_IMAGE_FILENAMES.length} Fitment Photographs Here
           </h3>
           <p className="text-xs text-zinc-400 max-w-xl mx-auto mb-4 leading-relaxed">
             Drag and drop <code className="text-orange-400 font-mono">Logo-removebg-preview.png</code> and all workshop JPEG photos simultaneously.
-            The server automatically maps each file to its designated vehicle card and writes it directly to disk.
+            Each file is automatically uploaded, saved to Netlify Blobs & server disk, and mapped to its designated vehicle card.
           </p>
 
           <label className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-orange-600 hover:bg-orange-500 text-white text-xs font-bold uppercase tracking-wider cursor-pointer transition shadow-lg">
@@ -566,14 +703,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
           </div>
         </div>
 
-        {/* SECTION 2: 21 WORKSHOP FITMENT PHOTOGRAPHS */}
+        {/* SECTION 2: WORKSHOP FITMENT PHOTOGRAPHS */}
         <div className="bg-[#121316] border border-white/10 rounded-2xl p-5 sm:p-6 space-y-5 shadow-xl">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
             <div>
               <h3 className="text-sm font-heading font-black uppercase text-white tracking-wider flex items-center gap-2">
-                <span>21 Genuine South African Workshop Fitments</span>
+                <span>{AUTHENTIC_IMAGE_FILENAMES.length} Genuine South African Workshop Fitments</span>
                 <span className="text-xs font-mono text-emerald-400 font-bold">
-                  ({photosUploadedCount} / 21 Live on Server)
+                  ({photosUploadedCount} / {AUTHENTIC_IMAGE_FILENAMES.length} Live on Server)
                 </span>
               </h3>
               <p className="text-xs text-zinc-400">
@@ -589,7 +726,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                   filter === 'all' ? 'bg-orange-500 text-white font-bold' : 'text-zinc-400 hover:text-white'
                 }`}
               >
-                All (21)
+                All ({AUTHENTIC_IMAGE_FILENAMES.length})
               </button>
               <button
                 onClick={() => setFilter('uploaded')}
@@ -605,12 +742,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                   filter === 'missing' ? 'bg-amber-600 text-white font-bold' : 'text-zinc-400 hover:text-white'
                 }`}
               >
-                Missing ({21 - photosUploadedCount})
+                Missing ({AUTHENTIC_IMAGE_FILENAMES.length - photosUploadedCount})
               </button>
             </div>
           </div>
 
-          {/* Grid of 21 Protected Photos */}
+          {/* Grid of Protected Photos */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {AUTHENTIC_IMAGE_FILENAMES.filter(name => {
               const isLive = hasUserUploadedAsset(name);

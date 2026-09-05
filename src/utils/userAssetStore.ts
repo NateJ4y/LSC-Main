@@ -22,18 +22,25 @@ export const AUTHENTIC_IMAGE_FILENAMES = [
   'WhatsApp Image 2026-08-31 at 8.08.55 AM (2).jpeg',
   'WhatsApp Image 2026-08-31 at 8.08.55 AM.jpeg',
   'WhatsApp Image 2026-08-31 at 8.08.56 AM (1).jpeg',
+  'WhatsApp Image 2026-08-31 at 8.08.56 AM (2).jpeg',
+  'WhatsApp Image 2026-08-31 at 8.08.56 AM.jpeg',
+  'WhatsApp Image 2026-08-31 at 8.08.57 AM (1).jpeg',
   'WhatsApp Image 2026-08-31 at 8.08.57 AM (2).jpeg',
   'WhatsApp Image 2026-08-31 at 8.08.57 AM.jpeg',
+  'WhatsApp Image 2026-08-31 at 8.08.58 AM (1).jpeg',
+  'WhatsApp Image 2026-08-31 at 8.08.58 AM.jpeg',
   'WhatsApp Image 2026-08-31 at 8.08.59 AM (1).jpeg',
   'WhatsApp Image 2026-08-31 at 8.08.59 AM (2).jpeg',
   'WhatsApp Image 2026-08-31 at 8.08.59 AM.jpeg',
   'WhatsApp Image 2026-08-31 at 8.09.00 AM (1).jpeg',
+  'WhatsApp Image 2026-08-31 at 8.09.00 AM.jpeg',
   'WhatsApp Image 2026-08-31 at 8.09.01 AM (1).jpeg',
   'WhatsApp Image 2026-08-31 at 8.09.01 AM (2).jpeg',
   'WhatsApp Image 2026-08-31 at 8.09.01 AM (3).jpeg',
   'WhatsApp Image 2026-08-31 at 8.09.01 AM.jpeg',
   'WhatsApp Image 2026-08-31 at 8.09.02 AM (1).jpeg',
   'WhatsApp Image 2026-08-31 at 8.09.02 AM (2).jpeg',
+  'WhatsApp Image 2026-08-31 at 8.09.03 AM (1).jpeg',
   'WhatsApp Image 2026-08-31 at 8.09.03 AM (2).jpeg',
   'WhatsApp Image 2026-08-31 at 8.09.03 AM (3).jpeg',
   'WhatsApp Image 2026-08-31 at 8.09.03 AM.jpeg',
@@ -171,11 +178,98 @@ export async function syncAssetsFromServer(): Promise<ServerAssetInfo[]> {
     });
 
     listeners.forEach(fn => fn());
+
+    // Check if browser has cached assets that are not yet on the server filesystem
+    if (typeof window !== 'undefined') {
+      const cachedCount = getBrowserCachedAssetsCount();
+      if (cachedCount > 0 && assets.length < cachedCount) {
+        // Automatically sync browser cache to server filesystem in background
+        setTimeout(() => {
+          syncBrowserCacheToRepository().catch(e => console.warn('Auto-sync browser cache failed:', e));
+        }, 1000);
+      }
+    }
+
     return assets;
   } catch (err) {
     console.warn('[AssetStore] Server asset sync skipped (offline/static):', err);
     return [];
   }
+}
+
+export function getBrowserCachedAssetsCount(): number {
+  if (typeof window === 'undefined') return 0;
+  let count = 0;
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith('asset:')) {
+        const val = localStorage.getItem(key);
+        if (val && val.startsWith('data:')) count++;
+      }
+    }
+  } catch {}
+  return count;
+}
+
+// Sync all browser cached assets directly to the server's public/images and public/assets filesystem
+export async function syncBrowserCacheToRepository(): Promise<{ count: number; syncedFiles: string[]; message?: string }> {
+  if (typeof window === 'undefined') return { count: 0, syncedFiles: [] };
+
+  const filesToSync: Array<{ filename: string; base64Data: string }> = [];
+
+  // 1. Check official logo
+  const cachedLogo = localStorage.getItem(`asset:${OFFICIAL_LOGO_FILENAME}`);
+  if (cachedLogo && cachedLogo.startsWith('data:')) {
+    filesToSync.push({ filename: OFFICIAL_LOGO_FILENAME, base64Data: cachedLogo });
+  }
+
+  // 2. Check authentic workshop filenames
+  AUTHENTIC_IMAGE_FILENAMES.forEach(name => {
+    const cached = localStorage.getItem(`asset:${name}`);
+    if (cached && cached.startsWith('data:') && !filesToSync.some(f => f.filename === name)) {
+      filesToSync.push({ filename: name, base64Data: cached });
+    }
+  });
+
+  // 3. Check any other custom asset keys in localStorage
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && key.startsWith('asset:')) {
+      const filename = key.replace('asset:', '');
+      if (!filesToSync.some(f => f.filename === filename)) {
+        const val = localStorage.getItem(key);
+        if (val && val.startsWith('data:')) {
+          filesToSync.push({ filename, base64Data: val });
+        }
+      }
+    }
+  }
+
+  if (filesToSync.length === 0) {
+    return { count: 0, syncedFiles: [], message: 'No cached browser assets to sync.' };
+  }
+
+  try {
+    const res = await fetchApi('/api/admin/assets/sync-browser-cache', {
+      method: 'POST',
+      body: JSON.stringify({ files: filesToSync }),
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      await syncAssetsFromServer();
+      return { 
+        count: data.count || filesToSync.length, 
+        syncedFiles: data.syncedFiles || filesToSync.map(f => f.filename),
+        message: data.message
+      };
+    }
+  } catch (err: any) {
+    console.warn('[AssetStore] Browser cache push failed:', err);
+  }
+
+  return { count: 0, syncedFiles: [] };
 }
 
 // Auto sync on client initialization

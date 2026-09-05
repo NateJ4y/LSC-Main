@@ -14,10 +14,11 @@ async function startServer() {
   // Ensure persistent assets are restored to public/ on server startup
   restoreAssetsOnBoot();
 
-  // Explicitly serve static public assets so /images/* and /Logo-removebg-preview.png are instantly reachable
+  // Explicitly serve static public assets so /images/*, /assets/*, and /Logo-removebg-preview.png are instantly reachable
   const publicDir = path.join(process.cwd(), 'public');
   app.use(express.static(publicDir));
   app.use('/images', express.static(path.join(publicDir, 'images')));
+  app.use('/assets', express.static(path.join(publicDir, 'assets')));
 
   // --- API ROUTES ---
 
@@ -54,14 +55,17 @@ async function startServer() {
   });
 
   // Upload single asset (admin only)
-  app.post('/api/admin/assets/upload', (req, res) => {
+  app.post('/api/admin/assets/upload', async (req, res) => {
     try {
       const { filename, base64Data } = req.body;
       if (!filename || !base64Data) {
         return res.status(400).json({ error: 'Both filename and base64Data are required' });
       }
 
-      const result = saveAsset(filename, base64Data);
+      const netlifyToken = (req.headers['x-netlify-blobs-token'] as string) || process.env.NETLIFY_BLOBS_TOKEN;
+      const netlifySiteId = (req.headers['x-netlify-site-id'] as string) || process.env.NETLIFY_SITE_ID;
+
+      const result = await saveAsset(filename, base64Data, { token: netlifyToken, siteId: netlifySiteId });
       console.log(`[Admin Asset Upload] Saved ${filename} permanently to server.`);
       return res.json({ success: true, ...result });
     } catch (err: any) {
@@ -71,19 +75,25 @@ async function startServer() {
   });
 
   // Batch upload assets (admin only)
-  app.post('/api/admin/assets/batch-upload', (req, res) => {
+  app.post('/api/admin/assets/batch-upload', async (req, res) => {
     try {
       const { files } = req.body;
       if (!Array.isArray(files) || files.length === 0) {
         return res.status(400).json({ error: 'files array is required' });
       }
 
-      const results = files.map((f: { filename: string; base64Data: string }) => {
+      const netlifyToken = (req.headers['x-netlify-blobs-token'] as string) || process.env.NETLIFY_BLOBS_TOKEN;
+      const netlifySiteId = (req.headers['x-netlify-site-id'] as string) || process.env.NETLIFY_SITE_ID;
+
+      const results = [];
+      for (const f of files) {
         if (f.filename && f.base64Data) {
-          return saveAsset(f.filename, f.base64Data);
+          const r = await saveAsset(f.filename, f.base64Data, { token: netlifyToken, siteId: netlifySiteId });
+          results.push(r);
+        } else {
+          results.push({ success: false, filename: f.filename, error: 'Missing data' });
         }
-        return { success: false, filename: f.filename, error: 'Missing data' };
-      });
+      }
 
       console.log(`[Admin Batch Upload] Saved ${results.filter(r => r.success).length} assets permanently to server.`);
       return res.json({ success: true, count: results.length, results });
@@ -93,11 +103,46 @@ async function startServer() {
     }
   });
 
+  // Sync browser cache / localStorage to Git repository public assets
+  app.post('/api/admin/assets/sync-browser-cache', async (req, res) => {
+    try {
+      const { files } = req.body;
+      if (!Array.isArray(files) || files.length === 0) {
+        return res.status(400).json({ error: 'files array is required' });
+      }
+
+      const netlifyToken = (req.headers['x-netlify-blobs-token'] as string) || process.env.NETLIFY_BLOBS_TOKEN;
+      const netlifySiteId = (req.headers['x-netlify-site-id'] as string) || process.env.NETLIFY_SITE_ID;
+
+      const syncedFiles: string[] = [];
+      for (const f of files) {
+        if (f.filename && f.base64Data) {
+          await saveAsset(f.filename, f.base64Data, { token: netlifyToken, siteId: netlifySiteId });
+          syncedFiles.push(f.filename);
+        }
+      }
+
+      console.log(`[Repo Sync] Synced ${syncedFiles.length} assets to public/images and public/assets for Git export.`);
+      return res.json({
+        success: true,
+        count: syncedFiles.length,
+        syncedFiles,
+        message: `Successfully wrote ${syncedFiles.length} asset(s) to public/images/ and public/assets/ in the Git repository.`,
+      });
+    } catch (err: any) {
+      console.error('Error in repo sync:', err);
+      return res.status(500).json({ error: err.message || 'Failed to sync browser cache to repository' });
+    }
+  });
+
   // Delete an asset
-  app.delete('/api/admin/assets/:filename', (req, res) => {
+  app.delete('/api/admin/assets/:filename', async (req, res) => {
     try {
       const { filename } = req.params;
-      const success = deleteAsset(filename);
+      const netlifyToken = (req.headers['x-netlify-blobs-token'] as string) || process.env.NETLIFY_BLOBS_TOKEN;
+      const netlifySiteId = (req.headers['x-netlify-site-id'] as string) || process.env.NETLIFY_SITE_ID;
+
+      const success = await deleteAsset(filename, { token: netlifyToken, siteId: netlifySiteId });
       return res.json({ success });
     } catch (err: any) {
       return res.status(500).json({ error: err.message || 'Failed to delete asset' });
