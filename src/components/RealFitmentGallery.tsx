@@ -88,7 +88,7 @@ export const RealFitmentGallery: React.FC<RealFitmentGalleryProps> = ({ onStartQ
   };
 
   return (
-    <section id="gallery" className="py-20 bg-[#0c0c0e] border-b border-white/10 relative overflow-hidden">
+    <section id="gallery" className="py-12 sm:py-16 lg:py-20 bg-[#0c0c0e] border-b border-white/10 relative overflow-hidden">
       {/* Subtle Background Glow */}
       <div className="absolute top-0 right-1/4 w-96 h-96 bg-orange-600/5 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-zinc-700/5 blur-[120px] pointer-events-none" />
@@ -97,12 +97,12 @@ export const RealFitmentGallery: React.FC<RealFitmentGalleryProps> = ({ onStartQ
         {/* Section Header */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div className="space-y-3 max-w-3xl">
-            <div className="inline-flex items-center space-x-2 text-[10px] font-bold text-orange-400 uppercase tracking-[0.25em] bg-black/60 border border-orange-500/20 px-3.5 py-1.5 rounded-full font-mono shadow-sm">
-              <Camera className="w-3.5 h-3.5 text-orange-400" />
-              <span>AUTHENTIC WORKSHOP GALLERY • {WORKSHOP_PHOTOS.length} TAILORED FITMENTS</span>
+            <div className="inline-flex max-w-full items-center space-x-2 text-[10px] font-bold text-orange-400 uppercase tracking-[0.18em] sm:tracking-[0.25em] bg-black/60 border border-orange-500/20 px-3.5 py-1.5 rounded-full font-mono shadow-sm">
+              <Camera className="w-3.5 h-3.5 shrink-0 text-orange-400" />
+              <span className="min-w-0 truncate">AUTHENTIC WORKSHOP GALLERY • {WORKSHOP_PHOTOS.length} TAILORED FITMENTS</span>
             </div>
             
-            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-black uppercase text-white tracking-tight leading-tight">
+            <h2 className="font-heading text-2xl sm:text-4xl lg:text-5xl font-black uppercase text-white tracking-tight leading-tight">
               GENUINE VEHICLE FITMENTS. <br />
               <span className="text-white border-b-2 border-orange-500 pb-1">UNEDITED VEREENIGING CRAFTSMANSHIP</span>
             </h2>
@@ -211,7 +211,7 @@ export const RealFitmentGallery: React.FC<RealFitmentGalleryProps> = ({ onStartQ
                 {filteredItems.map((item, idx) => (
                   <div
                     key={item.id}
-                    className="w-[calc(100vw-2rem)] shrink-0 snap-center bg-[#141418] border border-white/10 rounded-3xl overflow-hidden shadow-2xl flex flex-col justify-between"
+                    className="w-[calc(100vw-3rem)] max-w-full shrink-0 snap-center bg-[#141418] border border-white/10 rounded-3xl overflow-hidden shadow-2xl flex flex-col justify-between"
                   >
                     {/* Image Container */}
                     <div 
@@ -242,9 +242,9 @@ export const RealFitmentGallery: React.FC<RealFitmentGalleryProps> = ({ onStartQ
                       </button>
 
                       <div className="absolute bottom-3 left-3 right-3 z-10">
-                        <div className="inline-flex items-center space-x-1.5 bg-black/90 backdrop-blur-md border border-orange-500/30 text-white px-2.5 py-1 rounded-lg text-[11px] font-mono">
+                        <div className="flex w-fit max-w-full min-w-0 items-center space-x-1.5 bg-black/90 backdrop-blur-md border border-orange-500/30 text-white px-2.5 py-1 rounded-lg text-[11px] font-mono">
                           <Sparkles className="w-3 h-3 text-orange-400 shrink-0" />
-                          <span className="truncate">{item.embroidery}</span>
+                          <span className="min-w-0 truncate">{item.embroidery}</span>
                         </div>
                       </div>
                     </div>
@@ -263,15 +263,15 @@ export const RealFitmentGallery: React.FC<RealFitmentGalleryProps> = ({ onStartQ
                       <div className="bg-black/40 border border-white/5 rounded-2xl p-3 space-y-1.5 text-[11px] font-mono">
                         <div className="flex justify-between items-center border-b border-white/5 pb-1">
                           <span className="text-zinc-500">Material:</span>
-                          <span className="text-zinc-300 font-bold truncate max-w-[160px]">{item.material.split('+')[0]}</span>
+                          <span className="max-w-[55%] truncate text-right font-bold text-zinc-300">{item.material.split('+')[0]}</span>
                         </div>
                         <div className="flex justify-between items-center border-b border-white/5 pb-1">
                           <span className="text-zinc-500">Stitch Style:</span>
-                          <span className="text-zinc-300 font-bold truncate max-w-[160px]">{item.stitchStyle}</span>
+                          <span className="max-w-[55%] truncate text-right font-bold text-zinc-300">{item.stitchStyle}</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-zinc-500">Origin:</span>
-                          <span className="text-orange-400 font-bold">Vereeniging Workshop</span>
+                          <span className="max-w-[60%] truncate text-right font-bold text-orange-400">Vereeniging Workshop</span>
                         </div>
                       </div>
 

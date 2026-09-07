@@ -244,15 +244,15 @@ export const HeroGallerySlider: React.FC<HeroGallerySliderProps> = ({
       }}
     >
       {/* Top Banner: Authentic Workshop Photo Indicator & Status Bar */}
-      <div className="px-4 py-2.5 bg-black/75 border-b border-white/10 flex items-center justify-between text-xs text-zinc-300 font-mono backdrop-blur-md">
-        <div className="flex items-center space-x-2">
+      <div className="px-3 sm:px-4 py-2.5 bg-black/75 border-b border-white/10 flex items-center justify-between gap-2 text-xs text-zinc-300 font-mono backdrop-blur-md">
+        <div className="flex min-w-0 flex-1 items-center space-x-2">
           <Camera className="w-4 h-4 text-orange-400 shrink-0" />
           <span className="font-bold text-white tracking-wide truncate">AUTHENTIC VEREENIGING WORKSHOP INSTALLATIONS</span>
           <span className="hidden sm:inline-block text-[10px] text-zinc-500">|</span>
           <span className="hidden sm:inline-block text-zinc-400 text-[11px] truncate">Unmodified Client Photography</span>
         </div>
 
-        <div className="flex items-center space-x-3 shrink-0">
+        <div className="flex items-center space-x-2 sm:space-x-3 shrink-0">
           <span className="text-[11px] font-bold text-orange-400 font-mono">
             0{currentIndex + 1} / 0{HERO_SLIDES.length}
           </span>

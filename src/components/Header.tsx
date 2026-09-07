@@ -90,7 +90,7 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-[#0c0c0e]/95 backdrop-blur-md border-b border-white/10 transition-all font-sans">
+    <header className="sticky top-0 z-50 w-full overflow-x-clip bg-[#0c0c0e]/95 backdrop-blur-md border-b border-white/10 transition-all font-sans">
       {/* Top Banner - South African Workshop Context & Fast Helpline */}
       <div className="bg-[#141417] text-zinc-300 text-xs font-semibold py-1.5 px-3 sm:px-4 border-b border-white/5">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 text-[11px] sm:text-xs">
@@ -131,7 +131,7 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       {/* Main Nav Bar */}
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20 gap-2">
           {/* Official Brand Logo */}
           <div
@@ -330,7 +330,7 @@ export const Header: React.FC<HeaderProps> = ({
           </nav>
 
           {/* Action CTAs */}
-          <div className="flex items-center space-x-1.5 sm:space-x-2.5">
+          <div className="flex shrink-0 items-center space-x-1.5 sm:space-x-2.5">
             {/* Free Swatch Request Button (Large Desktop Only) */}
             <button
               onClick={onOpenSwatches}
@@ -346,7 +346,7 @@ export const Header: React.FC<HeaderProps> = ({
               target="_blank"
               rel="noreferrer"
               aria-label="Chat on WhatsApp"
-              className="lg:hidden flex items-center justify-center w-11 h-11 rounded-xl bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600 hover:text-white border border-emerald-500/30 transition active:scale-95 cursor-pointer"
+              className="hidden sm:flex lg:hidden items-center justify-center w-11 h-11 rounded-xl bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600 hover:text-white border border-emerald-500/30 transition active:scale-95 cursor-pointer"
             >
               <MessageCircle className="w-5 h-5 fill-current" />
             </a>
@@ -354,7 +354,7 @@ export const Header: React.FC<HeaderProps> = ({
             {/* High-Conversion GET A QUOTE CTA (Visible on both Mobile and Desktop with 44px min touch target) */}
             <button
               onClick={() => onSelectNav('quote')}
-              className="flex px-3 sm:px-4 py-2.5 rounded-xl bg-white text-black hover:bg-zinc-200 font-bold uppercase text-[11px] sm:text-xs tracking-wider transition shadow cursor-pointer items-center space-x-1.5 shrink-0 min-h-[44px]"
+              className="hidden sm:flex px-3 sm:px-4 py-2.5 rounded-xl bg-white text-black hover:bg-zinc-200 font-bold uppercase text-[11px] sm:text-xs tracking-wider transition shadow cursor-pointer items-center space-x-1.5 shrink-0 min-h-[44px]"
             >
               <Calculator className="w-3.5 h-3.5 text-orange-600" />
               <span>GET A QUOTE</span>

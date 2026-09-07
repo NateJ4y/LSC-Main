@@ -1,11 +1,27 @@
 @import "tailwindcss";
 
 @layer base {
+  html,
+  body,
+  #root {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  html,
   body {
+    overflow-x: hidden;
     background-color: #0c0c0e;
     color: #f4f4f5;
     font-family: 'Plus Jakarta Sans', sans-serif;
     transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  @supports (overflow: clip) {
+    html,
+    body {
+      overflow-x: clip;
+    }
   }
 
   body.light {

@@ -99,10 +99,10 @@ export const HeroVehicleSelector: React.FC<HeroVehicleSelectorProps> = ({
     `Please advise on availability and delivery to my area.`;
 
   return (
-    <section className="relative w-full bg-[#0c0c0e] pt-6 pb-12 px-4 sm:px-6 lg:px-8 border-b border-white/10">
+    <section className="relative w-full overflow-hidden bg-[#0c0c0e] pt-6 pb-10 sm:pb-12 px-4 sm:px-6 lg:px-8 border-b border-white/10">
       {/* Subtle Background Glow */}
-      <div className="absolute top-0 right-1/4 w-96 h-96 bg-orange-600/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-10 left-1/3 w-80 h-80 bg-zinc-800/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 right-1/4 w-64 h-64 sm:w-96 sm:h-96 bg-orange-600/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-10 left-1/3 w-56 h-56 sm:w-80 sm:h-80 bg-zinc-800/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto space-y-8 relative z-10">
         
@@ -155,7 +155,7 @@ export const HeroVehicleSelector: React.FC<HeroVehicleSelectorProps> = ({
           </div>
 
           {/* Quick Confidence Metric / Location */}
-          <div className="bg-[#141418] border border-white/10 p-4 rounded-2xl flex items-center space-x-3.5 shrink-0 shadow-lg">
+          <div className="min-w-0 bg-[#141418] border border-white/10 p-4 rounded-2xl flex items-center space-x-3.5 lg:shrink-0 shadow-lg">
             <div className="w-10 h-10 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-500 shrink-0">
               <Award className="w-5 h-5" />
             </div>
@@ -178,7 +178,7 @@ export const HeroVehicleSelector: React.FC<HeroVehicleSelectorProps> = ({
           </div>
 
           {/* Right Column: Instant 1-Minute Price & Quote Calculator (5 Cols) */}
-          <div className="lg:col-span-5 bg-[#141418] border-2 border-orange-500/40 rounded-3xl p-6 sm:p-7 shadow-2xl flex flex-col justify-between space-y-4">
+          <div className="lg:col-span-5 min-w-0 bg-[#141418] border-2 border-orange-500/40 rounded-3xl p-4 sm:p-7 shadow-2xl flex flex-col justify-between space-y-4">
             
             <div className="space-y-4">
               
