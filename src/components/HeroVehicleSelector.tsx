@@ -16,6 +16,7 @@ import {
 import { POPULAR_SA_VEHICLES } from '../data/vehicleDatabase';
 import { VehicleSelection } from '../types';
 import { HeroGallerySlider } from './HeroGallerySlider';
+import { getGeneralWhatsAppUrl } from '../utils/whatsappHelper';
 
 interface HeroVehicleSelectorProps {
   vehicle: VehicleSelection;
@@ -123,13 +124,34 @@ export const HeroVehicleSelector: React.FC<HeroVehicleSelectorProps> = ({
 
             {/* Main Headline */}
             <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight text-white leading-tight">
-              Practical Seat Covers for <span className="text-orange-500">Active Lifestyles</span> & Daily Drivers.
+              CUSTOM SEAT COVERS BUILT FOR <span className="text-orange-500">SOUTH AFRICAN ROADS</span>.
             </h1>
 
             {/* Simple Description */}
             <p className="text-sm sm:text-base text-[#8C9BA8] max-w-2xl leading-relaxed">
-              Handcrafted in Vereeniging. Engineered to protect your vehicle from sweat, mud, dogs, children, and heavy workwear with 100% waterproof materials, non-slip backing, certified airbag breakaway seams, and easy wipe or wash care.
+              Handcrafted in Vereeniging. Tough, tailored protection for cars, bakkies, SUVs, fleets and hardworking vehicles.
             </p>
+
+            {/* Action CTAs */}
+            <div className="pt-2 flex flex-wrap items-center gap-3">
+              <button
+                onClick={onStartConfiguring}
+                className="px-5 py-3 rounded-xl bg-white text-black hover:bg-zinc-200 font-bold uppercase text-xs tracking-wider transition shadow-lg cursor-pointer flex items-center space-x-2 min-h-[44px]"
+              >
+                <span>GET A QUOTE</span>
+                <ChevronRight className="w-4 h-4 text-orange-600" />
+              </button>
+
+              <a
+                href={getGeneralWhatsAppUrl()}
+                target="_blank"
+                rel="noreferrer"
+                className="px-5 py-3 rounded-xl bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600 hover:text-white border border-emerald-500/30 font-bold uppercase text-xs tracking-wider transition cursor-pointer flex items-center space-x-2 min-h-[44px]"
+              >
+                <MessageCircle className="w-4 h-4 fill-current" />
+                <span>WHATSAPP US</span>
+              </a>
+            </div>
           </div>
 
           {/* Quick Confidence Metric / Location */}
@@ -278,50 +300,58 @@ export const HeroVehicleSelector: React.FC<HeroVehicleSelectorProps> = ({
               </div>
 
               {/* Calculated Price Display */}
-              <div className="p-3.5 bg-black/60 border border-white/10 rounded-2xl flex items-center justify-between">
-                <div>
-                  <span className="text-[10px] uppercase font-bold text-zinc-400 block font-mono">
-                    Estimated Workshop Price
-                  </span>
-                  <span className="text-2xl font-black font-mono text-white">
-                    R{currentPrice.toLocaleString()}
-                  </span>
-                  <span className="text-[10px] text-emerald-400 block">
-                    ✓ Includes VAT & Free SA Delivery
-                  </span>
+              <div className="p-4 bg-black/60 border border-white/10 rounded-2xl space-y-2">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="text-[10px] uppercase font-bold text-zinc-400 block font-mono">
+                      Starting Estimate
+                    </span>
+                    <span className="text-2xl sm:text-3xl font-black font-mono text-white">
+                      FROM R{currentPrice.toLocaleString()}
+                    </span>
+                  </div>
+
+                  <div className="text-right">
+                    <span className="text-[10px] font-bold text-orange-400 uppercase block">
+                      {pricingMatrix[selectedMatType].name}
+                    </span>
+                    <span className="text-[10px] text-zinc-400">
+                      24-Month Warranty
+                    </span>
+                  </div>
                 </div>
 
-                <div className="text-right">
-                  <span className="text-[10px] font-bold text-orange-400 uppercase block">
-                    {pricingMatrix[selectedMatType].name}
-                  </span>
-                  <span className="text-[10px] text-zinc-400">
-                    24-Month Local Warranty
-                  </span>
+                <div className="pt-2 border-t border-white/10 space-y-1 text-[11px] text-[#8C9BA8] font-mono leading-tight">
+                  <div className="text-amber-400/90 font-bold uppercase tracking-wider text-[10px]">
+                    FINAL PRICE SUBJECT TO CONFIRMATION
+                  </div>
+                  <div>
+                    Final price depends on vehicle, material, configuration and selected extras.
+                  </div>
                 </div>
               </div>
 
             </div>
 
-            {/* Direct Action Buttons */}
+            {/* Direct Action Buttons: Primary GET A QUOTE + Secondary WHATSAPP US */}
             <div className="space-y-2 pt-2">
+              <button
+                onClick={onStartConfiguring}
+                className="w-full min-h-[46px] py-3 px-4 rounded-xl bg-white hover:bg-zinc-200 text-black font-bold uppercase text-xs sm:text-sm tracking-wider flex items-center justify-center space-x-2 shadow-xl transition cursor-pointer"
+              >
+                <span>GET A QUOTE</span>
+                <ChevronRight className="w-4 h-4 text-orange-600" />
+              </button>
+
               <a
                 href={`https://wa.me/27834455370?text=${whatsappMessage}`}
                 target="_blank"
                 rel="noreferrer"
-                className="w-full py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold uppercase text-xs sm:text-sm tracking-wider flex items-center justify-center space-x-2 shadow-lg transition cursor-pointer"
+                className="w-full min-h-[44px] py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold uppercase text-xs sm:text-sm tracking-wider flex items-center justify-center space-x-2 shadow-lg transition cursor-pointer"
               >
                 <MessageCircle className="w-4 h-4 fill-current" />
-                <span>Get Instant Quote on WhatsApp</span>
+                <span>WHATSAPP US</span>
               </a>
-
-              <button
-                onClick={onStartConfiguring}
-                className="w-full py-2.5 px-4 rounded-xl bg-white/10 hover:bg-white/20 text-zinc-200 font-bold uppercase text-xs tracking-wider flex items-center justify-center space-x-2 border border-white/10 transition cursor-pointer"
-              >
-                <span>Customize Colors & Stitching</span>
-                <ChevronRight className="w-3.5 h-3.5 text-orange-400" />
-              </button>
             </div>
 
           </div>

@@ -3,7 +3,8 @@ import { getAuthenticImageUrl, subscribeToAssetChanges } from '../utils/userAsse
 import { Image as ImageIcon, CheckCircle2, ShieldCheck, Maximize2, X, Sparkles } from 'lucide-react';
 
 interface AssetImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
-  filename: string;
+  filename?: string;
+  rawFilename?: string;
   alt: string;
   fit?: 'cover' | 'contain';
   caption?: string;
@@ -14,6 +15,7 @@ interface AssetImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
 
 export const AssetImage: React.FC<AssetImageProps> = ({
   filename,
+  rawFilename,
   alt,
   fit = 'contain',
   caption,
@@ -23,12 +25,14 @@ export const AssetImage: React.FC<AssetImageProps> = ({
   onClick,
   ...props
 }) => {
+  const targetFilename = filename || rawFilename || '';
+
   const candidatePaths = [
-    getAuthenticImageUrl(filename),
-    `/api/blob/${encodeURIComponent(filename)}`,
-    `/.netlify/functions/api/blob/${encodeURIComponent(filename)}`,
-    `/images/${encodeURIComponent(filename)}`,
-    `/${encodeURIComponent(filename)}`,
+    getAuthenticImageUrl(targetFilename),
+    `/api/blob/${encodeURIComponent(targetFilename)}`,
+    `/.netlify/functions/api/blob/${encodeURIComponent(targetFilename)}`,
+    `/images/${encodeURIComponent(targetFilename)}`,
+    `/${encodeURIComponent(targetFilename)}`,
   ];
 
   const [pathIndex, setPathIndex] = useState(0);
@@ -73,27 +77,27 @@ export const AssetImage: React.FC<AssetImageProps> = ({
   if (hasError) {
     return (
       <div 
-        className={`relative flex flex-col items-center justify-center p-6 bg-[#16181d] border border-zinc-800/80 rounded-xl text-center overflow-hidden min-h-[220px] ${className}`}
-        id={`placeholder-${filename.replace(/[^a-zA-Z0-9]/g, '-')}`}
+        className={`relative flex flex-col items-center justify-center p-6 bg-[#141418] border border-white/10 rounded-2xl text-center overflow-hidden min-h-[220px] ${className}`}
       >
-        <div className="w-12 h-12 rounded-xl bg-zinc-800/70 border border-zinc-700/50 flex items-center justify-center text-zinc-400 mb-3">
-          <ImageIcon className="w-6 h-6 text-orange-500/80" />
+        <div className="w-12 h-12 rounded-xl bg-black/50 border border-white/10 flex items-center justify-center text-zinc-400 mb-3">
+          <ImageIcon className="w-6 h-6 text-orange-500" />
         </div>
         
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-zinc-900 border border-zinc-800 text-[11px] font-mono text-zinc-300 mb-2">
-          <ShieldCheck className="w-3.5 h-3.5 text-orange-400 shrink-0" />
-          <span>Original Client Asset</span>
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-orange-500/10 border border-orange-500/30 text-[11px] font-mono text-orange-400 mb-2">
+          <ShieldCheck className="w-3.5 h-3.5 text-orange-500 shrink-0" />
+          <span>Workshop Fitment Portfolio</span>
         </div>
 
-        <p className="text-xs font-semibold text-zinc-200 max-w-xs line-clamp-1 mb-1">{alt}</p>
-        <p className="text-[10px] font-mono text-zinc-500 max-w-xs truncate" title={filename}>{filename}</p>
+        <p className="text-xs font-bold text-white max-w-xs line-clamp-2 mb-1 uppercase tracking-wide">
+          {alt || 'Handcrafted Seat Covers'}
+        </p>
         
-        <p className="text-[11px] text-zinc-400 mt-2 max-w-xs leading-relaxed">
-          Source file protected per strict asset rules. Awaiting asset placement in <code className="text-orange-400/90 font-mono">/public/images/</code>.
+        <p className="text-[11px] text-[#8C9BA8] max-w-xs leading-relaxed">
+          Custom tailored vehicle interior protection handcrafted in Vereeniging.
         </p>
 
         {caption && (
-          <span className="text-[10px] text-zinc-500 mt-3 italic">{caption}</span>
+          <span className="text-[10px] text-zinc-500 mt-2 italic">{caption}</span>
         )}
       </div>
     );
@@ -159,7 +163,7 @@ export const AssetImage: React.FC<AssetImageProps> = ({
                   <span>ORIGINAL WORKSHOP ASSET</span>
                 </div>
                 <h4 className="text-sm sm:text-base font-heading font-black uppercase text-white truncate">
-                  {alt || filename}
+                  {alt || targetFilename}
                 </h4>
               </div>
 

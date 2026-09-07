@@ -190,7 +190,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenSwatches, onSelectNav }) =
             <div className="flex items-center space-x-2">
               <MessageCircle className="w-4 h-4 text-emerald-400 shrink-0" />
               <a
-                href="https://wa.me/27834455370?text=Hi%20Stealth%20Seat%20Covers,%20I%20need%20a%20quote"
+                href="https://wa.me/27834455370?text=Hi%20Lifestyle%20Seat%20Covers,%20I%20need%20a%20quote"
                 target="_blank"
                 rel="noreferrer"
                 className="text-emerald-400 font-semibold hover:underline"

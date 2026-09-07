@@ -200,7 +200,7 @@ export const ManufacturingProcessAndDirector: React.FC<ManufacturingProcessProps
                 <div className="flex items-center space-x-2.5 font-mono">
                   <MessageCircle className="w-4 h-4 text-emerald-400 shrink-0" />
                   <a 
-                    href="https://wa.me/27834455370?text=Hi%20Stealth%20Seat%20Covers,%20I%20would%20like%20to%20inquire%20about%20custom%20seat%20covers" 
+                    href="https://wa.me/27834455370?text=Hi%20Lifestyle%20Seat%20Covers,%20I%20would%20like%20to%20inquire%20about%20custom%20seat%20covers" 
                     target="_blank" 
                     rel="noreferrer"
                     className="text-emerald-400 font-bold hover:underline"

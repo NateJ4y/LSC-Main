@@ -21,6 +21,7 @@ import {
 import { VEHICLE_MAKES } from '../data/vehicleDatabase';
 import { MATERIALS_DATA } from '../data/materialsData';
 import { VehicleSelection } from '../types';
+import { getQuoteWhatsAppUrl } from '../utils/whatsappHelper';
 
 interface ComprehensiveQuoteSystemProps {
   currentVehicle?: VehicleSelection;
@@ -649,7 +650,7 @@ export const ComprehensiveQuoteSystem: React.FC<ComprehensiveQuoteSystemProps> =
                   </button>
 
                   <a
-                    href={`https://wa.me/27834455370?text=${whatsappMessage}`}
+                    href={getQuoteWhatsAppUrl(vehicleSummaryText, selectedMaterialObj.name)}
                     target="_blank"
                     rel="noreferrer"
                     className="w-full sm:w-auto py-3.5 px-6 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold uppercase text-xs tracking-wider transition flex items-center justify-center space-x-2 cursor-pointer"
@@ -702,13 +703,16 @@ export const ComprehensiveQuoteSystem: React.FC<ComprehensiveQuoteSystemProps> =
             </div>
 
             {/* Price Box */}
-            <div className="p-4 bg-[#0c0c0e] border border-white/10 rounded-2xl space-y-1">
+            <div className="p-4 bg-[#0c0c0e] border border-white/10 rounded-2xl space-y-2">
               <div className="text-[10px] font-mono text-zinc-400 uppercase">Estimated Factory Price</div>
               <div className="text-2xl font-black font-mono text-white">
-                R{estimatedTotal.toLocaleString()}
+                FROM R{estimatedTotal.toLocaleString()}
               </div>
-              <div className="text-[10px] text-zinc-400">
-                *Includes VAT. Lead time 10–20 working days. Direct from Vereeniging workshop.
+              <div className="text-[10px] text-amber-400/90 font-bold uppercase font-mono">
+                FINAL PRICE SUBJECT TO CONFIRMATION
+              </div>
+              <div className="text-[10px] text-zinc-400 leading-tight">
+                Final price depends on vehicle, material, configuration and selected extras. Includes VAT. Direct from Vereeniging workshop.
               </div>
             </div>
 

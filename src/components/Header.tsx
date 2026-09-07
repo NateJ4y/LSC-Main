@@ -23,6 +23,7 @@ import {
 import { CartItem } from '../types';
 import { BrandLogo } from './BrandLogo';
 import { useTheme } from '../context/ThemeContext';
+import { getGeneralWhatsAppUrl } from '../utils/whatsappHelper';
 
 interface HeaderProps {
   cartItems: CartItem[];
@@ -55,11 +56,28 @@ export const Header: React.FC<HeaderProps> = ({
     };
   }, [mobileMenuOpen]);
 
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+
   const navItems = [
     { key: 'home', label: 'HOME' },
-    { key: 'gallery', label: 'GALLERY' },
-    { key: 'fabrics', label: 'FABRICS' },
-    { key: 'vehicles', label: 'VEHICLES' },
+    { 
+      key: 'gallery', 
+      label: 'GALLERY', 
+      hasDropdown: true,
+      dropdownType: 'gallery'
+    },
+    { 
+      key: 'fabrics', 
+      label: 'FABRICS', 
+      hasDropdown: true,
+      dropdownType: 'fabrics'
+    },
+    { 
+      key: 'vehicles', 
+      label: 'VEHICLES', 
+      hasDropdown: true,
+      dropdownType: 'vehicles'
+    },
     { key: 'customise', label: 'CUSTOMISE' },
     { key: 'reviews', label: 'REVIEWS' },
     { key: 'contact', label: 'CONTACT' }
@@ -67,6 +85,7 @@ export const Header: React.FC<HeaderProps> = ({
 
   const handleNavClick = (key: string) => {
     onSelectNav(key);
+    setActiveDropdown(null);
     setMobileMenuOpen(false);
   };
 
@@ -89,8 +108,9 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Right: Quick Direct Contact */}
           <div className="flex items-center space-x-3 text-[11px] font-medium shrink-0">
+            {/* Top Bar WhatsApp Link */}
             <a
-              href="https://wa.me/27834455370?text=Hi%20Lifestyle%20Seat%20Covers,%20I%20would%20like%20to%20enquire%20about%20custom%20seat%20covers%20for%20my%20vehicle."
+              href={getGeneralWhatsAppUrl()}
               target="_blank"
               rel="noreferrer"
               className="flex items-center space-x-1 text-emerald-400 hover:text-emerald-300 transition py-0.5"
@@ -127,22 +147,184 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           </div>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center space-x-1 xl:space-x-2">
+          {/* Desktop Navigation Links with Apple/LV Style Dropdowns */}
+          <nav 
+            className="hidden lg:flex items-center space-x-1 xl:space-x-2"
+            onMouseLeave={() => setActiveDropdown(null)}
+          >
             {navItems.map((item) => {
               const isActive = activeSection === item.key;
+              const hasDropdown = Boolean(item.hasDropdown);
+              const isDropdownOpen = activeDropdown === item.key;
+
               return (
-                <button
-                  key={item.key}
-                  onClick={() => onSelectNav(item.key)}
-                  className={`px-3 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition cursor-pointer ${
-                    isActive
-                      ? 'text-white bg-zinc-900 border border-white/20 shadow-sm relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-4 after:h-0.5 after:bg-orange-500'
-                      : 'text-[#8C9BA8] hover:text-white hover:bg-zinc-900/60 border border-transparent'
-                  }`}
+                <div 
+                  key={item.key} 
+                  className="relative"
+                  onMouseEnter={() => {
+                    if (hasDropdown) setActiveDropdown(item.key);
+                    else setActiveDropdown(null);
+                  }}
                 >
-                  {item.label}
-                </button>
+                  <button
+                    onClick={() => {
+                      if (hasDropdown) {
+                        setActiveDropdown(isDropdownOpen ? null : item.key);
+                      }
+                      onSelectNav(item.key);
+                    }}
+                    className={`px-3 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition cursor-pointer flex items-center gap-1 ${
+                      isActive
+                        ? 'text-white bg-zinc-900 border border-white/20 shadow-sm relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-4 after:h-0.5 after:bg-orange-500'
+                        : 'text-[#8C9BA8] hover:text-white hover:bg-zinc-900/60 border border-transparent'
+                    }`}
+                  >
+                    <span>{item.label}</span>
+                    {hasDropdown && (
+                      <span className={`text-[9px] transition-transform duration-200 ${isDropdownOpen ? 'rotate-180 text-orange-400' : 'text-zinc-500'}`}>
+                        ▼
+                      </span>
+                    )}
+                  </button>
+
+                  {/* Apple / Louis Vuitton Frosted Dropdown Menus */}
+                  {hasDropdown && isDropdownOpen && (
+                    <div 
+                      className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50 w-72 sm:w-80"
+                      onMouseEnter={() => setActiveDropdown(item.key)}
+                      onMouseLeave={() => setActiveDropdown(null)}
+                    >
+                      <div className="bg-[#0e0e13]/95 backdrop-blur-2xl border border-white/15 rounded-2xl p-4 shadow-[0_25px_50px_rgba(0,0,0,0.85)] ring-1 ring-white/10 space-y-3 animate-in fade-in zoom-in-95 duration-200">
+                        {item.dropdownType === 'vehicles' && (
+                          <>
+                            <div className="flex items-center justify-between pb-2 border-b border-white/10">
+                              <span className="text-[10px] font-mono uppercase tracking-widest text-orange-400 font-bold">
+                                Popular SA Fitments
+                              </span>
+                              <span className="text-[9px] font-mono text-zinc-500">2024 Patterns</span>
+                            </div>
+                            <div className="space-y-1">
+                              {[
+                                { name: 'Toyota Hilux Double Cab', tag: 'SA #1 Bakkie' },
+                                { name: 'Ford Ranger / Raptor T6.2', tag: 'Wildtrak Ready' },
+                                { name: 'Isuzu D-Max 3.0 Ddi', tag: 'V-Cross / Extended' },
+                                { name: 'Toyota Land Cruiser 76 / 79', tag: 'Expedition Spec' },
+                                { name: 'Suzuki Jimny 3-Door & 5-Door', tag: 'Rugged Canvas' },
+                                { name: 'Commercial & Security Fleets', tag: 'Corporate Logos' }
+                              ].map((v, idx) => (
+                                <div
+                                  key={idx}
+                                  onClick={() => {
+                                    onSelectNav('vehicles');
+                                    setActiveDropdown(null);
+                                  }}
+                                  className="p-2 rounded-xl hover:bg-white/10 transition cursor-pointer flex items-center justify-between group"
+                                >
+                                  <span className="text-xs font-medium text-zinc-200 group-hover:text-white">
+                                    {v.name}
+                                  </span>
+                                  <span className="text-[10px] font-mono text-orange-400/80 group-hover:text-orange-400 bg-black/40 px-1.5 py-0.5 rounded">
+                                    {v.tag}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          </>
+                        )}
+
+                        {item.dropdownType === 'fabrics' && (
+                          <>
+                            <div className="flex items-center justify-between pb-2 border-b border-white/10">
+                              <span className="text-[10px] font-mono uppercase tracking-widest text-orange-400 font-bold">
+                                Tailored Materials
+                              </span>
+                              <span className="text-[9px] font-mono text-emerald-400">100% Waterproof</span>
+                            </div>
+                            <div className="space-y-1.5">
+                              {[
+                                { title: '510g Tough Ripstop Canvas', desc: 'SABS UV-resistant 100% waterproof', badge: 'Flagship' },
+                                { title: 'Diamond Quilted Matrix', desc: 'Prestige double-needle diamond stitch', badge: 'Prestige' },
+                                { title: 'Automotive Bovine Leather', desc: 'South African genuine leather hide', badge: 'Luxury' },
+                                { title: 'High-Density Neoprene', desc: 'Waterproof surf & ocean composite', badge: 'Comfort' }
+                              ].map((f, idx) => (
+                                <div
+                                  key={idx}
+                                  onClick={() => {
+                                    onSelectNav('fabrics');
+                                    setActiveDropdown(null);
+                                  }}
+                                  className="p-2 rounded-xl hover:bg-white/10 transition cursor-pointer group flex items-center justify-between"
+                                >
+                                  <div>
+                                    <div className="text-xs font-bold text-white group-hover:text-orange-400 transition-colors">
+                                      {f.title}
+                                    </div>
+                                    <div className="text-[10px] text-zinc-400">
+                                      {f.desc}
+                                    </div>
+                                  </div>
+                                  <span className="text-[10px] font-mono text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-full shrink-0 ml-2">
+                                    {f.badge}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          </>
+                        )}
+
+                        {item.dropdownType === 'gallery' && (
+                          <>
+                            <div className="flex items-center justify-between pb-2 border-b border-white/10">
+                              <span className="text-[10px] font-mono uppercase tracking-widest text-orange-400 font-bold">
+                                Real Workshop Photos
+                              </span>
+                              <span className="text-[9px] font-mono text-zinc-500">21 Fitments</span>
+                            </div>
+                            <div className="space-y-1">
+                              {[
+                                { name: '4x4 Bakkies & Cruisers', count: '9 Photos' },
+                                { name: 'SUVs & Jeep Wranglers', count: '4 Photos' },
+                                { name: 'Commercial Fleets & Logos', count: '3 Photos' },
+                                { name: 'Diamond Quilted Luxury', count: '3 Photos' },
+                                { name: 'Full Cabin & Rear Views', count: '2 Photos' }
+                              ].map((g, idx) => (
+                                <div
+                                  key={idx}
+                                  onClick={() => {
+                                    onSelectNav('gallery');
+                                    setActiveDropdown(null);
+                                  }}
+                                  className="p-2 rounded-xl hover:bg-white/10 transition cursor-pointer flex items-center justify-between group"
+                                >
+                                  <span className="text-xs font-medium text-zinc-200 group-hover:text-white">
+                                    {g.name}
+                                  </span>
+                                  <span className="text-[10px] font-mono text-zinc-400 group-hover:text-white">
+                                    {g.count}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          </>
+                        )}
+
+                        <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[11px] font-mono">
+                          <span className="text-zinc-500">Custom Tailored SA</span>
+                          <button
+                            onClick={() => {
+                              onSelectNav(item.key);
+                              setActiveDropdown(null);
+                            }}
+                            className="text-orange-400 hover:text-orange-300 font-bold uppercase transition flex items-center gap-1 cursor-pointer"
+                          >
+                            <span>Explore All</span>
+                            <span>→</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               );
             })}
           </nav>
@@ -158,19 +340,30 @@ export const Header: React.FC<HeaderProps> = ({
               <span>Free Swatches</span>
             </button>
 
-            {/* Primary High-Conversion GET A QUOTE CTA (Hidden on tiny mobile to keep space clean) */}
+            {/* Direct WhatsApp Quick Button (Mobile & Tablet) */}
+            <a
+              href={getGeneralWhatsAppUrl()}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Chat on WhatsApp"
+              className="lg:hidden flex items-center justify-center w-11 h-11 rounded-xl bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600 hover:text-white border border-emerald-500/30 transition active:scale-95 cursor-pointer"
+            >
+              <MessageCircle className="w-5 h-5 fill-current" />
+            </a>
+
+            {/* High-Conversion GET A QUOTE CTA (Visible on both Mobile and Desktop with 44px min touch target) */}
             <button
               onClick={() => onSelectNav('quote')}
-              className="hidden md:flex px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-white text-black hover:bg-zinc-200 font-bold uppercase text-xs tracking-wider transition shadow cursor-pointer items-center space-x-1.5 shrink-0"
+              className="flex px-3 sm:px-4 py-2.5 rounded-xl bg-white text-black hover:bg-zinc-200 font-bold uppercase text-[11px] sm:text-xs tracking-wider transition shadow cursor-pointer items-center space-x-1.5 shrink-0 min-h-[44px]"
             >
               <Calculator className="w-3.5 h-3.5 text-orange-600" />
               <span>GET A QUOTE</span>
             </button>
 
-            {/* Dark / Light Mode Switch Button */}
+            {/* Desktop Theme Switch Button */}
             <button
               onClick={toggleTheme}
-              className="p-2 sm:p-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-white/10 hover:border-orange-500/40 transition-all duration-200 cursor-pointer flex items-center justify-center group relative shadow-sm min-w-[40px] min-h-[40px] sm:min-w-[44px] sm:min-h-[44px]"
+              className="hidden lg:flex p-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-white/10 hover:border-orange-500/40 transition-all duration-200 cursor-pointer items-center justify-center group relative shadow-sm min-w-[44px] min-h-[44px]"
               aria-label={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
               title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             >
@@ -181,15 +374,15 @@ export const Header: React.FC<HeaderProps> = ({
               )}
             </button>
 
-            {/* Shopping Cart Button */}
+            {/* Desktop Shopping Cart Button */}
             <button
               onClick={onOpenCart}
-              className="relative p-2 sm:p-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white border border-white/10 hover:border-orange-500/40 transition group cursor-pointer min-w-[40px] min-h-[40px] sm:min-w-[44px] sm:min-h-[44px] flex items-center justify-center"
+              className="hidden lg:flex relative p-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white border border-white/10 hover:border-orange-500/40 transition group cursor-pointer min-w-[44px] min-h-[44px] items-center justify-center"
               aria-label="View Shopping Cart"
             >
-              <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 text-zinc-200 group-hover:text-white transition-colors" />
+              <ShoppingCart className="w-5 h-5 text-zinc-200 group-hover:text-white transition-colors" />
               {totalCartCount > 0 && (
-                <span className="absolute -top-1 -right-1 sm:-top-1.5 sm:-right-1.5 min-w-[18px] sm:min-w-[20px] h-[18px] sm:h-[20px] px-1 rounded-full bg-orange-600 text-white text-[10px] sm:text-xs font-black flex items-center justify-center ring-2 ring-[#0c0c0e]">
+                <span className="absolute -top-1 -right-1 min-w-[20px] h-[20px] px-1 rounded-full bg-orange-600 text-white text-xs font-black flex items-center justify-center ring-2 ring-[#0c0c0e]">
                   {totalCartCount}
                 </span>
               )}
@@ -198,7 +391,7 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Mobile Menu Toggle Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 sm:p-2.5 rounded-xl bg-zinc-900 text-zinc-300 border border-white/10 hover:text-white cursor-pointer min-w-[40px] min-h-[40px] sm:min-w-[44px] sm:min-h-[44px] flex items-center justify-center active:scale-95 transition"
+              className="lg:hidden p-2.5 rounded-xl bg-zinc-900 text-zinc-300 border border-white/10 hover:text-white cursor-pointer min-w-[44px] min-h-[44px] flex items-center justify-center active:scale-95 transition"
               aria-label="Toggle Navigation Menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5 text-white" /> : <Menu className="w-5 h-5" />}
@@ -302,7 +495,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <span>Vereeniging Workshop</span>
               </div>
               <a
-                href="https://wa.me/27834455370"
+                href={getGeneralWhatsAppUrl()}
                 target="_blank"
                 rel="noreferrer"
                 className="text-emerald-400 font-bold hover:underline flex items-center gap-1"

@@ -112,7 +112,7 @@ export const InstallationGuides: React.FC = () => {
             {/* Video Guide & Support Box */}
             <div className="pt-2">
               <a
-                href="https://wa.me/27725916960?text=Hi%20Lifestyle%20Seat%20Covers,%20I%20need%20assistance%20fitting%20my%20covers"
+                href="https://wa.me/27834455370?text=Hi%20Lifestyle%20Seat%20Covers,%20I%20need%20assistance%20fitting%20my%20covers"
                 target="_blank"
                 rel="noreferrer"
                 className="w-full py-3 px-4 rounded-xl bg-black/40 hover:bg-zinc-800 border border-white/10 text-xs font-bold text-white hover:text-orange-400 flex items-center justify-center space-x-2 transition font-mono"

@@ -388,7 +388,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
             <div className="flex flex-col sm:flex-row justify-center gap-3 pt-2">
               <a
-                href={`https://wa.me/27118874000?text=Hi%20Lifestyle%20Seat%20Covers,%20I%20just%20placed%20order%20${orderNumber}%20for%20${encodeURIComponent(
+                href={`https://wa.me/27834455370?text=Hi%20Lifestyle%20Seat%20Covers,%20I%20just%20placed%20order%20${orderNumber}%20for%20${encodeURIComponent(
                   name
                 )}`}
                 target="_blank"

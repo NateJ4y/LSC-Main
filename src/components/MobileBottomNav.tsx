@@ -1,5 +1,6 @@
 import React from 'react';
-import { Calculator, Sparkles, ShoppingBag, MessageCircle, Camera, Palette } from 'lucide-react';
+import { Calculator, ShoppingBag, MessageCircle, Camera, Palette } from 'lucide-react';
+import { getGeneralWhatsAppUrl } from '../utils/whatsappHelper';
 
 interface MobileBottomNavProps {
   cartCount: number;
@@ -46,7 +47,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
 
         {/* Gallery */}
         <button
-          onClick={() => onNavigate('fitment-gallery')}
+          onClick={() => onNavigate('gallery')}
           className="flex flex-col items-center justify-center p-1 text-zinc-400 hover:text-white active:scale-95 transition min-w-[56px] min-h-[44px] cursor-pointer"
         >
           <div className="p-1 rounded-xl hover:bg-white/10 transition">
@@ -59,7 +60,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
 
         {/* Direct WhatsApp */}
         <a
-          href="https://wa.me/27834455370?text=Hi%20Lifestyle%20Seat%20Covers,%20I%20would%20like%20to%20chat%20about%20custom%20seat%20covers%20for%20my%20vehicle."
+          href={getGeneralWhatsAppUrl()}
           target="_blank"
           rel="noreferrer"
           className="flex flex-col items-center justify-center p-1 text-zinc-400 hover:text-white active:scale-95 transition min-w-[56px] min-h-[44px] cursor-pointer"

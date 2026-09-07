@@ -60,23 +60,23 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
     }
   };
 
-  // Neutral placeholder per AGENTS.md rule when asset is awaiting placement
+  // Professional brand fallback when image file is loading or awaiting placement
   if (hasFailedAll && !hasUserUploadedAsset(OFFICIAL_LOGO_FILENAME)) {
     return (
       <div
-        className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#121316] border border-zinc-800 text-zinc-300 select-none shadow-sm ${className}`}
-        id="brand-logo-placeholder"
+        className={`inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-xl bg-[#141418] border border-white/10 text-zinc-300 select-none shadow-sm ${className}`}
+        id="brand-logo-badge"
       >
-        <div className="flex items-center gap-2">
-          <ShieldCheck className="w-4 h-4 text-orange-400 shrink-0" />
-          <div className="flex flex-col text-left">
-            <span className="text-[11px] font-mono font-bold text-white tracking-tight leading-tight">
-              Lifestyle Seat Covers
-            </span>
-            <span className="text-[9px] font-mono text-zinc-400 leading-tight">
-              Protected Brand Asset • {OFFICIAL_LOGO_FILENAME}
-            </span>
-          </div>
+        <div className="w-8 h-8 rounded-lg bg-orange-600/20 border border-orange-500/40 flex items-center justify-center shrink-0">
+          <ShieldCheck className="w-4 h-4 text-orange-500" />
+        </div>
+        <div className="flex flex-col text-left">
+          <span className="font-heading text-sm font-black text-white tracking-wider uppercase leading-none">
+            LIFESTYLE
+          </span>
+          <span className="text-[9px] font-bold tracking-widest text-orange-400 uppercase leading-tight font-mono">
+            SEAT COVERS SA
+          </span>
         </div>
       </div>
     );

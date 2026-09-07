@@ -67,6 +67,9 @@ export interface CustomizerState {
   };
   mollePocketsAddon: boolean;
   waterproofSeatHeaterCutout: boolean;
+  includePhonePocket?: boolean;
+  customPiping?: boolean;
+  pipingColor?: string;
   notes: string;
 }
 
