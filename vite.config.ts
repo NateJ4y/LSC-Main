@@ -1,8 +1,11 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
+import { fileURLToPath } from 'node:url';
 import {defineConfig, Plugin} from 'vite';
 import { listAssets, saveAsset, deleteAsset, restoreAssetsOnBoot, getAsset } from './server/assetHandler';
+
+const projectRoot = fileURLToPath(new URL('.', import.meta.url));
 
 function assetApiPlugin(): Plugin {
   return {
@@ -106,7 +109,7 @@ export default defineConfig(() => {
     plugins: [react(), tailwindcss(), assetApiPlugin()],
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, '.'),
+        '@': path.resolve(projectRoot),
       },
     },
     server: {

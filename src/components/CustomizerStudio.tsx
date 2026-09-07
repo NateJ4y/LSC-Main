@@ -22,7 +22,8 @@ import {
   Box, 
   Flame,
   CheckCircle2,
-  Sliders
+  Sliders,
+  Maximize2
 } from 'lucide-react';
 import { MATERIALS_DATA } from '../data/materialsData';
 import { CustomizerState, CartItem } from '../types';
