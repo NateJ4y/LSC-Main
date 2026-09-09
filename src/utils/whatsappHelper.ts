@@ -43,7 +43,6 @@ export function getConfigurationWhatsAppUrl(details: {
   color: string;
   stitching?: string;
   extras?: string;
-  estimatedPrice?: number;
 }): string {
   let msg = `Hi Lifestyle Seat Covers, I would like a quote for my configuration:\n\n` +
     `• Vehicle: ${details.vehicle}\n` +
@@ -56,10 +55,7 @@ export function getConfigurationWhatsAppUrl(details: {
   if (details.extras) {
     msg += `\n• Extras: ${details.extras}`;
   }
-  if (details.estimatedPrice) {
-    msg += `\n• Estimated Price: From R${details.estimatedPrice.toLocaleString()}`;
-  }
-  msg += `\n\nPlease confirm final pricing, lead time, and delivery.`;
+  msg += `\n\nPlease provide pricing, lead time, and delivery details for this request.`;
 
   return `https://wa.me/${LSC_WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 }

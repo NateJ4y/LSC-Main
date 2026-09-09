@@ -141,7 +141,6 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
     material: currentMaterial.name,
     color: currentColor.name,
     stitching: customizerState.customPiping ? `Piping (${customizerState.pipingColor || 'Standard'})` : undefined,
-    estimatedPrice: calculatedPrice,
     extras: extrasList.length > 0 ? extrasList.join(', ') : undefined
   });
 
@@ -289,10 +288,10 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
               <div className="flex items-center justify-between">
                 <div>
                   <span className="text-[10px] uppercase font-bold text-zinc-400 block font-mono">
-                    Estimated Workshop Price
+                    Custom-fit pricing
                   </span>
                   <span className="text-2xl sm:text-3xl font-black font-mono text-white">
-                    ESTIMATED PRICE: FROM R{calculatedPrice.toLocaleString()}
+                    REQUEST A PERSONALISED QUOTE
                   </span>
                 </div>
                 <div className="text-right">
@@ -307,10 +306,10 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
 
               <div className="pt-2 border-t border-white/10 space-y-0.5 text-[11px] text-[#8C9BA8] font-mono leading-tight">
                 <div className="text-amber-400/90 font-bold uppercase tracking-wider text-[10px]">
-                  FINAL PRICE SUBJECT TO CONFIRMATION
+                  PRICING PROVIDED BY REQUEST
                 </div>
                 <div>
-                  Final price depends on vehicle, material, configuration and selected extras.
+                  Our team will price your exact vehicle, material, configuration and selected extras.
                 </div>
               </div>
             </div>
@@ -499,7 +498,7 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                       Driver and passenger bucket seats with tailored headrests and armrests.
                     </p>
                     <div className="text-xs font-mono font-bold text-orange-400">
-                      Starting from ~60% of set price
+                      Pricing available by quote
                     </div>
                   </div>
 
@@ -605,10 +604,8 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                         </div>
 
                         <div className="text-left sm:text-right shrink-0">
-                          <span className="text-xs text-zinc-400 uppercase font-mono block">From</span>
-                          <span className="text-xl font-black font-mono text-white">
-                            R{mat.basePriceZAR.toLocaleString()}
-                          </span>
+                          <span className="text-xs text-zinc-400 uppercase font-mono block">Pricing</span>
+                          <span className="text-base font-black font-mono text-white">REQUEST QUOTE</span>
                           <span className="text-[10px] text-emerald-400 block font-semibold">
                             {isSelected ? '✓ Selected' : 'Click to choose'}
                           </span>
@@ -685,7 +682,7 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                         Custom Headrest Embroidery
                       </span>
                       <span className="text-xs text-zinc-400">
-                        Add vehicle name, farm name, or custom text (+R350)
+                        Add a vehicle name, farm name, or custom text to your quote request
                       </span>
                     </div>
                     <button
@@ -858,7 +855,7 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                   <div>
                     <div className="font-heading text-sm font-bold uppercase text-white flex items-center gap-1.5">
                       <Flame className="w-3.5 h-3.5 text-orange-500" />
-                      <span>Expedition MOLLE Organizer Grid (+R450)</span>
+                      <span>Expedition MOLLE Organizer Grid</span>
                     </div>
                     <div className="text-xs text-zinc-400">
                       Laser-cut webbing with 2 detachable pouches on the back of front seats.
@@ -878,7 +875,7 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                         : 'bg-zinc-800 text-zinc-300'
                     }`}
                   >
-                    {customizerState.mollePocketsAddon ? '✓ Added (+R450)' : '+ Add (+R450)'}
+                    {customizerState.mollePocketsAddon ? '✓ Added' : '+ Add'}
                   </button>
                 </div>
               </div>
@@ -916,7 +913,7 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                     <span className="text-zinc-400 uppercase font-mono">Embroidery:</span>
                     <span className="font-bold text-white">
                       {customizerState.embroideryOption.enabled && customizerState.embroideryOption.text
-                        ? `"${customizerState.embroideryOption.text}" (+R350)`
+                        ? `"${customizerState.embroideryOption.text}"`
                         : 'None'}
                     </span>
                   </div>
@@ -932,15 +929,15 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                   </div>
                 </div>
 
-                {/* Final Price Block & Disclaimers */}
+                {/* Quote-only notice */}
                 <div className="p-4 bg-orange-500/10 border-2 border-orange-500/40 rounded-2xl space-y-2">
                   <div className="flex items-center justify-between">
                     <div>
                       <span className="text-[10px] uppercase font-bold text-zinc-400 block font-mono">
-                        Starting Workshop Estimate
+                        Custom-fit pricing
                       </span>
                       <span className="text-2xl sm:text-3xl font-black font-mono text-white">
-                        ESTIMATED PRICE: FROM R{calculatedPrice.toLocaleString()}
+                        REQUEST A PERSONALISED QUOTE
                       </span>
                     </div>
                     <div className="text-right">
@@ -955,10 +952,10 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
 
                   <div className="pt-2 border-t border-white/10 space-y-1 text-[11px] text-[#8C9BA8] font-mono leading-tight">
                     <div className="text-amber-400 font-bold uppercase tracking-wider text-[10px]">
-                      FINAL PRICE SUBJECT TO CONFIRMATION
+                      PRICING PROVIDED BY REQUEST
                     </div>
                     <div>
-                      Final price depends on vehicle, material, configuration and selected extras.
+                      Our team will price your exact vehicle, material, configuration and selected extras.
                     </div>
                   </div>
                 </div>

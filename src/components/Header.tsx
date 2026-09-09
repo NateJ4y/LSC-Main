@@ -473,7 +473,7 @@ export const Header: React.FC<HeaderProps> = ({
                 className="w-full min-h-[48px] py-3.5 px-4 rounded-xl bg-white text-black font-bold uppercase text-xs tracking-wider flex items-center justify-center space-x-2 shadow-lg cursor-pointer"
               >
                 <Calculator className="w-4 h-4 text-orange-600" />
-                <span>CALCULATE PRICE / GET QUOTE</span>
+                <span>REQUEST A CUSTOM QUOTE</span>
               </button>
 
               <button
