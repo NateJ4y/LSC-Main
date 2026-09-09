@@ -5,8 +5,8 @@ import { ShieldCheck } from 'lucide-react';
 interface BrandLogoProps { size?: 'sm' | 'md' | 'lg' | 'xl'; showSubtitle?: boolean; iconOnly?: boolean; className?: string; onClick?: () => void; }
 
 // Customer-facing pricing policy: no public prices or estimates are shown.
-// Any rendered currency amount is converted into a consistent Get a Quote CTA,
-// including values produced dynamically by configurators and carts.
+// Any rendered currency amount is converted into a consistent Get a Quote CTA.
+// Quote-specification estimate panels are removed entirely from the public UI.
 function scrubPublicPrices(root: Node = document.body) {
   const pricePattern = /(?:\b(?:FROM\s*)?R\s?\d[\d\s,.]*|\bR\{[^}]+\})/gi;
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
@@ -16,14 +16,43 @@ function scrubPublicPrices(root: Node = document.body) {
 
   nodes.forEach((textNode) => {
     const value = textNode.nodeValue || '';
+    const parent = textNode.parentElement;
+    if (!parent || ['SCRIPT', 'STYLE', 'NOSCRIPT', 'INPUT', 'TEXTAREA'].includes(parent.tagName)) return;
+
+    // Remove the Quote Specification's customer-facing estimate card completely.
+    if (/Estimated Factory Price|FINAL PRICE SUBJECT TO CONFIRMATION|Final price depends on vehicle, material, configuration/i.test(value)) {
+      const priceCard = parent.closest('#quote-builder .p-4.bg-\\[\\#0c0c0e\\]');
+      if (priceCard instanceof HTMLElement) priceCard.style.display = 'none';
+      else if (/Estimated Factory Price|FINAL PRICE SUBJECT TO CONFIRMATION/i.test(value)) {
+        const candidate = parent.parentElement;
+        if (candidate instanceof HTMLElement) candidate.style.display = 'none';
+      }
+      return;
+    }
+
+    // Replace estimate language in the public quote header with quote-only language.
+    if (/INSTANT ITEMISED VEHICLE ESTIMATE/i.test(value)) {
+      textNode.nodeValue = value.replace(/INSTANT ITEMISED VEHICLE ESTIMATE/gi, 'FORMAL QUOTE REQUEST');
+      return;
+    }
+    if (/instant direct estimate/i.test(value)) {
+      textNode.nodeValue = value.replace(/instant direct estimate/gi, 'direct WhatsApp quote');
+      return;
+    }
+    if (/LIVE ESTIMATE/i.test(value)) {
+      textNode.nodeValue = value.replace(/LIVE ESTIMATE/gi, 'QUOTE SUMMARY');
+      return;
+    }
+    if (/\(\+R\s?\d[\d\s,.]*\)/i.test(value)) {
+      textNode.nodeValue = value.replace(/\(\+R\s?\d[\d\s,.]*\)/gi, '(Optional)');
+      return;
+    }
+
     if (!pricePattern.test(value)) {
       pricePattern.lastIndex = 0;
       return;
     }
     pricePattern.lastIndex = 0;
-
-    const parent = textNode.parentElement;
-    if (!parent || ['SCRIPT', 'STYLE', 'NOSCRIPT', 'INPUT', 'TEXTAREA'].includes(parent.tagName)) return;
 
     // If the price is already inside an interactive control, turn that control
     // into a quote CTA rather than creating an invalid nested button.
