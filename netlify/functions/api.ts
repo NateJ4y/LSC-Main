@@ -43,35 +43,15 @@ async function saveAsset(store: any, filename: string, base64Data: string) {
   const mimeType = getMimeType(cleanFilename);
   const isLogo = cleanFilename.toLowerCase().includes('logo') || cleanFilename === 'Logo-removebg-preview.png';
   const updatedAt = new Date().toISOString();
-
-  await store.set(cleanFilename, binaryData, {
-    metadata: {
-      filename: cleanFilename,
-      contentType: mimeType,
-      size: binaryData.length,
-      updatedAt,
-      isLogo,
-    }
-  });
-
+  await store.set(cleanFilename, binaryData, { metadata: { filename: cleanFilename, contentType: mimeType, size: binaryData.length, updatedAt, isLogo } });
   if (isLogo && cleanFilename !== 'Logo-removebg-preview.png') {
-    await store.set('Logo-removebg-preview.png', binaryData, {
-      metadata: {
-        filename: 'Logo-removebg-preview.png',
-        contentType: mimeType,
-        size: binaryData.length,
-        updatedAt,
-        isLogo: true,
-      }
-    });
+    await store.set('Logo-removebg-preview.png', binaryData, { metadata: { filename: 'Logo-removebg-preview.png', contentType: mimeType, size: binaryData.length, updatedAt, isLogo: true } });
   }
-
   return { cleanFilename, binaryData, mimeType, isLogo, updatedAt };
 }
 
 export default async function handler(req: Request) {
   if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: corsHeaders });
-
   const url = new URL(req.url);
   let subpath = url.pathname;
   if (subpath.startsWith('/.netlify/functions/api')) subpath = subpath.replace('/.netlify/functions/api', '');
@@ -80,9 +60,7 @@ export default async function handler(req: Request) {
 
   try {
     if (subpath === '/health') {
-      return new Response(JSON.stringify({ status: 'ok', service: 'Netlify Blobs API', store: 'lifestyle-assets', time: new Date().toISOString() }), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      });
+      return new Response(JSON.stringify({ status: 'ok', service: 'Netlify Blobs API', store: 'lifestyle-assets', time: new Date().toISOString() }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
     if (subpath === '/assets' && req.method === 'GET') {
@@ -94,22 +72,13 @@ export default async function handler(req: Request) {
           const metadata = (meta?.metadata || {}) as Record<string, any>;
           const isLogo = b.key.toLowerCase().includes('logo') || b.key === 'Logo-removebg-preview.png';
           const updatedAt = (metadata.updatedAt as string) || new Date().toISOString();
-          return {
-            filename: b.key,
-            url: assetUrl(b.key, updatedAt),
-            size: Number(metadata.size) || 0,
-            updatedAt,
-            isLogo,
-            storage: 'netlify-blob'
-          };
+          return { filename: b.key, url: assetUrl(b.key, updatedAt), size: Number(metadata.size) || 0, updatedAt, isLogo, storage: 'netlify-blob' };
         } catch {
           const updatedAt = new Date().toISOString();
           return { filename: b.key, url: assetUrl(b.key, updatedAt), size: 0, updatedAt, isLogo: b.key.toLowerCase().includes('logo'), storage: 'netlify-blob' };
         }
       }));
-      return new Response(JSON.stringify({ assets, count: assets.length, storage: 'netlify-blobs', storeName: 'lifestyle-assets' }), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      });
+      return new Response(JSON.stringify({ assets, count: assets.length, storage: 'netlify-blobs', storeName: 'lifestyle-assets' }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
     if (subpath.startsWith('/blob/') && req.method === 'GET') {
@@ -123,9 +92,7 @@ export default async function handler(req: Request) {
         const meta = await store.getMetadata(filename);
         if (meta?.metadata?.contentType) mimeType = meta.metadata.contentType as string;
       } catch {}
-      return new Response(arrayBuf, {
-        headers: { ...corsHeaders, 'Content-Type': mimeType, 'Cache-Control': 'public, max-age=31536000, must-revalidate' }
-      });
+      return new Response(arrayBuf, { headers: { ...corsHeaders, 'Content-Type': mimeType, 'Cache-Control': 'public, max-age=31536000, must-revalidate' } });
     }
 
     if (subpath === '/admin/assets/upload' && req.method === 'POST') {
@@ -134,9 +101,7 @@ export default async function handler(req: Request) {
       if (!filename || !base64Data) return new Response(JSON.stringify({ error: 'Both filename and base64Data are required' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       const store = getBlobStore(req);
       const saved = await saveAsset(store, filename, base64Data);
-      return new Response(JSON.stringify({ success: true, filename: saved.cleanFilename, url: assetUrl(saved.cleanFilename, saved.updatedAt), size: saved.binaryData.length, storage: 'netlify-blobs', storeName: 'lifestyle-assets', updatedAt: saved.updatedAt }), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      });
+      return new Response(JSON.stringify({ success: true, filename: saved.cleanFilename, url: assetUrl(saved.cleanFilename, saved.updatedAt), size: saved.binaryData.length, storage: 'netlify-blobs', storeName: 'lifestyle-assets', updatedAt: saved.updatedAt }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
     if (subpath === '/admin/assets/batch-upload' && req.method === 'POST') {
@@ -149,9 +114,21 @@ export default async function handler(req: Request) {
         const saved = await saveAsset(store, f.filename, f.base64Data);
         results.push({ filename: saved.cleanFilename, url: assetUrl(saved.cleanFilename, saved.updatedAt), success: true });
       }
-      return new Response(JSON.stringify({ success: true, count: results.length, results, storage: 'netlify-blobs', storeName: 'lifestyle-assets' }), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      });
+      return new Response(JSON.stringify({ success: true, count: results.length, results, storage: 'netlify-blobs', storeName: 'lifestyle-assets' }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
+
+    // Migration endpoint for assets that were previously stored only in a browser session/localStorage.
+    if (subpath === '/admin/assets/sync-browser-cache' && req.method === 'POST') {
+      const body = await req.json();
+      const files = Array.isArray(body.files) ? body.files : [];
+      const store = getBlobStore(req);
+      const syncedFiles: string[] = [];
+      for (const f of files) {
+        if (!f?.filename || !f?.base64Data) continue;
+        const saved = await saveAsset(store, f.filename, f.base64Data);
+        syncedFiles.push(saved.cleanFilename);
+      }
+      return new Response(JSON.stringify({ success: true, count: syncedFiles.length, syncedFiles, storage: 'netlify-blobs', storeName: 'lifestyle-assets', message: 'Assets are now stored server-side and available to new visitors.' }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
     if (subpath.startsWith('/admin/assets/') && req.method === 'DELETE') {
