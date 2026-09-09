@@ -78,25 +78,7 @@ export const ComprehensiveQuoteSystem: React.FC<ComprehensiveQuoteSystemProps> =
   // Submission State
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  // Calculate live estimate price
-  const basePrices: Record<string, { front: number; full: number; threeRow: number }> = {
-    '600d-synthetic-polyester': { front: 2450, full: 3650, threeRow: 5150 },
-    'heavy-duty-ripstop-canvas': { front: 2650, full: 3950, threeRow: 5650 },
-    'rhino-hide-leatherette': { front: 2950, full: 4450, threeRow: 6450 }
-  };
-
   const selectedMaterialObj = MATERIALS_DATA.find((m) => m.id === materialId) || MATERIALS_DATA[0];
-  const matPricing = basePrices[materialId] || { front: 2650, full: 3950, threeRow: 5650 };
-  
-  let estimatedTotal = 
-    seatConfig === 'front_only' 
-      ? matPricing.front 
-      : seatConfig === 'front_and_rear' 
-      ? matPricing.full 
-      : matPricing.threeRow;
-
-  if (embroideryText.trim().length > 0) estimatedTotal += 200;
-  if (includeConsole) estimatedTotal += 150;
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -126,13 +108,13 @@ export const ComprehensiveQuoteSystem: React.FC<ComprehensiveQuoteSystemProps> =
         <div className="text-center max-w-3xl mx-auto space-y-3">
           <div className="inline-flex items-center space-x-2 text-[10px] font-bold text-orange-500 uppercase tracking-widest bg-[#141418] border border-orange-500/20 px-3 py-1 rounded-md font-mono">
             <Calculator className="w-3.5 h-3.5 text-orange-500" />
-            <span>INSTANT ITEMISED VEHICLE ESTIMATE</span>
+            <span>CUSTOM-FIT QUOTE REQUEST</span>
           </div>
           <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-black uppercase text-white tracking-tight leading-tight">
             REQUEST YOUR <span className="text-white border-b-2 border-orange-500 pb-1">CUSTOM FIT QUOTE</span>
           </h2>
           <p className="text-xs sm:text-sm text-[#8C9BA8] max-w-2xl mx-auto leading-relaxed">
-            Type in your vehicle details below to receive a formal quotation from our Vereeniging workshop, or tap WhatsApp for an instant direct estimate.
+            Type in your vehicle details below to request a personalised quotation from our Vereeniging workshop, or send the specification to our team on WhatsApp.
           </p>
 
           {/* Simple vs Detailed Toggle Switch */}
@@ -260,7 +242,7 @@ export const ComprehensiveQuoteSystem: React.FC<ComprehensiveQuoteSystemProps> =
                           }`}
                         >
                           <span className="text-xs font-bold uppercase">Front Row Only</span>
-                          <span className="font-mono text-xs font-bold text-orange-400 mt-1">From R{matPricing.front.toLocaleString()}</span>
+                          <span className="font-mono text-xs font-bold text-orange-400 mt-1">Request quote</span>
                         </label>
 
                         <label
@@ -272,7 +254,7 @@ export const ComprehensiveQuoteSystem: React.FC<ComprehensiveQuoteSystemProps> =
                           }`}
                         >
                           <span className="text-xs font-bold uppercase">Full Set (Front + Rear)</span>
-                          <span className="font-mono text-xs font-bold text-orange-400 mt-1">From R{matPricing.full.toLocaleString()}</span>
+                          <span className="font-mono text-xs font-bold text-orange-400 mt-1">Request quote</span>
                         </label>
 
                         <label
@@ -284,7 +266,7 @@ export const ComprehensiveQuoteSystem: React.FC<ComprehensiveQuoteSystemProps> =
                           }`}
                         >
                           <span className="text-xs font-bold uppercase">3-Row (7 Seater)</span>
-                          <span className="font-mono text-xs font-bold text-orange-400 mt-1">From R{matPricing.threeRow.toLocaleString()}</span>
+                          <span className="font-mono text-xs font-bold text-orange-400 mt-1">Request quote</span>
                         </label>
                       </div>
                     </div>
@@ -437,7 +419,7 @@ export const ComprehensiveQuoteSystem: React.FC<ComprehensiveQuoteSystemProps> =
                         >
                           <span className="text-xs font-bold uppercase">Front Row Only</span>
                           <span className="text-[11px] text-[#8C9BA8]">Driver + Passenger bucket seats</span>
-                          <span className="font-mono text-xs font-bold text-orange-400">From R{matPricing.front.toLocaleString()}</span>
+                          <span className="font-mono text-xs font-bold text-orange-400">Request quote</span>
                         </label>
 
                         <label
@@ -450,7 +432,7 @@ export const ComprehensiveQuoteSystem: React.FC<ComprehensiveQuoteSystemProps> =
                         >
                           <span className="text-xs font-bold uppercase">Full Set (Front + Rear)</span>
                           <span className="text-[11px] text-[#8C9BA8]">Complete 2-row cab protection</span>
-                          <span className="font-mono text-xs font-bold text-orange-400">From R{matPricing.full.toLocaleString()}</span>
+                          <span className="font-mono text-xs font-bold text-orange-400">Request quote</span>
                         </label>
 
                         <label
@@ -463,7 +445,7 @@ export const ComprehensiveQuoteSystem: React.FC<ComprehensiveQuoteSystemProps> =
                         >
                           <span className="text-xs font-bold uppercase">Complete 3-Row Set</span>
                           <span className="text-[11px] text-[#8C9BA8]">7-seater SUVs (Fortuner, Everest, Prado)</span>
-                          <span className="font-mono text-xs font-bold text-orange-400">From R{matPricing.threeRow.toLocaleString()}</span>
+                          <span className="font-mono text-xs font-bold text-orange-400">Request quote</span>
                         </label>
                       </div>
 
@@ -544,7 +526,7 @@ export const ComprehensiveQuoteSystem: React.FC<ComprehensiveQuoteSystemProps> =
                             onChange={(e) => setIncludeConsole(e.target.checked)}
                             className="w-4 h-4 accent-orange-500 rounded"
                           />
-                          <span>Include Padded Center Console Lid Cover (+R150)</span>
+                          <span>Include Padded Center Console Lid Cover</span>
                         </label>
 
                         <label className="flex items-center space-x-2 text-xs text-zinc-300 cursor-pointer">
@@ -664,10 +646,10 @@ export const ComprehensiveQuoteSystem: React.FC<ComprehensiveQuoteSystemProps> =
             )}
           </div>
 
-          {/* Real-Time Estimated Summary Card (4 Cols) */}
+          {/* Quote specification summary card (4 Cols) */}
           <div className="lg:col-span-4 bg-[#141418] border border-white/10 rounded-3xl p-6 sm:p-7 space-y-6 shadow-2xl sticky top-24">
             <div className="border-b border-white/10 pb-3">
-              <span className="text-[10px] font-mono font-bold text-orange-400 uppercase">LIVE ESTIMATE</span>
+              <span className="text-[10px] font-mono font-bold text-orange-400 uppercase">YOUR QUOTE REQUEST</span>
               <h4 className="font-heading text-xl font-bold uppercase text-white">QUOTE SPECIFICATION</h4>
             </div>
 
@@ -697,22 +679,17 @@ export const ComprehensiveQuoteSystem: React.FC<ComprehensiveQuoteSystemProps> =
               {includeConsole && (
                 <div className="flex justify-between py-1.5 border-b border-white/5">
                   <span className="text-zinc-400">Console Protector:</span>
-                  <span className="font-bold text-white text-right">Included (+R150)</span>
+                  <span className="font-bold text-white text-right">Included in request</span>
                 </div>
               )}
             </div>
 
-            {/* Price Box */}
+            {/* Quote-only notice */}
             <div className="p-4 bg-[#0c0c0e] border border-white/10 rounded-2xl space-y-2">
-              <div className="text-[10px] font-mono text-zinc-400 uppercase">Estimated Factory Price</div>
-              <div className="text-2xl font-black font-mono text-white">
-                FROM R{estimatedTotal.toLocaleString()}
-              </div>
-              <div className="text-[10px] text-amber-400/90 font-bold uppercase font-mono">
-                FINAL PRICE SUBJECT TO CONFIRMATION
-              </div>
+              <div className="text-[10px] font-mono text-zinc-400 uppercase">Custom-fit pricing</div>
+              <div className="text-2xl font-black font-mono text-white">REQUEST A QUOTE</div>
               <div className="text-[10px] text-zinc-400 leading-tight">
-                Final price depends on vehicle, material, configuration and selected extras. Includes VAT. Direct from Vereeniging workshop.
+                Our team will confirm pricing for your exact vehicle, material, seating configuration and selected extras.
               </div>
             </div>
 

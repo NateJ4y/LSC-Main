@@ -26,8 +26,6 @@ interface FabricDetail {
   subtitle: string;
   categoryBadge: string;
   badgeColor: string;
-  priceFront: string;
-  priceFull: string;
   description: string;
   gsm: string;
   waterproofRating: string;
@@ -47,8 +45,6 @@ const FABRICS: FabricDetail[] = [
     subtitle: 'Military-Spec Woven Canvas',
     categoryBadge: '⭐ #1 SA 4X4 & BAKKIES',
     badgeColor: 'bg-gradient-to-r from-orange-500 to-amber-600 text-black',
-    priceFront: 'FROM R2,650',
-    priceFull: 'FROM R3,950',
     description: 'South Africa’s toughest off-road shield. 100% waterproof military-grade cotton/polyester canvas that shrugs off red Kalahari mud, thorns, and wet hunting dogs.',
     gsm: '510 GSM Mil-Spec',
     waterproofRating: '100% (Hydrostatic > 12,000mm)',
@@ -76,8 +72,6 @@ const FABRICS: FabricDetail[] = [
     subtitle: 'Executive Supple Grain Synthetic',
     categoryBadge: '👑 EXECUTIVE LUXURY & SUVS',
     badgeColor: 'bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-500 text-black',
-    priceFront: 'FROM R2,950',
-    priceFull: 'FROM R4,450',
     description: 'Louis Vuitton grade supple automotive leatherette with French double-needle contrast stitching. Gives your interior an executive finish that wipes clean in 5 seconds.',
     gsm: '650 GSM Multi-Laminate',
     waterproofRating: '100% Spill & Stain Impermeable',
@@ -105,8 +99,6 @@ const FABRICS: FabricDetail[] = [
     subtitle: 'High-Density Commuter Weave',
     categoryBadge: '⚡ FLEETS & DAILY COMMUTERS',
     badgeColor: 'bg-zinc-800 border border-white/20 text-white',
-    priceFront: 'FROM R2,450',
-    priceFull: 'FROM R3,650',
     description: 'High-density synthetic ballistic polyester tailored for commercial fleets, delivery vehicles, and active daily commuters seeking breathable comfort.',
     gsm: '420 GSM High-Tensile',
     waterproofRating: 'Water-Repellent DWR Coating',
@@ -301,17 +293,12 @@ export const MaterialMatrix: React.FC<MaterialMatrixProps> = ({
                     </div>
                   </div>
 
-                  {/* Pricing & CTA */}
+                  {/* Quote-only CTA */}
                   <div className="pt-4 border-t border-white/10 space-y-3">
-                    <div className="flex items-baseline justify-between">
-                      <div>
-                        <span className="text-[10px] uppercase font-mono text-zinc-400 block">Single Row Front Set</span>
-                        <span className="text-2xl font-black font-mono text-white tracking-tight">{fabric.priceFront}</span>
-                      </div>
-                      <div className="text-right">
-                        <span className="text-[10px] uppercase font-mono text-zinc-400 block">Full Vehicle Set</span>
-                        <span className="text-sm font-bold font-mono text-orange-400">{fabric.priceFull}</span>
-                      </div>
+                    <div>
+                      <span className="text-[10px] uppercase font-mono text-zinc-400 block">Custom-fit pricing</span>
+                      <span className="text-lg font-black font-mono text-white tracking-tight">REQUEST A QUOTE</span>
+                      <p className="mt-1 text-xs text-zinc-400">Pricing is confirmed for your vehicle, seating layout and selected options.</p>
                     </div>
 
                     <button
@@ -322,7 +309,7 @@ export const MaterialMatrix: React.FC<MaterialMatrixProps> = ({
                           : 'bg-white hover:bg-zinc-200 text-black'
                       }`}
                     >
-                      <span>SELECT THIS FABRIC SPEC</span>
+                      <span>SELECT FABRIC & REQUEST QUOTE</span>
                       <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
                     </button>
                   </div>
