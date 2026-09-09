@@ -4,19 +4,58 @@ import { ShieldCheck } from 'lucide-react';
 
 interface BrandLogoProps { size?: 'sm' | 'md' | 'lg' | 'xl'; showSubtitle?: boolean; iconOnly?: boolean; className?: string; onClick?: () => void; }
 
-// Global customer-facing price scrubber. Pricing is intentionally not displayed anywhere on the public site.
+// Customer-facing pricing policy: no public prices or estimates are shown.
+// Any rendered currency amount is converted into a consistent Get a Quote CTA,
+// including values produced dynamically by configurators and carts.
 function scrubPublicPrices(root: Node = document.body) {
   const pricePattern = /(?:\b(?:FROM\s*)?R\s?\d[\d\s,.]*|\bR\{[^}]+\})/gi;
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
   const nodes: Text[] = [];
   let node: Node | null;
   while ((node = walker.nextNode())) nodes.push(node as Text);
+
   nodes.forEach((textNode) => {
     const value = textNode.nodeValue || '';
-    if (pricePattern.test(value)) {
+    if (!pricePattern.test(value)) {
       pricePattern.lastIndex = 0;
-      textNode.nodeValue = value.replace(pricePattern, 'GET A QUOTE');
+      return;
     }
+    pricePattern.lastIndex = 0;
+
+    const parent = textNode.parentElement;
+    if (!parent || ['SCRIPT', 'STYLE', 'NOSCRIPT', 'INPUT', 'TEXTAREA'].includes(parent.tagName)) return;
+
+    // If the price is already inside an interactive control, turn that control
+    // into a quote CTA rather than creating an invalid nested button.
+    if (parent.closest('button, a')) {
+      textNode.nodeValue = value.replace(pricePattern, 'GET A QUOTE');
+      pricePattern.lastIndex = 0;
+      return;
+    }
+
+    const fragment = document.createDocumentFragment();
+    let lastIndex = 0;
+    value.replace(pricePattern, (match, offset: number) => {
+      const before = value.slice(lastIndex, offset);
+      if (before) fragment.appendChild(document.createTextNode(before));
+
+      const quoteButton = document.createElement('button');
+      quoteButton.type = 'button';
+      quoteButton.textContent = 'GET A QUOTE';
+      quoteButton.setAttribute('aria-label', 'Get a quote');
+      quoteButton.className = 'public-quote-cta inline-flex items-center justify-center rounded-xl bg-white px-4 py-2 text-[10px] font-black uppercase tracking-wider text-black shadow-sm transition hover:bg-zinc-200 active:scale-95 cursor-pointer';
+      quoteButton.addEventListener('click', () => {
+        const quoteSection = document.getElementById('quote-builder');
+        if (quoteSection) quoteSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      fragment.appendChild(quoteButton);
+      lastIndex = offset + match.length;
+      return match;
+    });
+
+    const after = value.slice(lastIndex);
+    if (after) fragment.appendChild(document.createTextNode(after));
+    parent.replaceChild(fragment, textNode);
     pricePattern.lastIndex = 0;
   });
 }
@@ -40,6 +79,9 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({ size = 'md', className = '
   }, []);
 
   useEffect(() => {
+    const isAdmin = window.location.pathname === '/admin' || window.location.hash.toLowerCase() === '#admin';
+    if (isAdmin) return;
+
     scrubPublicPrices();
     const observer = new MutationObserver(() => scrubPublicPrices());
     observer.observe(document.body, { childList: true, subtree: true, characterData: true });
