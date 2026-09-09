@@ -4,9 +4,8 @@ import { ShieldCheck } from 'lucide-react';
 
 interface BrandLogoProps { size?: 'sm' | 'md' | 'lg' | 'xl'; showSubtitle?: boolean; iconOnly?: boolean; className?: string; onClick?: () => void; }
 
-// Customer-facing pricing policy: customers request a quote only.
-// Any visible currency amount is converted to a GET A QUOTE CTA.
-// Estimate/price language is also normalized to quote language.
+// Customer-facing policy: customers request a quote only.
+// Visible prices become GET A QUOTE CTAs; legacy brand/location copy is normalized.
 function scrubPublicPrices(root: Node = document.body) {
   const pricePattern = /(?:\b(?:FROM\s*)?R\s?\d[\d\s,.]*|\bR\{[^}]+\})/gi;
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
@@ -19,7 +18,6 @@ function scrubPublicPrices(root: Node = document.body) {
     const parent = textNode.parentElement;
     if (!parent || ['SCRIPT', 'STYLE', 'NOSCRIPT', 'INPUT', 'TEXTAREA'].includes(parent.tagName)) return;
 
-    // Normalize customer-facing estimate/pricing language.
     const normalized = value
       .replace(/INSTANT ITEMISED VEHICLE ESTIMATE/gi, 'CUSTOM FIT QUOTE REQUEST')
       .replace(/ESTIMATED FACTORY PRICE/gi, 'CUSTOM QUOTE')
@@ -27,7 +25,12 @@ function scrubPublicPrices(root: Node = document.body) {
       .replace(/INSTANT DIRECT ESTIMATE/gi, 'DIRECT QUOTE FROM OUR TEAM')
       .replace(/ESTIMATED PRICE/gi, 'QUOTE')
       .replace(/ESTIMATE PRICE/gi, 'QUOTE')
-      .replace(/LIVE ESTIMATE/gi, 'CUSTOM QUOTE');
+      .replace(/LIVE ESTIMATE/gi, 'CUSTOM QUOTE')
+      .replace(/Lifestyle\s*&\s*Stealth\s*Seat\s*Covers/gi, 'Lifestyle Seat Covers')
+      .replace(/Powered by Stealth Seat Covers\s*\(stealthseatcovers\.co\.za\)\.?/gi, '')
+      .replace(/stealthseatcovers\.co\.za/gi, 'lifestyleseatcovers.co.za')
+      .replace(/\bPolokwane\b/gi, 'Vereeniging')
+      .replace(/\bLimpopo\b/gi, 'Gauteng');
 
     if (normalized !== value) textNode.nodeValue = normalized;
 
@@ -38,7 +41,6 @@ function scrubPublicPrices(root: Node = document.body) {
     }
     pricePattern.lastIndex = 0;
 
-    // Any visible customer-facing price becomes a GET A QUOTE CTA.
     if (parent.closest('button, a')) {
       textNode.nodeValue = normalized.replace(pricePattern, 'GET A QUOTE');
       pricePattern.lastIndex = 0;
