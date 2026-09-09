@@ -20,7 +20,6 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
   className = '',
   onClick
 }) => {
-  // Candidate image paths to check for the supplied Logo-removebg-preview.png
   const candidatePaths = [
     getAuthenticImageUrl(OFFICIAL_LOGO_FILENAME),
     `/api/blob/${encodeURIComponent(OFFICIAL_LOGO_FILENAME)}`,
@@ -34,7 +33,6 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
   const [hasFailedAll, setHasFailedAll] = useState(false);
   const [, setTick] = useState(0);
 
-  // Subscribe to changes if the user uploads the logo during the session
   useEffect(() => {
     const unsubscribe = subscribeToAssetChanges(() => {
       setHasFailedAll(false);
@@ -44,12 +42,13 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
     return unsubscribe;
   }, []);
 
-  // Size specifications preserving proportional height and natural aspect ratio
+  // The header now uses the same size scale, but the logo itself is intentionally
+  // twice as large as the previous sm/md presentation.
   const heightClasses = {
-    sm: 'h-8 sm:h-9 max-w-[200px]',
-    md: 'h-10 sm:h-12 max-w-[240px]',
-    lg: 'h-14 sm:h-16 max-w-[320px]',
-    xl: 'h-20 sm:h-24 max-w-[420px]',
+    sm: 'h-16 sm:h-18 max-w-[400px]',
+    md: 'h-20 sm:h-24 max-w-[480px]',
+    lg: 'h-28 sm:h-32 max-w-[560px]',
+    xl: 'h-32 sm:h-40 max-w-[640px]',
   }[size];
 
   const handleImageError = () => {
@@ -60,7 +59,6 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
     }
   };
 
-  // Professional brand fallback when image file is loading or awaiting placement
   if (hasFailedAll && !hasUserUploadedAsset(OFFICIAL_LOGO_FILENAME)) {
     return (
       <div
@@ -87,14 +85,6 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
       className={`inline-flex items-center select-none ${className}`}
       onClick={onClick}
     >
-      {/* 
-        CRITICAL IMAGE ASSET PRESERVATION RULE COMPLIANT:
-        - Exact supplied PNG file (Logo-removebg-preview.png)
-        - Preserves 100% transparency
-        - Preserves exact original typography, colors, and proportions
-        - object-fit: contain ensures no stretching, cropping, or distortion
-        - No CSS filters (no brightness, contrast, saturate, or hue alterations)
-      */}
       <img
         src={candidatePaths[pathIndex]}
         alt="Lifestyle Seat Covers South Africa"
