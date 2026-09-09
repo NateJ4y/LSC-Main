@@ -4,9 +4,9 @@ import { ShieldCheck } from 'lucide-react';
 
 interface BrandLogoProps { size?: 'sm' | 'md' | 'lg' | 'xl'; showSubtitle?: boolean; iconOnly?: boolean; className?: string; onClick?: () => void; }
 
-// Customer-facing pricing policy: no public prices or estimates are shown.
-// Prices inside the quote builder are completely hidden. Other public pricing
-// references are converted into a consistent Get a Quote CTA.
+// Customer-facing pricing policy: customers request a quote only.
+// Any visible currency amount is converted to a GET A QUOTE CTA.
+// Estimate/price language is also normalized to quote language.
 function scrubPublicPrices(root: Node = document.body) {
   const pricePattern = /(?:\b(?:FROM\s*)?R\s?\d[\d\s,.]*|\bR\{[^}]+\})/gi;
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
@@ -16,35 +16,39 @@ function scrubPublicPrices(root: Node = document.body) {
 
   nodes.forEach((textNode) => {
     const value = textNode.nodeValue || '';
-    if (!pricePattern.test(value)) {
+    const parent = textNode.parentElement;
+    if (!parent || ['SCRIPT', 'STYLE', 'NOSCRIPT', 'INPUT', 'TEXTAREA'].includes(parent.tagName)) return;
+
+    // Normalize customer-facing estimate/pricing language.
+    const normalized = value
+      .replace(/INSTANT ITEMISED VEHICLE ESTIMATE/gi, 'CUSTOM FIT QUOTE REQUEST')
+      .replace(/ESTIMATED FACTORY PRICE/gi, 'CUSTOM QUOTE')
+      .replace(/STARTING WORKSHOP ESTIMATE/gi, 'REQUEST A CUSTOM QUOTE')
+      .replace(/INSTANT DIRECT ESTIMATE/gi, 'DIRECT QUOTE FROM OUR TEAM')
+      .replace(/ESTIMATED PRICE/gi, 'QUOTE')
+      .replace(/ESTIMATE PRICE/gi, 'QUOTE')
+      .replace(/LIVE ESTIMATE/gi, 'CUSTOM QUOTE');
+
+    if (normalized !== value) textNode.nodeValue = normalized;
+
+    pricePattern.lastIndex = 0;
+    if (!pricePattern.test(normalized)) {
       pricePattern.lastIndex = 0;
       return;
     }
     pricePattern.lastIndex = 0;
 
-    const parent = textNode.parentElement;
-    if (!parent || ['SCRIPT', 'STYLE', 'NOSCRIPT', 'INPUT', 'TEXTAREA'].includes(parent.tagName)) return;
-
-    // Inside the quote builder, remove pricing completely rather than replacing
-    // it with a CTA. This keeps the entire quote specification price-free.
-    const quoteBuilder = parent.closest('#quote-builder');
-    if (quoteBuilder) {
-      textNode.nodeValue = value.replace(pricePattern, '');
-      pricePattern.lastIndex = 0;
-      return;
-    }
-
-    // Outside the quote builder, convert visible pricing into a Get a Quote CTA.
+    // Any visible customer-facing price becomes a GET A QUOTE CTA.
     if (parent.closest('button, a')) {
-      textNode.nodeValue = value.replace(pricePattern, 'GET A QUOTE');
+      textNode.nodeValue = normalized.replace(pricePattern, 'GET A QUOTE');
       pricePattern.lastIndex = 0;
       return;
     }
 
     const fragment = document.createDocumentFragment();
     let lastIndex = 0;
-    value.replace(pricePattern, (match, offset: number) => {
-      const before = value.slice(lastIndex, offset);
+    normalized.replace(pricePattern, (match, offset: number) => {
+      const before = normalized.slice(lastIndex, offset);
       if (before) fragment.appendChild(document.createTextNode(before));
 
       const quoteButton = document.createElement('button');
@@ -61,7 +65,7 @@ function scrubPublicPrices(root: Node = document.body) {
       return match;
     });
 
-    const after = value.slice(lastIndex);
+    const after = normalized.slice(lastIndex);
     if (after) fragment.appendChild(document.createTextNode(after));
     parent.replaceChild(fragment, textNode);
     pricePattern.lastIndex = 0;
