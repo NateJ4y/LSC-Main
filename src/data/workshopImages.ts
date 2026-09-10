@@ -1,6 +1,8 @@
 // Original Workshop Photographs provided by the client
 // Compliant with AGENTS.md: original assets only, no AI manipulation, no CSS filters
 
+import { WORKSHOP_PHOTOS_2026_09_08 } from './workshopImages20260908';
+
 export interface WorkshopPhoto {
   id: string;
   title: string;
@@ -415,5 +417,6 @@ export const WORKSHOP_PHOTOS: WorkshopPhoto[] = [
     ],
     description: 'Driver cockpit showing the diamond quilted seat cover paired with an all-weather high-wall floor tray for comprehensive interior defense.',
     featured: false
-  }
+  },
+  ...WORKSHOP_PHOTOS_2026_09_08
 ];
