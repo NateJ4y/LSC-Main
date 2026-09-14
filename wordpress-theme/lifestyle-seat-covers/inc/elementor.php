@@ -14,13 +14,16 @@ function lsc_register_elementor_locations( $manager ) {
 add_action( 'elementor/theme/register_locations', 'lsc_register_elementor_locations' );
 
 function lsc_elementor_content_wrapper_start() {
-	if ( class_exists( '\Elementor\Plugin' ) && \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
+	if ( class_exists( '\\Elementor\\Plugin' ) && \\Elementor\\Plugin::$instance->editor->is_edit_mode() ) {
 		echo '<main id="primary" class="lsc-editor-content lsc-elementor-editing">';
 	}
 }
 
 function lsc_elementor_content_wrapper_end() {
-	if ( class_exists( '\Elementor\Plugin' ) && \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
+	if ( class_exists( '\\Elementor\\Plugin' ) && \\Elementor\\Plugin::$instance->editor->is_edit_mode() ) {
 		echo '</main>';
 	}
 }
+
+// Register the actual React-to-Elementor section equivalents.
+require_once get_template_directory() . '/inc/elementor-widgets.php';
