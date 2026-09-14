@@ -2,15 +2,18 @@
 /**
  * Front page template.
  *
- * Elementor owns the page content. The theme owns global chrome, loading,
- * accessibility and the fallback presentation shown before the page is built.
+ * Elementor owns the editable page content when the page has Elementor data.
+ * The theme owns global chrome and provides a safe product-first fallback.
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 get_header();
+
+$elementor_data = get_post_meta( get_the_ID(), '_elementor_data', true );
+$has_elementor_content = ! empty( $elementor_data );
 ?>
 
 <main id="primary" class="site-main">
-	<?php if ( class_exists( '\Elementor\Plugin' ) && \Elementor\Plugin::$instance->documents->get_current() ) : ?>
+	<?php if ( $has_elementor_content ) : ?>
 		<div class="lsc-editor-content">
 			<?php
 			while ( have_posts() ) :
@@ -38,7 +41,7 @@ get_header();
 				<p class="lsc-kicker">Real workshop work</p>
 				<h2 class="lsc-title">See what we make.</h2>
 				<div class="lsc-editor-content" style="margin-top:28px">
-					<p>Use Elementor to replace this fallback section with the existing workshop gallery and the supplied Lifestyle Seat Covers imagery.</p>
+					<p>Build this section in Elementor with the supplied workshop photography. The fallback intentionally contains no fabricated product imagery.</p>
 				</div>
 			</div>
 		</section>
@@ -47,7 +50,7 @@ get_header();
 			<div class="lsc-container">
 				<p class="lsc-kicker">Built around the vehicle</p>
 				<h2 class="lsc-title">Custom fit. Tough materials. Clean finish.</h2>
-				<p class="lsc-copy">Keep the existing product-first messaging here, then use Elementor to place the exact product, material, embroidery and fitment content from the current site.</p>
+				<p class="lsc-copy">Use Elementor to place the existing product, material, embroidery and fitment content from the current site.</p>
 			</div>
 		</section>
 
@@ -70,7 +73,7 @@ get_header();
 				<p class="lsc-kicker">No public pricing</p>
 				<h2 class="lsc-title">Get a custom quote.</h2>
 				<p class="lsc-copy">Tell us your vehicle and requirements. We will confirm the correct fit, material and finish before providing your quote.</p>
-				<a class="lsc-button" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">Request a quote</a>
+				<a class="lsc-button" href="#quote">Request a quote</a>
 			</div>
 		</section>
 	<?php endif; ?>
