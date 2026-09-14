@@ -44,6 +44,22 @@ export const HeroGallerySlider: React.FC<HeroGallerySliderProps> = ({ onSelectSl
     onSelectSlideVehicle(currentSlide.vehicleModel, currentSlide.suggestedMatType);
   }, [currentSlide.id]);
 
+  // Let the hero photography carry through the main navigation without a heavy nav block.
+  useEffect(() => {
+    const header = document.querySelector('header');
+    if (!header) return;
+
+    const originalBackground = header.style.backgroundColor;
+    const originalBorder = header.style.borderBottomColor;
+    header.style.backgroundColor = 'transparent';
+    header.style.borderBottomColor = 'transparent';
+
+    return () => {
+      header.style.backgroundColor = originalBackground;
+      header.style.borderBottomColor = originalBorder;
+    };
+  }, []);
+
   useEffect(() => {
     if (!isPlaying || isHovered) return;
     const timer = window.setInterval(next, 6500);
@@ -65,28 +81,30 @@ export const HeroGallerySlider: React.FC<HeroGallerySliderProps> = ({ onSelectSl
     >
       {HERO_SLIDES.map((slide, index) => (
         <div key={slide.id} className={`absolute inset-0 transition-opacity duration-1000 ease-out ${index === currentIndex ? 'z-10 opacity-100' : 'z-0 opacity-0 pointer-events-none'}`}>
-          <AssetImage filename={slide.rawFilename} alt={slide.vehicleTitle} fit="cover" className="absolute inset-0 h-full w-full scale-[1.01]" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/65 to-black/10" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/20" />
+          <AssetImage
+            filename={slide.rawFilename}
+            alt={slide.vehicleTitle}
+            fit="cover"
+            className="absolute inset-0 h-full w-full scale-100"
+          />
+          {/* Keep the photograph bright and readable. The gradient is deliberately subtle. */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/15 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/5" />
         </div>
       ))}
 
-      <div className="relative z-20 mx-auto flex min-h-[640px] max-w-7xl items-end px-5 pb-28 pt-32 sm:min-h-[700px] sm:px-8 sm:pb-32 lg:min-h-[calc(100vh-76px)] lg:px-10 lg:pb-36">
-        <div className="max-w-3xl">
+      <div className="relative z-20 flex min-h-[640px] items-end px-5 pb-24 pt-28 sm:min-h-[700px] sm:px-8 sm:pb-28 lg:min-h-[calc(100vh-76px)] lg:px-10 lg:pb-32">
+        <div className="w-full max-w-2xl">
           <div key={currentSlide.id} className="animate-in fade-in slide-in-from-bottom-4 duration-700">
-            <div className="mb-5 flex flex-wrap items-center gap-2">
-              <span className="rounded-full border border-orange-400/50 bg-orange-500/15 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-orange-300 backdrop-blur-md">{currentSlide.badge}</span>
-              <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/60">Lifestyle Seat Covers</span>
+            <div className="mb-4 flex flex-wrap items-center gap-2">
+              <span className="rounded-full border border-orange-400/50 bg-black/25 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-orange-200 backdrop-blur-sm">{currentSlide.badge}</span>
             </div>
-            <p className="mb-3 text-xs font-bold uppercase tracking-[0.22em] text-orange-400 sm:text-sm">Custom fit • Premium protection • South Africa</p>
-            <h1 className="max-w-3xl font-heading text-4xl font-black uppercase leading-[0.92] tracking-tight text-white sm:text-6xl lg:text-8xl">{currentSlide.vehicleTitle}</h1>
-            <p className="mt-5 max-w-xl text-sm leading-relaxed text-white/75 sm:text-base lg:text-lg">{currentSlide.description}</p>
-            <div className="mt-7 flex flex-wrap gap-3">
-              <button onClick={onStartConfiguring} className="group inline-flex min-h-12 items-center gap-2 rounded-xl bg-white px-6 py-3 text-xs font-black uppercase tracking-wider text-black transition hover:bg-orange-500">Get a quote <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" /></button>
-              <button onClick={onViewGallery} className="min-h-12 rounded-xl border border-white/25 bg-white/10 px-6 py-3 text-xs font-black uppercase tracking-wider text-white backdrop-blur-md transition hover:bg-white/20">View gallery</button>
-            </div>
-            <div className="mt-7 hidden items-center gap-6 text-[10px] font-bold uppercase tracking-widest text-white/55 sm:flex">
-              <span>{currentSlide.material}</span><span className="h-1 w-1 rounded-full bg-orange-500" /><span>Tailored to your vehicle</span>
+            <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.2em] text-orange-300 sm:text-xs">Custom fit • Premium protection</p>
+            <h1 className="max-w-2xl font-heading text-3xl font-black uppercase leading-[0.94] tracking-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.45)] sm:text-5xl lg:text-6xl">{currentSlide.vehicleTitle}</h1>
+            <p className="mt-4 max-w-lg text-sm leading-relaxed text-white/90 drop-shadow-[0_1px_6px_rgba(0,0,0,0.5)] sm:text-base">{currentSlide.description}</p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <button onClick={onStartConfiguring} className="group inline-flex min-h-11 items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-xs font-black uppercase tracking-wider text-black shadow-lg transition hover:bg-orange-500">Get a quote <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" /></button>
+              <button onClick={onViewGallery} className="min-h-11 rounded-xl border border-white/35 bg-black/15 px-5 py-2.5 text-xs font-black uppercase tracking-wider text-white backdrop-blur-sm transition hover:bg-black/30">View gallery</button>
             </div>
           </div>
         </div>
@@ -94,14 +112,14 @@ export const HeroGallerySlider: React.FC<HeroGallerySliderProps> = ({ onSelectSl
 
       <div className="absolute bottom-5 left-1/2 z-30 flex w-[calc(100%-2.5rem)] max-w-7xl -translate-x-1/2 items-center justify-between gap-4 sm:bottom-7">
         <div className="flex items-center gap-2">
-          <button onClick={prev} aria-label="Previous slide" className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/30 text-white backdrop-blur-md transition hover:border-white/50 hover:bg-white/10"><ChevronLeft className="h-4 w-4" /></button>
-          <button onClick={next} aria-label="Next slide" className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/30 text-white backdrop-blur-md transition hover:border-white/50 hover:bg-white/10"><ChevronRight className="h-4 w-4" /></button>
-          <button onClick={() => setIsPlaying(!isPlaying)} aria-label={isPlaying ? 'Pause slideshow' : 'Play slideshow'} className="ml-1 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/30 text-white backdrop-blur-md transition hover:border-white/50 hover:bg-white/10">{isPlaying ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}</button>
+          <button onClick={prev} aria-label="Previous slide" className="flex h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-black/20 text-white backdrop-blur-sm transition hover:border-white/50 hover:bg-black/35"><ChevronLeft className="h-4 w-4" /></button>
+          <button onClick={next} aria-label="Next slide" className="flex h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-black/20 text-white backdrop-blur-sm transition hover:border-white/50 hover:bg-black/35"><ChevronRight className="h-4 w-4" /></button>
+          <button onClick={() => setIsPlaying(!isPlaying)} aria-label={isPlaying ? 'Pause slideshow' : 'Play slideshow'} className="ml-1 flex h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-black/20 text-white backdrop-blur-sm transition hover:border-white/50 hover:bg-black/35">{isPlaying ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}</button>
         </div>
         <div className="flex items-center gap-2">
-          {HERO_SLIDES.map((slide, index) => <button key={slide.id} onClick={() => setCurrentIndex(index)} aria-label={`Go to slide ${index + 1}`} className="group p-1"><span className={`block h-1 rounded-full transition-all duration-500 ${index === currentIndex ? 'w-10 bg-orange-500' : 'w-4 bg-white/35 group-hover:bg-white/70'}`} /></button>)}
+          {HERO_SLIDES.map((slide, index) => <button key={slide.id} onClick={() => setCurrentIndex(index)} aria-label={`Go to slide ${index + 1}`} className="group p-1"><span className={`block h-1 rounded-full transition-all duration-500 ${index === currentIndex ? 'w-10 bg-orange-500' : 'w-4 bg-white/45 group-hover:bg-white/80'}`} /></button>)}
         </div>
-        <div className="hidden text-right sm:block"><div className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">{String(currentIndex + 1).padStart(2, '0')} / {String(HERO_SLIDES.length).padStart(2, '0')}</div></div>
+        <div className="hidden text-right sm:block"><div className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60">{String(currentIndex + 1).padStart(2, '0')} / {String(HERO_SLIDES.length).padStart(2, '0')}</div></div>
       </div>
     </section>
   );
