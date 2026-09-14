@@ -1,0 +1,36 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "settings": {
+    "appearanceTools": true,
+    "layout": {
+      "contentSize": "1240px",
+      "wideSize": "1440px"
+    },
+    "color": {
+      "palette": [
+        { "slug": "background", "color": "#0c0c0e", "name": "Background" },
+        { "slug": "surface", "color": "#121216", "name": "Surface" },
+        { "slug": "text", "color": "#f4f4f5", "name": "Text" },
+        { "slug": "muted", "color": "#a1a1aa", "name": "Muted" },
+        { "slug": "white", "color": "#ffffff", "name": "White" }
+      ]
+    },
+    "typography": {
+      "fluid": true,
+      "fontFamilies": [
+        { "fontFamily": "Montserrat, sans-serif", "slug": "montserrat", "name": "Montserrat" },
+        { "fontFamily": "Plus Jakarta Sans, sans-serif", "slug": "plus-jakarta-sans", "name": "Plus Jakarta Sans" }
+      ]
+    }
+  },
+  "styles": {
+    "color": {
+      "background": "var:preset|color|background",
+      "text": "var:preset|color|text"
+    },
+    "typography": {
+      "fontFamily": "var:preset|font-family|plus-jakarta-sans"
+    }
+  }
+}
