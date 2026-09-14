@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 function lsc_site_logo() {
 	if ( has_custom_logo() ) {
-		the_custom_logo();
+		echo '<span class="lsc-brand">' . get_custom_logo() . '</span>';
 		return;
 	}
 
@@ -16,11 +16,11 @@ function lsc_site_logo() {
 
 function lsc_primary_menu_fallback() {
 	$links = array(
-		'Gallery'    => '#gallery',
+		'Gallery'     => '#gallery',
 		'Seat Covers' => '#seat-covers',
-		'Vehicles'   => '#vehicles',
-		'Customise'  => '#customise',
-		'Contact'    => '#contact',
+		'Vehicles'    => '#vehicles',
+		'Customise'   => '#customise',
+		'Contact'     => '#contact',
 	);
 
 	foreach ( $links as $label => $href ) {
