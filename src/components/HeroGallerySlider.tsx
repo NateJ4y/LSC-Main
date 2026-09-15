@@ -16,53 +16,15 @@ export interface HeroSlide {
   highlights: string[];
 }
 
-/**
- * Seven original/gallery photographs already present in the project.
- * They form the moving visual language of the new diagonal-panel hero.
- */
+/** Seven original/gallery photographs already present in the project. */
 export const HERO_GALLERY_IMAGES = [
-  {
-    id: 'hilux-gd6',
-    filename: 'WhatsApp Image 2026-08-31 at 8.09.01 AM.jpeg',
-    title: 'Toyota Hilux GD-6',
-    category: 'Bakkies',
-  },
-  {
-    id: 'land-cruiser-79',
-    filename: 'WhatsApp Image 2026-08-31 at 8.08.57 AM (2).jpeg',
-    title: 'Land Cruiser 79',
-    category: '4x4',
-  },
-  {
-    id: 'jeep-wrangler',
-    filename: 'WhatsApp Image 2026-08-31 at 8.08.53 AM.jpeg',
-    title: 'Jeep Wrangler',
-    category: 'SUV',
-  },
-  {
-    id: 'amarok',
-    filename: 'WhatsApp Image 2026-08-31 at 8.08.55 AM.jpeg',
-    title: 'Volkswagen Amarok',
-    category: 'Bakkies',
-  },
-  {
-    id: 'toyota-emblem',
-    filename: 'WhatsApp Image 2026-08-31 at 8.08.55 AM (2).jpeg',
-    title: 'Toyota Custom Fit',
-    category: 'SUV',
-  },
-  {
-    id: 'fleet-optimum',
-    filename: 'WhatsApp Image 2026-08-31 at 8.08.56 AM (1).jpeg',
-    title: 'Commercial Fleet',
-    category: 'Fleet',
-  },
-  {
-    id: 'ford-ranger',
-    filename: 'WhatsApp Image 2026-08-31 at 8.09.00 AM (1).jpeg',
-    title: 'Ford Ranger',
-    category: 'Bakkies',
-  },
+  { id: 'hilux-gd6', filename: 'WhatsApp Image 2026-08-31 at 8.09.01 AM.jpeg', title: 'Toyota Hilux GD-6', category: 'Bakkies' },
+  { id: 'land-cruiser-79', filename: 'WhatsApp Image 2026-08-31 at 8.08.57 AM (2).jpeg', title: 'Land Cruiser 79', category: '4x4' },
+  { id: 'jeep-wrangler', filename: 'WhatsApp Image 2026-08-31 at 8.08.53 AM.jpeg', title: 'Jeep Wrangler', category: 'SUV' },
+  { id: 'amarok', filename: 'WhatsApp Image 2026-08-31 at 8.08.55 AM.jpeg', title: 'Volkswagen Amarok', category: 'Bakkies' },
+  { id: 'toyota-emblem', filename: 'WhatsApp Image 2026-08-31 at 8.08.55 AM (2).jpeg', title: 'Toyota Custom Fit', category: 'SUV' },
+  { id: 'fleet-optimum', filename: 'WhatsApp Image 2026-08-31 at 8.08.56 AM (1).jpeg', title: 'Commercial Fleet', category: 'Fleet' },
+  { id: 'ford-ranger', filename: 'WhatsApp Image 2026-08-31 at 8.09.00 AM (1).jpeg', title: 'Ford Ranger', category: 'Bakkies' },
 ] as const;
 
 interface HeroGallerySliderProps {
@@ -100,11 +62,6 @@ export const HeroGallerySlider: React.FC<HeroGallerySliderProps> = ({
           will-change: transform;
         }
 
-        .lsc-hero-marquee:hover .lsc-hero-marquee__track,
-        .lsc-hero-marquee:focus-within .lsc-hero-marquee__track {
-          animation-play-state: paused;
-        }
-
         @media (prefers-reduced-motion: reduce) {
           .lsc-hero-marquee__track {
             animation: none;
@@ -117,11 +74,11 @@ export const HeroGallerySlider: React.FC<HeroGallerySliderProps> = ({
         <div className="absolute inset-0 bg-gradient-to-r from-[#070707] via-black/35 to-transparent lg:z-20 lg:w-[38%]" />
         <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/80 via-transparent to-black/15" />
 
-        <div className="lsc-hero-marquee__track flex h-full w-max items-stretch gap-3 px-2 sm:gap-4 lg:gap-5">
+        <div className="lsc-hero-marquee__track flex h-full w-max items-stretch gap-1 px-0 sm:gap-1 lg:gap-2">
           {[0, 1].map((setIndex) => (
             <div
               key={setIndex}
-              className="flex h-full items-stretch gap-3 sm:gap-4 lg:gap-5"
+              className="flex h-full items-stretch gap-1 sm:gap-1 lg:gap-2"
               aria-hidden={setIndex === 1}
             >
               {HERO_GALLERY_IMAGES.map((image) => (
@@ -130,7 +87,7 @@ export const HeroGallerySlider: React.FC<HeroGallerySliderProps> = ({
                   type="button"
                   onClick={onViewGallery}
                   className="group relative h-full w-[42vw] max-w-[300px] min-w-[190px] shrink-0 overflow-hidden text-left outline-none sm:w-[30vw] lg:w-[15vw] lg:min-w-[190px]"
-                  style={{ clipPath: 'polygon(12% 0, 100% 0, 88% 100%, 0 100%)' }}
+                  style={{ clipPath: 'polygon(10% 0, 100% 0, 90% 100%, 0 100%)' }}
                   aria-label={`View ${image.title} gallery image`}
                   tabIndex={setIndex === 1 ? -1 : 0}
                 >
@@ -142,12 +99,8 @@ export const HeroGallerySlider: React.FC<HeroGallerySliderProps> = ({
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/5 to-black/10" />
                   <div className="absolute bottom-8 left-7 right-4 z-10">
-                    <span className="block text-[9px] font-black uppercase tracking-[0.22em] text-orange-400">
-                      {image.category}
-                    </span>
-                    <span className="mt-1 block text-sm font-black uppercase leading-tight text-white drop-shadow-lg">
-                      {image.title}
-                    </span>
+                    <span className="block text-[9px] font-black uppercase tracking-[0.22em] text-orange-400">{image.category}</span>
+                    <span className="mt-1 block text-sm font-black uppercase leading-tight text-white drop-shadow-lg">{image.title}</span>
                   </div>
                   <span className="absolute right-5 top-7 flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-black/25 text-white opacity-0 backdrop-blur-md transition group-hover:opacity-100 group-focus-visible:opacity-100">
                     <ChevronRight className="h-4 w-4" />
@@ -165,19 +118,15 @@ export const HeroGallerySlider: React.FC<HeroGallerySliderProps> = ({
       <div className="relative z-30 flex min-h-[650px] items-end lg:min-h-[calc(100vh-76px)]">
         <div className="mx-auto flex w-full max-w-[1600px] items-end px-5 pb-16 pt-32 sm:px-8 sm:pb-20 lg:px-12 lg:pb-24">
           <div className="max-w-xl">
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-3 py-2 backdrop-blur-md">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-3 py-2 backdrop-blur-md">
               <span className="h-1.5 w-1.5 rounded-full bg-orange-500 shadow-[0_0_12px_rgba(249,115,22,0.8)]" />
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/70">
-                Vereeniging • Gauteng • South Africa
-              </span>
+              <span className="text-[9px] font-black uppercase tracking-[0.18em] text-white/70">Vereeniging • Gauteng • South Africa</span>
             </div>
 
-            <p className="mb-3 text-xs font-black uppercase tracking-[0.28em] text-orange-400 sm:text-sm">
-              Custom fit. Built properly.
-            </p>
+            <p className="mb-2 text-[10px] font-black uppercase tracking-[0.24em] text-orange-400 sm:text-xs">Custom fit. Built properly.</p>
             <h1
               id="lsc-hero-title"
-              className="max-w-2xl font-heading text-5xl font-black uppercase leading-[0.86] tracking-[-0.035em] text-white sm:text-6xl lg:text-8xl"
+              className="max-w-xl font-heading text-3xl font-black uppercase leading-[0.9] tracking-[-0.025em] text-white sm:text-4xl lg:text-5xl"
             >
               Seat covers
               <br />
@@ -185,15 +134,15 @@ export const HeroGallerySlider: React.FC<HeroGallerySliderProps> = ({
               <br />
               your vehicle.
             </h1>
-            <p className="mt-6 max-w-lg text-sm leading-7 text-white/68 sm:text-base sm:leading-8">
+            <p className="mt-4 max-w-md text-xs leading-6 text-white/68 sm:text-sm sm:leading-7">
               Precision-tailored seat covers for bakkies, SUVs and commercial fleets — fitted for real South African roads and built around your vehicle.
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-6 flex flex-wrap gap-2">
               <button
                 type="button"
                 onClick={onStartConfiguring}
-                className="group inline-flex min-h-14 items-center gap-3 rounded-full bg-white px-7 py-4 text-xs font-black uppercase tracking-[0.12em] text-black shadow-2xl transition duration-300 hover:-translate-y-0.5 hover:bg-orange-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-white/80"
+                className="group inline-flex min-h-12 items-center gap-3 rounded-full bg-white px-6 py-3 text-[10px] font-black uppercase tracking-[0.12em] text-black shadow-2xl transition duration-300 hover:-translate-y-0.5 hover:bg-orange-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-white/80"
               >
                 Get my quote
                 <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -202,13 +151,13 @@ export const HeroGallerySlider: React.FC<HeroGallerySliderProps> = ({
               <button
                 type="button"
                 onClick={onViewGallery}
-                className="inline-flex min-h-14 items-center gap-2 rounded-full border border-white/20 bg-white/[0.06] px-6 py-4 text-xs font-black uppercase tracking-[0.12em] text-white backdrop-blur-md transition hover:border-white/40 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/60"
+                className="inline-flex min-h-12 items-center gap-2 rounded-full border border-white/20 bg-white/[0.06] px-5 py-3 text-[10px] font-black uppercase tracking-[0.12em] text-white backdrop-blur-md transition hover:border-white/40 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/60"
               >
                 Explore fitments
               </button>
             </div>
 
-            <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 text-[9px] font-black uppercase tracking-[0.18em] text-white/45">
+            <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-[8px] font-black uppercase tracking-[0.16em] text-white/45">
               <span>7 real workshop fitments</span>
               <span className="h-1 w-1 rounded-full bg-orange-500" />
               <span>Custom embroidery</span>
