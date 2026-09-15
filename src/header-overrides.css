@@ -1,0 +1,38 @@
+/* Lifestyle Seat Covers — streamlined transparent navigation */
+header.sticky.top-0 {
+  background-color: transparent !important;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-bottom-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Remove the old workshop / WhatsApp announcement strip entirely. */
+header.sticky.top-0 > div:first-child {
+  display: none !important;
+}
+
+/* Trim a small amount from the right edge of the navbar logo without changing the source asset. */
+header.sticky.top-0 > div:nth-child(2) > div > div:first-child img {
+  clip-path: inset(0 3.5% 0 0);
+}
+
+/* Keep the mobile drawer flush with the now-shorter transparent header. */
+header.sticky.top-0 [class*="top-[96px]"] {
+  top: 64px !important;
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  header.sticky.top-0 [class*="top-[96px]"] {
+    top: 80px !important;
+  }
+}
+
+/* Preserve readable navigation in light mode while keeping the navbar itself transparent. */
+html.light header.sticky.top-0 {
+  background-color: transparent !important;
+  background: transparent !important;
+  border-bottom-color: transparent !important;
+  box-shadow: none !important;
+}
