@@ -1,38 +1,270 @@
-/* Lifestyle Seat Covers — streamlined transparent navigation */
-header.sticky.top-0 {
-  background-color: transparent !important;
-  background: transparent !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  border-bottom-color: transparent !important;
-  box-shadow: none !important;
+/* ============================================================================
+   LIFESTYLE SEAT COVERS — PREMIUM UI / UX POLISH
+   Loaded after index.css so these rules are the final presentation layer.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. VIEWPORT-LOCKED NAVIGATION
+   -------------------------------------------------------------------------- */
+
+/* The public navigation is genuinely fixed to the viewport — not sticky. */
+header.sticky.top-0,
+header.sticky {
+  position: fixed !important;
+  top: 0 !important;
+  right: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  max-width: 100vw !important;
+  height: auto !important;
+  z-index: 9999 !important;
+  transform: translate3d(0, 0, 0) !important;
+  will-change: transform;
+  contain: layout style;
+  overflow: visible !important;
+  background: rgba(7, 7, 9, 0.28) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07) !important;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08) !important;
+  backdrop-filter: blur(10px) saturate(115%) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(115%) !important;
+  transition: background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
 }
 
 /* Remove the old workshop / WhatsApp announcement strip entirely. */
-header.sticky.top-0 > div:first-child {
+header.sticky.top-0 > div:first-child,
+header.sticky > div:first-of-type {
   display: none !important;
 }
 
-/* Trim a small amount from the right edge of the navbar logo without changing the source asset. */
-header.sticky.top-0 > div:nth-child(2) > div > div:first-child img {
-  clip-path: inset(0 3.5% 0 0);
+/* Keep the main navigation compact and visually deliberate. */
+header.sticky.top-0 > div:nth-child(2) {
+  min-height: 68px;
 }
 
-/* Keep the mobile drawer flush with the now-shorter transparent header. */
+header.sticky.top-0 > div:nth-child(2) > div {
+  min-height: 68px !important;
+}
+
+@media (min-width: 640px) {
+  header.sticky.top-0 > div:nth-child(2),
+  header.sticky.top-0 > div:nth-child(2) > div {
+    min-height: 76px !important;
+  }
+}
+
+/* Trim a small amount from the right edge of the source logo. */
+header.sticky.top-0 > div:nth-child(2) > div > div:first-child img,
+header.sticky img[alt="Lifestyle Seat Covers South Africa"] {
+  clip-path: inset(0 3.5% 0 0);
+  max-height: 54px;
+}
+
+@media (min-width: 640px) {
+  header.sticky img[alt="Lifestyle Seat Covers South Africa"] {
+    max-height: 62px;
+  }
+}
+
+/* Desktop navigation: quieter borders, less visual noise, better hierarchy. */
+header.sticky.top-0 nav button {
+  letter-spacing: 0.075em;
+  transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+header.sticky.top-0 nav button:hover {
+  transform: translateY(-1px);
+}
+
+header.sticky.top-0 nav button.bg-zinc-900 {
+  background: rgba(255, 255, 255, 0.075) !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+/* Dropdowns should feel like one premium system rather than floating AI cards. */
+header.sticky.top-0 nav [class*="absolute top-full"] > div {
+  border-color: rgba(255, 255, 255, 0.11) !important;
+  border-radius: 18px !important;
+  background: rgba(14, 14, 19, 0.94) !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.48) !important;
+}
+
+/* --------------------------------------------------------------------------
+   2. MOBILE NAV / DRAWER ALIGNMENT
+   -------------------------------------------------------------------------- */
+
+/* Mobile drawer begins underneath the actual fixed navigation height. */
 header.sticky.top-0 [class*="top-[96px]"] {
-  top: 64px !important;
+  top: 68px !important;
 }
 
 @media (min-width: 640px) and (max-width: 1023px) {
   header.sticky.top-0 [class*="top-[96px]"] {
-    top: 80px !important;
+    top: 76px !important;
   }
 }
 
-/* Preserve readable navigation in light mode while keeping the navbar itself transparent. */
-html.light header.sticky.top-0 {
-  background-color: transparent !important;
-  background: transparent !important;
-  border-bottom-color: transparent !important;
-  box-shadow: none !important;
+/* The mobile bottom bar is an action rail, not a second heavy navigation system. */
+nav[aria-label="Mobile Quick Actions"] {
+  z-index: 9990 !important;
+  min-height: 68px;
+  padding-top: 6px !important;
+  padding-bottom: max(6px, env(safe-area-inset-bottom)) !important;
+  background: rgba(10, 10, 12, 0.94) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.09) !important;
+  box-shadow: 0 -12px 35px rgba(0, 0, 0, 0.22) !important;
+  backdrop-filter: blur(18px) saturate(125%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(125%) !important;
+}
+
+nav[aria-label="Mobile Quick Actions"] button,
+nav[aria-label="Mobile Quick Actions"] a {
+  min-height: 48px !important;
+  border-radius: 14px !important;
+}
+
+nav[aria-label="Mobile Quick Actions"] svg {
+  stroke-width: 1.9;
+}
+
+/* Prevent the floating WhatsApp action from colliding with the bottom rail. */
+@media (max-width: 1023px) {
+  div.fixed.bottom-20.right-4 {
+    bottom: 84px !important;
+    right: 14px !important;
+    z-index: 9985 !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   3. HERO / CUSTOMER JOURNEY PRESENTATION
+   -------------------------------------------------------------------------- */
+
+/* Keep the hero immediately underneath the fixed navigation. */
+.lsc-hero-marquee {
+  isolation: isolate;
+}
+
+/* Avoid the “template” look from overly sharp text blocks. */
+.lsc-hero-marquee h1 {
+  text-wrap: balance;
+  line-height: 0.98 !important;
+  letter-spacing: -0.045em !important;
+}
+
+.lsc-hero-marquee p {
+  text-wrap: pretty;
+  line-height: 1.55 !important;
+}
+
+/* CTA buttons share one consistent physical language. */
+.lsc-hero-marquee a,
+.lsc-hero-marquee button {
+  border-radius: 999px !important;
+  transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease, border-color 180ms ease;
+}
+
+.lsc-hero-marquee a:hover,
+.lsc-hero-marquee button:hover {
+  transform: translateY(-1px);
+}
+
+/* --------------------------------------------------------------------------
+   4. PREMIUM SURFACE LANGUAGE
+   -------------------------------------------------------------------------- */
+
+/* Reduce the “AI-generated UI” feeling: consistent radii and restrained borders
+   on common elevated surfaces without touching the actual imagery. */
+.lsc-hero-marquee,
+main section {
+  --lsc-border: rgba(255, 255, 255, 0.085);
+  --lsc-surface: rgba(255, 255, 255, 0.025);
+}
+
+main section [class*="border-white/10"] {
+  border-color: var(--lsc-border) !important;
+}
+
+/* Avoid excessive pill-shaped labels. Pills remain reserved for compact metadata. */
+main section [class*="rounded-full"] {
+  transition: background-color 160ms ease, border-color 160ms ease;
+}
+
+/* Cleaner typography rhythm across content sections. */
+main h2 {
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+main h3 {
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+main p {
+  text-wrap: pretty;
+}
+
+/* Keep icons optically lighter than the copy so they support rather than dominate. */
+main svg {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* --------------------------------------------------------------------------
+   5. IMAGE / CARD FINISH
+   -------------------------------------------------------------------------- */
+
+/* Images should feel photographic and tactile rather than clipped into generic cards. */
+main img {
+  image-rendering: auto;
+}
+
+/* Consistent hover motion for genuinely interactive image cards. */
+main a.group:hover img,
+main button.group:hover img {
+  transform: scale(1.025);
+}
+
+/* Do not let hover transforms affect fixed UI. */
+header img,
+nav[aria-label="Mobile Quick Actions"] img {
+  transform: none !important;
+}
+
+/* --------------------------------------------------------------------------
+   6. LIGHT MODE — SAME PREMIUM SYSTEM
+   -------------------------------------------------------------------------- */
+
+html.light header.sticky.top-0,
+html.light header.sticky {
+  background: rgba(248, 250, 252, 0.74) !important;
+  border-bottom-color: rgba(15, 23, 42, 0.08) !important;
+  box-shadow: 0 10px 35px rgba(15, 23, 42, 0.06) !important;
+}
+
+html.light nav[aria-label="Mobile Quick Actions"] {
+  background: rgba(248, 250, 252, 0.94) !important;
+  border-top-color: rgba(15, 23, 42, 0.09) !important;
+}
+
+/* --------------------------------------------------------------------------
+   7. ACCESSIBILITY / MOTION
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  header.sticky.top-0,
+  nav[aria-label="Mobile Quick Actions"],
+  main a,
+  main button {
+    transition: none !important;
+  }
+}
+
+/* Keep content clear of the fixed mobile action rail at the very bottom. */
+@media (max-width: 1023px) {
+  main {
+    padding-bottom: 10px;
+  }
 }
