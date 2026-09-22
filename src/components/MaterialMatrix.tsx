@@ -8,9 +8,9 @@ interface MaterialMatrixProps {
 }
 
 const MATERIALS = [
-  { id: 'heavy-duty-ripstop-canvas', name: 'Tough Ripstop Canvas', short: 'Rugged protection for bakkies, 4x4s and working vehicles.', image: 'WhatsApp Image 2026-08-31 at 8.09.01 AM.jpeg', tone: 'Best for 4x4 & work', points: ['Hard-wearing', 'Water resistant', 'Adventure ready'] },
-  { id: 'rhino-hide-leatherette', name: 'Automotive Leatherette', short: 'A cleaner, more refined finish for daily drivers and SUVs.', image: 'WhatsApp Image 2026-08-31 at 8.08.53 AM.jpeg', tone: 'Best for comfort & style', points: ['Easy clean', 'Premium finish', 'Custom stitching'] },
-  { id: '600d-synthetic-polyester', name: 'Heavy-Duty Polyester', short: 'Practical protection for commuters, fleets and high-use vehicles.', image: 'WhatsApp Image 2026-08-31 at 8.08.56 AM (1).jpeg', tone: 'Best for fleets', points: ['Durable weave', 'Easy maintenance', 'Daily ready'] },
+  { id: 'heavy-duty-ripstop-canvas', name: 'Tough Ripstop Canvas', short: 'Rugged protection for bakkies, 4x4s and working vehicles.', image: 'WhatsApp Image 2026-09-16 at 8.32.12 AM.jpeg', tone: 'Best for 4x4 & work', points: ['Hard-wearing', 'Water resistant', 'Adventure ready'] },
+  { id: 'rhino-hide-leatherette', name: 'Automotive Leatherette', short: 'A cleaner, more refined finish for daily drivers and SUVs.', image: 'WhatsApp Image 2026-09-16 at 8.32.15 AM.jpeg', tone: 'Best for comfort & style', points: ['Easy clean', 'Premium finish', 'Custom stitching'] },
+  { id: '600d-synthetic-polyester', name: 'Heavy-Duty Polyester', short: 'Practical protection for commuters, fleets and high-use vehicles.', image: 'WhatsApp Image 2026-09-16 at 8.32.23 AM (1).jpeg', tone: 'Best for fleets', points: ['Durable weave', 'Easy maintenance', 'Daily ready'] },
 ];
 
 export const MaterialMatrix: React.FC<MaterialMatrixProps> = ({ onSelectMaterial, onOpenSwatches }) => (
