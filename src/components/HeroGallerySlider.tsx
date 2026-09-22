@@ -18,13 +18,13 @@ export interface HeroSlide {
 
 /** Seven original/gallery photographs already present in the project. */
 export const HERO_GALLERY_IMAGES = [
-  { id: 'hilux-gd6', filename: 'WhatsApp Image 2026-09-16 at 8.32.12 AM (1).jpeg', title: 'Toyota Hilux GD-6', category: 'Bakkies' },
-  { id: 'land-cruiser-79', filename: 'WhatsApp Image 2026-09-16 at 8.32.15 AM (2).jpeg', title: 'Land Cruiser 79', category: '4x4' },
-  { id: 'jeep-wrangler', filename: 'WhatsApp Image 2026-09-16 at 8.32.16 AM.jpeg', title: 'Jeep Wrangler', category: 'SUV' },
-  { id: 'amarok', filename: 'WhatsApp Image 2026-09-16 at 8.32.19 AM (1).jpeg', title: 'Volkswagen Amarok', category: 'Bakkies' },
-  { id: 'toyota-emblem', filename: 'WhatsApp Image 2026-09-16 at 8.32.22 AM.jpeg', title: 'Toyota Custom Fit', category: 'SUV' },
-  { id: 'fleet-optimum', filename: 'WhatsApp Image 2026-09-16 at 8.32.28 AM.jpeg', title: 'Commercial Fleet', category: 'Fleet' },
-  { id: 'ford-ranger', filename: 'WhatsApp Image 2026-09-16 at 8.32.31 AM.jpeg', title: 'Ford Ranger', category: 'Bakkies' },
+  { id: 'new-design-01', filename: 'WhatsApp Image 2026-09-16 at 8.32.12 AM (1).jpeg', title: 'New Design 01', category: 'New Designs' },
+  { id: 'new-design-10', filename: 'WhatsApp Image 2026-09-16 at 8.32.15 AM (2).jpeg', title: 'New Design 10', category: 'New Designs' },
+  { id: 'new-design-14', filename: 'WhatsApp Image 2026-09-16 at 8.32.16 AM.jpeg', title: 'New Design 14', category: 'New Designs' },
+  { id: 'new-design-21', filename: 'WhatsApp Image 2026-09-16 at 8.32.19 AM (1).jpeg', title: 'New Design 21', category: 'New Designs' },
+  { id: 'new-design-32', filename: 'WhatsApp Image 2026-09-16 at 8.32.22 AM.jpeg', title: 'New Design 32', category: 'New Designs' },
+  { id: 'new-design-43', filename: 'WhatsApp Image 2026-09-16 at 8.32.28 AM.jpeg', title: 'New Design 43', category: 'New Designs' },
+  { id: 'new-design-53', filename: 'WhatsApp Image 2026-09-16 at 8.32.31 AM.jpeg', title: 'New Design 53', category: 'New Designs' },
 ] as const;
 
 interface HeroGallerySliderProps {
