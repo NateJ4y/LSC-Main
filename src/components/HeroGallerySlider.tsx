@@ -18,13 +18,13 @@ export interface HeroSlide {
 
 /** Seven original/gallery photographs already present in the project. */
 export const HERO_GALLERY_IMAGES = [
-  { id: 'hilux-gd6', filename: 'WhatsApp Image 2026-08-31 at 8.09.01 AM.jpeg', title: 'Toyota Hilux GD-6', category: 'Bakkies' },
-  { id: 'land-cruiser-79', filename: 'WhatsApp Image 2026-08-31 at 8.08.57 AM (2).jpeg', title: 'Land Cruiser 79', category: '4x4' },
-  { id: 'jeep-wrangler', filename: 'WhatsApp Image 2026-08-31 at 8.08.53 AM.jpeg', title: 'Jeep Wrangler', category: 'SUV' },
-  { id: 'amarok', filename: 'WhatsApp Image 2026-08-31 at 8.08.55 AM.jpeg', title: 'Volkswagen Amarok', category: 'Bakkies' },
-  { id: 'toyota-emblem', filename: 'WhatsApp Image 2026-08-31 at 8.08.55 AM (2).jpeg', title: 'Toyota Custom Fit', category: 'SUV' },
-  { id: 'fleet-optimum', filename: 'WhatsApp Image 2026-08-31 at 8.08.56 AM (1).jpeg', title: 'Commercial Fleet', category: 'Fleet' },
-  { id: 'ford-ranger', filename: 'WhatsApp Image 2026-08-31 at 8.09.00 AM (1).jpeg', title: 'Ford Ranger', category: 'Bakkies' },
+  { id: 'hilux-gd6', filename: 'WhatsApp Image 2026-09-16 at 8.32.12 AM (1).jpeg', title: 'Toyota Hilux GD-6', category: 'Bakkies' },
+  { id: 'land-cruiser-79', filename: 'WhatsApp Image 2026-09-16 at 8.32.15 AM (2).jpeg', title: 'Land Cruiser 79', category: '4x4' },
+  { id: 'jeep-wrangler', filename: 'WhatsApp Image 2026-09-16 at 8.32.16 AM.jpeg', title: 'Jeep Wrangler', category: 'SUV' },
+  { id: 'amarok', filename: 'WhatsApp Image 2026-09-16 at 8.32.19 AM (1).jpeg', title: 'Volkswagen Amarok', category: 'Bakkies' },
+  { id: 'toyota-emblem', filename: 'WhatsApp Image 2026-09-16 at 8.32.22 AM.jpeg', title: 'Toyota Custom Fit', category: 'SUV' },
+  { id: 'fleet-optimum', filename: 'WhatsApp Image 2026-09-16 at 8.32.28 AM.jpeg', title: 'Commercial Fleet', category: 'Fleet' },
+  { id: 'ford-ranger', filename: 'WhatsApp Image 2026-09-16 at 8.32.31 AM.jpeg', title: 'Ford Ranger', category: 'Bakkies' },
 ] as const;
 
 interface HeroGallerySliderProps {
