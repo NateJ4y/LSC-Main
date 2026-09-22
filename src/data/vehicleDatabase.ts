@@ -370,7 +370,7 @@ export const POPULAR_SA_VEHICLES = [
     submodel: 'Legend RS / Raider GD-6',
     year: 2024,
     badge: 'SA #1 Bestselling Bakkie',
-    image: '/images/WhatsApp Image 2026-08-31 at 8.09.01 AM.jpeg',
+    image: '/images/WhatsApp Image 2026-09-16 at 8.32.17 AM (1).jpeg',
     popularMaterial: '510g Tough Ripstop Canvas'
   },
   {
@@ -380,7 +380,7 @@ export const POPULAR_SA_VEHICLES = [
     submodel: 'Wildtrak 3.0L V6 / 2.0 Bi-Turbo',
     year: 2024,
     badge: 'Top Overland Sport Spec',
-    image: '/images/WhatsApp Image 2026-08-31 at 8.09.00 AM (1).jpeg',
+    image: '/images/WhatsApp Image 2026-09-16 at 8.32.17 AM (2).jpeg',
     popularMaterial: 'Sport Quilted Canvas with Red Trim'
   },
   {
@@ -390,7 +390,7 @@ export const POPULAR_SA_VEHICLES = [
     submodel: '4.5L V8 D-4D / 2.8 GD-6',
     year: 2024,
     badge: 'Bushveld Legend 4x4',
-    image: '/images/WhatsApp Image 2026-08-31 at 8.08.57 AM (2).jpeg',
+    image: '/images/WhatsApp Image 2026-09-16 at 8.32.17 AM.jpeg',
     popularMaterial: 'Heavy Duty 510g Safari Canvas'
   },
   {
@@ -400,7 +400,7 @@ export const POPULAR_SA_VEHICLES = [
     submodel: '3.0 TDI V6 / BiTDI Style',
     year: 2024,
     badge: 'Executive Diamond Stitch',
-    image: '/images/WhatsApp Image 2026-08-31 at 8.08.55 AM.jpeg',
+    image: '/images/WhatsApp Image 2026-09-16 at 8.32.18 AM (2).jpeg',
     popularMaterial: 'High-Density Diamond Quilted Canvas'
   },
   {
@@ -410,7 +410,7 @@ export const POPULAR_SA_VEHICLES = [
     submodel: 'Rubicon 4x4 Trail-Rated',
     year: 2024,
     badge: 'Adventure 4x4 Favorite',
-    image: '/images/WhatsApp Image 2026-08-31 at 8.08.53 AM.jpeg',
+    image: '/images/WhatsApp Image 2026-09-16 at 8.32.18 AM.jpeg',
     popularMaterial: 'Tactical Waterproof Ripstop Canvas'
   },
   {
@@ -420,7 +420,7 @@ export const POPULAR_SA_VEHICLES = [
     submodel: 'Fleet Mining & Ag Heavy Duty',
     year: 2024,
     badge: 'Custom Corporate Logo Branding',
-    image: '/images/WhatsApp Image 2026-08-31 at 8.08.56 AM (1).jpeg',
+    image: '/images/WhatsApp Image 2026-09-16 at 8.32.19 AM.jpeg',
     popularMaterial: 'Industrial 600D Tear-Proof Oxford'
   }
 ];
