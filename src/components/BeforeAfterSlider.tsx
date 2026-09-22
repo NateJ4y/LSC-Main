@@ -17,8 +17,8 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({ onGetQuote
   const [activePreset, setActivePreset] = useState<'bakkie' | 'suv'>('bakkie');
 
   const activeFilename = activePreset === 'bakkie' 
-    ? 'WhatsApp Image 2026-08-31 at 8.09.01 AM.jpeg' 
-    : 'WhatsApp Image 2026-08-31 at 8.08.57 AM (2).jpeg';
+    ? 'WhatsApp Image 2026-09-16 at 8.32.12 AM.jpeg' 
+    : 'WhatsApp Image 2026-09-16 at 8.32.15 AM (2).jpeg';
   const activeTitle = activePreset === 'bakkie' ? 'Toyota Hilux GD-6' : 'Land Cruiser 79 Series';
 
   return (
