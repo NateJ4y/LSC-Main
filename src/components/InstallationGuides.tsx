@@ -20,7 +20,7 @@ export const InstallationGuides: React.FC = () => {
       description: 'Press the release pin on the factory headrest post and slide the headrest completely out. Pull the Lifestyle custom backrest cover down over the seat back like a glove, smoothing downwards to eliminate air pockets.',
       tip: 'Ensure the red side AIRBAG tag is positioned facing towards the vehicle doors, not the center console.',
       badge: 'Step 1: Slip-Over Fit',
-      image: 'WhatsApp Image 2026-08-31 at 8.08.57 AM (1).jpeg',
+      image: 'WhatsApp Image 2026-09-16 at 8.32.18 AM (1).jpeg',
       caption: 'Workshop demonstration: Slip-over upper backrest contour with reinforced headrest grommets'
     },
     {
@@ -30,7 +30,7 @@ export const InstallationGuides: React.FC = () => {
       description: 'Push the reinforced neoprene/canvas center flap through the seat bight (crevice between backrest and bottom cushion) until it emerges behind the seat. Fasten with the heavy-duty industrial hook-and-loop anchors.',
       tip: 'Pull firmly for a wrinkle-free contour that mirrors factory upholstery.',
       badge: 'Step 2: Center Flap Tuck',
-      image: 'WhatsApp Image 2026-08-31 at 8.08.54 AM.jpeg',
+      image: 'WhatsApp Image 2026-09-16 at 8.32.20 AM (2).jpeg',
       caption: 'Workshop demonstration: Center bight flap secured tightly around the lumbar junction'
     },
     {
@@ -40,7 +40,7 @@ export const InstallationGuides: React.FC = () => {
       description: 'Slide the bottom cover over the seat base. Route the two underside nylon straps beneath the seat frame and click them into the quick-cinch tension buckles. Pull snug.',
       tip: 'Do not trap any electric seat wiring or seat rail motors under the straps.',
       badge: 'Step 3: Base Cinch',
-      image: 'WhatsApp Image 2026-08-31 at 8.08.58 AM (1).jpeg',
+      image: 'WhatsApp Image 2026-09-16 at 8.32.13 AM (1).jpeg',
       caption: 'Workshop demonstration: Tailored bottom cushion bolsters anchored securely'
     },
     {
@@ -50,7 +50,7 @@ export const InstallationGuides: React.FC = () => {
       description: 'Slip the tailored headrest covers onto the detached headrests and cinch the velcro bottom. Reinsert the metal posts through the laser-cut reinforced grommet holes. Fit your free matching center console lid cover.',
       tip: 'Your seat covers are now fully installed, 100% airbag deployment safe, and ready for the bush!',
       badge: 'Step 4: Final Inspection',
-      image: 'WhatsApp Image 2026-08-31 at 8.09.00 AM (1).jpeg',
+      image: 'WhatsApp Image 2026-09-16 at 8.32.13 AM (2).jpeg',
       caption: 'Workshop demonstration: Finished cabin installation with matching console lid cover'
     }
   ];
