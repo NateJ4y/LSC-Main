@@ -11,7 +11,7 @@ const APPLICATIONS = [
   {
     key: '4x4-overland',
     title: '4x4 & Bakkies',
-    image: 'WhatsApp Image 2026-08-31 at 8.08.57 AM (2).jpeg',
+    image: 'WhatsApp Image 2026-09-16 at 8.32.13 AM (1).jpeg',
     icon: Compass,
     copy: 'Rugged protection for Hilux, Ranger, Land Cruiser, D-Max and more.',
     tags: ['Hilux', 'Ranger', 'Land Cruiser'],
@@ -19,7 +19,7 @@ const APPLICATIONS = [
   {
     key: 'daily-suv',
     title: 'Cars & SUVs',
-    image: 'WhatsApp Image 2026-08-31 at 8.08.53 AM.jpeg',
+    image: 'WhatsApp Image 2026-09-16 at 8.32.15 AM (2).jpeg',
     icon: Car,
     copy: 'A cleaner, more refined fit for daily drivers, families and SUVs.',
     tags: ['Fortuner', 'Polo', 'Tiguan'],
@@ -27,7 +27,7 @@ const APPLICATIONS = [
   {
     key: 'commercial-fleet',
     title: 'Fleets & Work Vehicles',
-    image: 'WhatsApp Image 2026-08-31 at 8.08.56 AM (1).jpeg',
+    image: 'WhatsApp Image 2026-09-16 at 8.32.20 AM (3).jpeg',
     icon: Building2,
     copy: 'Built for high-use seats, delivery vehicles and commercial fleets.',
     tags: ['Trucks', 'Vans', 'Fleets'],
@@ -35,7 +35,7 @@ const APPLICATIONS = [
   {
     key: 'agriculture',
     title: 'Agriculture & Plant',
-    image: 'WhatsApp Image 2026-09-08 at 11.30.31 PM.jpeg',
+    image: 'WhatsApp Image 2026-09-16 at 8.32.28 AM.jpeg',
     icon: Tractor,
     copy: 'Protection for farm vehicles, machinery and tough working environments.',
     tags: ['Tractors', 'Plant', 'Farm rigs'],
