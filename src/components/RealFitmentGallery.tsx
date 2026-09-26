@@ -88,7 +88,7 @@ export const RealFitmentGallery: React.FC<RealFitmentGalleryProps> = ({ onStartQ
   };
 
   return (
-    <section id="gallery" className="py-12 sm:py-16 lg:py-20 bg-[#0c0c0e] border-b border-white/10 relative overflow-hidden">
+    <section id="gallery" className="py-12 sm:py-16 lg:py-20 bg-[#0c0c0e] border-b border-white/10 relative overflow-hidden" aria-label="Custom seat cover workshop gallery">
       {/* Subtle Background Glow */}
       <div className="absolute top-0 right-1/4 w-96 h-96 bg-orange-600/5 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-zinc-700/5 blur-[120px] pointer-events-none" />
