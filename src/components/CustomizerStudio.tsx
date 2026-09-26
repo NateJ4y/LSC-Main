@@ -753,7 +753,7 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
                             <option value="#ea580c">Fiery Orange</option>
                             <option value="#e03131">Sport Red</option>
                             <option value="#b39c7d">Kalahari Sand</option>
-                            <option value="#000000">Stealth Black</option>
+                            <option value="#000000">Deep Black</option>
                           </select>
                         </div>
 
