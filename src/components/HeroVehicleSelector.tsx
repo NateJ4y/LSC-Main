@@ -18,7 +18,7 @@ export const HeroVehicleSelector: React.FC<HeroVehicleSelectorProps> = ({
   onViewGallery
 }) => {
   return (
-    <section className="relative w-full overflow-hidden bg-[#09090b]">
+    <section className="relative w-full overflow-hidden bg-[#09090b]" aria-label="Lifestyle Seat Covers custom seat cover overview">
       <HeroGallerySlider
         onSelectSlideVehicle={(vehicleName) => {
           onVehicleChange({ ...vehicle, model: vehicleName });
