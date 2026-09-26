@@ -13,7 +13,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onStartQuote }) 
   const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); setFormSubmitted(true); };
 
   return (
-    <section id="contact-us" className="w-full bg-[#101014] py-16 px-4 sm:px-6 lg:px-8 border-b border-white/10 scroll-mt-20">
+    <section id="contact-us" className="w-full bg-[#101014] py-16 px-4 sm:px-6 lg:px-8 border-b border-white/10 scroll-mt-20" aria-label="Contact Lifestyle Seat Covers">
       <div className="max-w-7xl mx-auto space-y-12">
         <div className="max-w-3xl space-y-3">
           <div className="inline-flex items-center space-x-2 text-[10px] font-bold text-orange-500 uppercase tracking-widest bg-[#16161b] border border-orange-500/20 px-3 py-1 rounded-md font-mono"><Building2 className="w-3.5 h-3.5 text-orange-500" /><span>FACTORY & SHOWROOM FITMENT BAY</span></div>
