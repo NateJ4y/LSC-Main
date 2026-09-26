@@ -502,7 +502,7 @@ export const ComprehensiveQuoteSystem: React.FC<ComprehensiveQuoteSystemProps> =
                             <option value="Rally Red Stitch">Rally Red</option>
                             <option value="Kalahari Orange Stitch">Kalahari Orange</option>
                             <option value="Titanium Silver Stitch">Titanium Silver</option>
-                            <option value="Stealth Matching Black">Stealth Black (Matching)</option>
+                            <option value="Deep Black (Matching)">Stealth Black (Matching)</option>
                           </select>
                         </div>
 
