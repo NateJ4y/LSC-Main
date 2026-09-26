@@ -20,7 +20,8 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
     >
       <div className="flex items-center justify-around max-w-md mx-auto">
         {/* Instant Quote */}
-        <button
+        <a
+          href="#quote-builder"
           onClick={() => onNavigate('quote-builder')}
           className="flex flex-col items-center justify-center p-1 text-zinc-400 hover:text-white active:scale-95 transition min-w-[56px] min-h-[44px] cursor-pointer"
         >
@@ -30,10 +31,11 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
           <span className="text-[10px] font-bold tracking-tight uppercase font-mono mt-0.5">
             Quote
           </span>
-        </button>
+        </a>
 
         {/* Customizer */}
-        <button
+        <a
+          href="#customizer-studio"
           onClick={() => onNavigate('customizer-studio')}
           className="flex flex-col items-center justify-center p-1 text-zinc-400 hover:text-white active:scale-95 transition min-w-[56px] min-h-[44px] cursor-pointer"
         >
@@ -43,10 +45,11 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
           <span className="text-[10px] font-bold tracking-tight uppercase font-mono mt-0.5">
             Studio
           </span>
-        </button>
+        </a>
 
         {/* Gallery */}
-        <button
+        <a
+          href="#gallery"
           onClick={() => onNavigate('gallery')}
           className="flex flex-col items-center justify-center p-1 text-zinc-400 hover:text-white active:scale-95 transition min-w-[56px] min-h-[44px] cursor-pointer"
         >
@@ -56,7 +59,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
           <span className="text-[10px] font-bold tracking-tight uppercase font-mono mt-0.5">
             Gallery
           </span>
-        </button>
+        </a>
 
         {/* Direct WhatsApp */}
         <a
