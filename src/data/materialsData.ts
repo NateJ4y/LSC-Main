@@ -14,10 +14,10 @@ export const MATERIALS_DATA: MaterialSpec[] = [
     breathabilityRating: 8.5,
     comfortRating: 8.2,
     cleaningEase: 'Hose Down',
-    warrantyYears: 2, // 24-Month Stealth Warranty
+    warrantyYears: 2, // 24-Month Lifestyle Warranty
     idealFor: ['4x4 Overlanding & Bakkies', 'Safari & Game Viewers', 'Farms & Agriculture', 'Mining & Construction Heavy Machinery'],
     colors: [
-      { id: 'canvas-charcoal', name: 'Stealth Charcoal Grey', hex: '#2c3035', patternType: 'solid' },
+      { id: 'canvas-charcoal', name: 'Charcoal Grey', hex: '#2c3035', patternType: 'solid' },
       { id: 'canvas-sand', name: 'Kalahari Sand / Tan', hex: '#b39c7d', patternType: 'solid', badge: 'Safari Favorite' },
       { id: 'canvas-olive', name: 'Bushveld Olive Green', hex: '#484b38', patternType: 'solid' },
       { id: 'canvas-black', name: 'Midnight Black', hex: '#171717', patternType: 'solid' },
@@ -40,7 +40,7 @@ export const MATERIALS_DATA: MaterialSpec[] = [
     breathabilityRating: 9.0,
     comfortRating: 9.2,
     cleaningEase: 'Wipe Clean',
-    warrantyYears: 2, // 24-Month Stealth Warranty
+    warrantyYears: 2, // 24-Month Lifestyle Warranty
     idealFor: ['Daily Commuters', 'Family SUVs', 'Courier & Delivery Vans', 'Security & Fleet Bakkies'],
     colors: [
       { id: 'poly-charcoal', name: 'Shadow Charcoal', hex: '#2b2d30', patternType: 'solid' },
@@ -64,7 +64,7 @@ export const MATERIALS_DATA: MaterialSpec[] = [
     breathabilityRating: 6.8,
     comfortRating: 9.8,
     cleaningEase: 'Wipe Clean',
-    warrantyYears: 2, // 24-Month Stealth Warranty
+    warrantyYears: 2, // 24-Month Lifestyle Warranty
     idealFor: ['Family Road Trips', 'Uber & Executive Shuttles', 'Dogs & Toddlers', 'Sport SUVs & Double Cabs'],
     colors: [
       { id: 'rhino-onyx', name: 'Onyx Black Diamond Stitch', hex: '#151515', patternType: 'quilted' },
@@ -89,7 +89,7 @@ export const MATERIALS_DATA: MaterialSpec[] = [
     breathabilityRating: 7.9,
     comfortRating: 8.2,
     cleaningEase: 'Spot Clean',
-    warrantyYears: 2, // 24-Month Stealth Warranty
+    warrantyYears: 2, // 24-Month Lifestyle Warranty
     idealFor: ['Overland Expeditions', 'Security & Tactical Vehicles', 'Camping Enthusiasts', 'Bakkie Gear Heads'],
     colors: [
       { id: 'molle-black', name: 'Tactical Stealth Black', hex: '#1a1a1a', patternType: 'solid' },
@@ -112,7 +112,7 @@ export const MATERIALS_DATA: MaterialSpec[] = [
     breathabilityRating: 7.0,
     comfortRating: 9.5,
     cleaningEase: 'Spot Clean',
-    warrantyYears: 2, // 24-Month Stealth Warranty
+    warrantyYears: 2, // 24-Month Lifestyle Warranty
     idealFor: ['Coastal Surfers & Divers', 'Gym & Mountain Bikers', 'Active Outdoor Lifestyle', 'Hatchbacks & Sport Bakkies'],
     colors: [
       { id: 'neo-black', name: 'Pitch Black', hex: '#111111', patternType: 'solid' },
@@ -136,7 +136,7 @@ export const MATERIALS_DATA: MaterialSpec[] = [
     breathabilityRating: 9.2,
     comfortRating: 8.8,
     cleaningEase: 'Machine Washable',
-    warrantyYears: 2, // 24-Month Stealth Warranty
+    warrantyYears: 2, // 24-Month Lifestyle Warranty
     idealFor: ['Fleet & Work Bakkies', 'Tradesmen & Contractors', 'Affordable Full-Vehicle Protection'],
     colors: [
       { id: 'twill-charcoal', name: 'Industrial Charcoal', hex: '#33373b', patternType: 'solid' },
