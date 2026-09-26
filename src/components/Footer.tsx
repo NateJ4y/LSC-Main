@@ -55,18 +55,18 @@ export const Footer: React.FC<FooterProps> = ({ onOpenSwatches, onSelectNav }) =
         <div className="space-y-3">
           <h4 className="font-heading text-sm font-bold text-white uppercase tracking-wider">Popular Bakkies & 4x4s</h4>
           <ul className="space-y-2 text-xs text-[#8C9BA8]">
-            {['Toyota Hilux Double & Extra Cab','Ford Ranger Next-Gen Wildtrak','Land Cruiser 79 / 76 / Prado','Isuzu D-Max V-Cross / LSE','Suzuki Jimny 3-Door & 5-Door','Toyota Fortuner 7-Seater'].map((item) => <li key={item}><button onClick={() => onSelectNav('popular-vehicles')} className="hover:text-white transition cursor-pointer">{item}</button></li>)}
+            {['Toyota Hilux Double & Extra Cab','Ford Ranger Next-Gen Wildtrak','Land Cruiser 79 / 76 / Prado','Isuzu D-Max V-Cross / LSE','Suzuki Jimny 3-Door & 5-Door','Toyota Fortuner 7-Seater'].map((item) => <li key={item}><a href="#vehicle-applications" onClick={() => onSelectNav('vehicles')} className="hover:text-white transition">{item}</a></li>)}
           </ul>
         </div>
 
         <div className="space-y-3">
           <h4 className="font-heading text-sm font-bold text-white uppercase tracking-wider">Custom Fabrics & Range</h4>
           <ul className="space-y-2 text-xs text-[#8C9BA8]">
-            <li><button onClick={() => onSelectNav('materials')} className="hover:text-white transition cursor-pointer">Riptech® 510g Ripstop Canvas</button></li>
-            <li><button onClick={() => onSelectNav('materials')} className="hover:text-white transition cursor-pointer">600D Synthetic Polyester</button></li>
-            <li><button onClick={() => onSelectNav('materials')} className="hover:text-white transition cursor-pointer">Automotive Leather & Leatherette</button></li>
-            <li><button onClick={() => onSelectNav('process')} className="hover:text-white transition cursor-pointer">The Workshop Tailoring Process</button></li>
-            <li><button onClick={() => onSelectNav('categories')} className="hover:text-white transition cursor-pointer">Anti-Glare Custom Dash Covers</button></li>
+            <li><a href="#fabric-matrix" onClick={() => onSelectNav('fabrics')} className="hover:text-white transition">Riptech® 510g Ripstop Canvas</a></li>
+            <li><a href="#fabric-matrix" onClick={() => onSelectNav('fabrics')} className="hover:text-white transition">600D Synthetic Polyester</a></li>
+            <li><a href="#fabric-matrix" onClick={() => onSelectNav('fabrics')} className="hover:text-white transition">Automotive Leather & Leatherette</a></li>
+            <li><a href="#customizer-studio" onClick={() => onSelectNav('customise')} className="hover:text-white transition">The Workshop Tailoring Process</a></li>
+            <li><span className="hover:text-white transition">Anti-Glare Custom Dash Covers</span></li>
             <li><button onClick={onOpenSwatches} className="text-white font-bold hover:text-orange-400 transition cursor-pointer flex items-center gap-1"><span>Request Free Swatches</span><span className="w-1.5 h-1.5 rounded-full bg-orange-500 inline-block"></span></button></li>
           </ul>
         </div>
