@@ -19,7 +19,7 @@ export const CustomerReviews: React.FC = () => {
       : SA_REVIEWS.filter((r) => r.usageType === selectedFilter);
 
   return (
-    <section id="reviews" className="w-full bg-[#0c0c0e] py-16 px-4 sm:px-6 lg:px-8 border-b border-white/10 scroll-mt-20">
+    <section id="reviews" className="w-full bg-[#0c0c0e] py-16 px-4 sm:px-6 lg:px-8 border-b border-white/10 scroll-mt-20" aria-label="Lifestyle Seat Covers customer reviews">
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Section Header Bento */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
