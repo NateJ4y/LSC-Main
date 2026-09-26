@@ -28,7 +28,7 @@ function scrubPublicPrices(root: Node = document.body) {
       .replace(/LIVE ESTIMATE/gi, 'CUSTOM QUOTE')
       .replace(/Lifestyle\s*&\s*Stealth\s*Seat\s*Covers/gi, 'Lifestyle Seat Covers')
       .replace(/Powered by Stealth Seat Covers\s*\(stealthseatcovers\.co\.za\)\.?/gi, '')
-      .replace(/stealthseatcovers\.co\.za/gi, 'lifestyleseatcovers.co.za')
+      .replace(/stealthseatcovers\.co\.za/gi, 'lifestyleseatcovers.com')
       .replace(/\bStealth Black\b/gi, 'Deep Black')
       .replace(/\bPolokwane\b/gi, 'Vereeniging')
       .replace(/\bLimpopo\b/gi, 'Gauteng');
