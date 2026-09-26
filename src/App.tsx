@@ -76,6 +76,14 @@ export default function App() {
     return () => window.removeEventListener('hashchange', checkAdminHash);
   }, []);
 
+  useEffect(() => {
+    const robots = document.querySelector('meta[name="robots"]');
+    const googlebot = document.querySelector('meta[name="googlebot"]');
+    const noindex = activeNav === 'admin';
+    robots?.setAttribute('content', noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1');
+    googlebot?.setAttribute('content', noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1');
+  }, [activeNav]);
+
   const [activeCoupon, setActiveCoupon] = useState<string | null>('LIFESTYLE10');
   const [discountPercentage, setDiscountPercentage] = useState<number>(10);
   const [discountFixed, setDiscountFixed] = useState<number>(0);
