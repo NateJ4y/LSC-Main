@@ -145,7 +145,7 @@ export const CustomizerStudio: React.FC<CustomizerStudioProps> = ({
   });
 
   return (
-    <section id="customizer-studio" className="w-full bg-[#0c0c0e] py-10 sm:py-14 px-3 sm:px-6 lg:px-8 border-b border-white/10 scroll-mt-20">
+    <section id="customizer-studio" className="w-full bg-[#0c0c0e] py-10 sm:py-14 px-3 sm:px-6 lg:px-8 border-b border-white/10 scroll-mt-20" aria-label="Custom vehicle seat cover configurator">
       <div className="max-w-7xl mx-auto space-y-6">
         
         {/* Header Block */}
