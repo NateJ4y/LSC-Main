@@ -102,7 +102,7 @@ export const ComprehensiveQuoteSystem: React.FC<ComprehensiveQuoteSystemProps> =
     `*Notes:* ${additionalNotes || 'None'}`;
 
   return (
-    <section id="quote-builder" className="w-full bg-[#0c0c0e] py-16 px-4 sm:px-6 lg:px-8 border-b border-white/10 scroll-mt-20">
+    <section id="quote-builder" className="w-full bg-[#0c0c0e] py-16 px-4 sm:px-6 lg:px-8 border-b border-white/10 scroll-mt-20" aria-label="Request a custom seat cover quote">
       <div className="max-w-7xl mx-auto space-y-12">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3">
