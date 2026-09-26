@@ -365,13 +365,14 @@ export const Header: React.FC<HeaderProps> = ({
             </a>
 
             {/* High-Conversion GET A QUOTE CTA (Visible on both Mobile and Desktop with 44px min touch target) */}
-            <button
+            <a
+              href="#quote-builder"
               onClick={() => onSelectNav('quote')}
               className="hidden sm:flex px-3 sm:px-4 py-2.5 rounded-xl bg-white text-black hover:bg-zinc-200 font-bold uppercase text-[11px] sm:text-xs tracking-wider transition shadow cursor-pointer items-center space-x-1.5 shrink-0 min-h-[44px]"
             >
-              <Calculator className="w-3.5 h-3.5 text-orange-600" />
+<Calculator className="w-3.5 h-3.5 text-orange-600" />
               <span>GET A QUOTE</span>
-            </button>
+            </a>
 
             {/* Desktop Theme Switch Button */}
             <button
