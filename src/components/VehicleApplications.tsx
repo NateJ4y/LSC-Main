@@ -48,7 +48,7 @@ export const VehicleApplications: React.FC<VehicleApplicationsProps> = ({ onSele
   const Icon = current.icon;
 
   return (
-    <section id="vehicle-applications" className="w-full bg-[#101014] py-14 px-4 sm:px-6 lg:px-8 border-b border-white/10 scroll-mt-20">
+    <section id="vehicle-applications" className="w-full bg-[#101014] py-14 px-4 sm:px-6 lg:px-8 border-b border-white/10 scroll-mt-20" aria-label="Vehicle applications for custom seat covers">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 mb-7">
           <div className="max-w-2xl">
