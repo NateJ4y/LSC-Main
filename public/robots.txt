@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
-Sitemap: https://lifestyleseatcovers.co.za/sitemap.xml
+
+Sitemap: https://lifestyleseatcovers.com/sitemap.xml
