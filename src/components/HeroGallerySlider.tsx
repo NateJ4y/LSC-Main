@@ -139,22 +139,22 @@ export const HeroGallerySlider: React.FC<HeroGallerySliderProps> = ({
             </p>
 
             <div className="mt-6 flex flex-wrap gap-2">
-              <button
-                type="button"
+              <a
+                href="#customizer-studio"
                 onClick={onStartConfiguring}
                 className="group inline-flex min-h-12 items-center gap-3 rounded-full bg-white px-6 py-3 text-[10px] font-black uppercase tracking-[0.12em] text-black shadow-2xl transition duration-300 hover:-translate-y-0.5 hover:bg-orange-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-white/80"
               >
                 Get my quote
                 <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-              </button>
+              </a>
 
-              <button
-                type="button"
+              <a
+                href="#gallery"
                 onClick={onViewGallery}
                 className="inline-flex min-h-12 items-center gap-2 rounded-full border border-white/20 bg-white/[0.06] px-5 py-3 text-[10px] font-black uppercase tracking-[0.12em] text-white backdrop-blur-md transition hover:border-white/40 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/60"
               >
                 Explore fitments
-              </button>
+              </a>
             </div>
 
             <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-[8px] font-black uppercase tracking-[0.16em] text-white/45">
