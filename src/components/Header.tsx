@@ -83,6 +83,17 @@ export const Header: React.FC<HeaderProps> = ({
     { key: 'contact', label: 'CONTACT' }
   ];
 
+  const navHref: Record<string, string> = {
+    home: '/',
+    gallery: '#gallery',
+    fabrics: '#fabric-matrix',
+    vehicles: '#vehicle-applications',
+    customise: '#customizer-studio',
+    reviews: '#reviews',
+    contact: '#contact-us',
+    quote: '#quote-builder',
+  };
+
   const handleNavClick = (key: string) => {
     onSelectNav(key);
     setActiveDropdown(null);
@@ -166,8 +177,10 @@ export const Header: React.FC<HeaderProps> = ({
                     else setActiveDropdown(null);
                   }}
                 >
-                  <button
-                    onClick={() => {
+                  <a
+                    href={navHref[item.key]}
+                    onClick={(event) => {
+                      if (hasDropdown) event.preventDefault();
                       if (hasDropdown) {
                         setActiveDropdown(isDropdownOpen ? null : item.key);
                       }
@@ -179,13 +192,13 @@ export const Header: React.FC<HeaderProps> = ({
                         : 'text-[#8C9BA8] hover:text-white hover:bg-zinc-900/60 border border-transparent'
                     }`}
                   >
-                    <span>{item.label}</span>
+<span>{item.label}</span>
                     {hasDropdown && (
                       <span className={`text-[9px] transition-transform duration-200 ${isDropdownOpen ? 'rotate-180 text-orange-400' : 'text-zinc-500'}`}>
                         ▼
                       </span>
                     )}
-                  </button>
+                  </a>
 
                   {/* Apple / Louis Vuitton Frosted Dropdown Menus */}
                   {hasDropdown && isDropdownOpen && (
