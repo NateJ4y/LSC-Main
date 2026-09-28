@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import { Header } from './components/Header';
 import { HeroVehicleSelector } from './components/HeroVehicleSelector';
 import { TrustProofBar } from './components/TrustProofBar';
@@ -254,6 +255,8 @@ export default function App() {
       />
 
       <Footer onOpenSwatches={() => setIsSwatchesOpen(true)} onSelectNav={handleNavSelection} />
+
+      <Analytics />
 
       <MobileBottomNav
         cartCount={cartItems.reduce((sum, item) => sum + item.quantity, 0)}
