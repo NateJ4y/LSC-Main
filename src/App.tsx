@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import { Header } from './components/Header';
 import { HeroVehicleSelector } from './components/HeroVehicleSelector';
 import { TrustProofBar } from './components/TrustProofBar';
@@ -263,6 +264,7 @@ export default function App() {
           setActiveNav(sectionId === 'quote-builder' ? 'quote' : sectionId === 'customizer-studio' ? 'customise' : 'gallery');
         }}
       />
+      <Analytics />
     </div>
   );
 }
