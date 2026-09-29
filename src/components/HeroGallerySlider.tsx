@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { ArrowRight, ChevronRight, MessageCircle } from 'lucide-react';
+import { ArrowRight, ChevronRight } from 'lucide-react';
 import { AssetImage } from './AssetImage';
 
 export interface HeroSlide {
@@ -167,17 +167,6 @@ export const HeroGallerySlider: React.FC<HeroGallerySliderProps> = ({
           </div>
         </div>
       </div>
-
-      <a
-        href="https://wa.me/27674736068"
-        target="_blank"
-        rel="noreferrer"
-        className="absolute bottom-7 right-7 z-40 hidden items-center gap-2 rounded-full border border-emerald-300/20 bg-emerald-600/85 px-4 py-3 text-[10px] font-black uppercase tracking-[0.14em] text-white shadow-xl backdrop-blur-md transition hover:bg-emerald-500 lg:flex"
-        aria-label="Chat with Lifestyle Seat Covers on WhatsApp"
-      >
-        <MessageCircle className="h-4 w-4 fill-current" />
-        WhatsApp us
-      </a>
 
       <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-40 h-24 bg-gradient-to-t from-black to-transparent" />
     </section>
