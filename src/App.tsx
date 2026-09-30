@@ -266,6 +266,7 @@ export default function App() {
           setActiveNav(sectionId === 'quote-builder' ? 'quote' : sectionId === 'customizer-studio' ? 'customise' : 'gallery');
         }}
       />
+      <Analytics />
     </div>
   );
 }
